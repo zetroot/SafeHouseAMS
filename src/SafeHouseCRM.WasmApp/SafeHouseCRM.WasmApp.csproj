@@ -22,4 +22,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SafeHouseCRM.BizLayer.Abstractions\SafeHouseCRM.BizLayer.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

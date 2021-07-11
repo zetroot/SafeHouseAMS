@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using SafeHouseCRM.BizLayer.Abstractions.Services;
+using SafeHouseCRM.WasmApp.Services;
 
 namespace SafeHouseCRM.WasmApp
 {
@@ -29,6 +31,8 @@ namespace SafeHouseCRM.WasmApp
 
                 options.ProviderOptions.ResponseType = "code";
             });
+
+            builder.Services.AddSingleton<IPersonCatalogue, InMemoryPersonCatalogue>();
             
             await builder.Build().RunAsync();
         }
