@@ -4,3 +4,6 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 **\appsettings.Development.json
+.idea/.idea.SafeHouseCRM/.idea/indexLayout.xml
+.idea/.idea.SafeHouseCRM/.idea/misc.xml
+.idea/.idea.SafeHouseCRM/.idea/vcs.xml
