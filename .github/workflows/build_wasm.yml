@@ -54,10 +54,10 @@ jobs:
     #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #    BRANCH: gh-pages
     #    FOLDER: release/wwwroot
-    - name: Deploy draft to Netlify
-      uses: South-Paw/action-netlify-deploy@v1.2.0
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-        build-dir: './release/wwwroot'
+    #- name: Deploy draft to Netlify
+    #  uses: South-Paw/action-netlify-deploy@v1.2.0
+    #  with:
+    #    github-token: ${{ secrets.GITHUB_TOKEN }}
+    #    netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+    #    netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+    #    build-dir: './release/wwwroot'
