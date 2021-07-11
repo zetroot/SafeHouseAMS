@@ -40,20 +40,24 @@ jobs:
         path: release/
                 
     # заменить базовый URL с / на /SafeHouseCRM
-    #- name: Change base-tag in index.html
-    #  run: sed -i 's/<base href="\/" \/>/<base href="\/SafeHouseCRM\/" \/>/g' release/wwwroot/index.html
+    - name: Change base-tag in index.html
+      run: sed -i 's/<base href="\/" \/>/<base href="\/SafeHouseCRM\/" \/>/g' release/wwwroot/index.html
 
     # добавить файл .nojekyll чтобы отвязаться от правила Jekyll по игнорированию путей начинающихся с нижнего подчеркивания. Это критично важно для blazor
-    #- name: Add .nojekyll file
-    #  run: touch release/wwwroot/.nojekyll
+    - name: Add .nojekyll file
+      run: touch release/wwwroot/.nojekyll
+    
+    # copy index.html to 404.html to serve the same file when a file is not found
+    - name: copy index.html to 404.html
+      run: cp release/wwwroot/index.html release/wwwroot/404.html
 
     # наконец, закоммитить результаты в ветку gh-pages
-    #- name: Commit wwwroot to GitHub Pages
-    #  uses: JamesIves/github-pages-deploy-action@3.7.1
-    #  with:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #    BRANCH: gh-pages
-    #    FOLDER: release/wwwroot
+    - name: Commit wwwroot to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@3.7.1
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: release/wwwroot
     #- name: Deploy draft to Netlify
     #  uses: South-Paw/action-netlify-deploy@v1.2.0
     #  with:
