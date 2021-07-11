@@ -1,0 +1,73 @@
+name: Build and deploy wasm client
+on:
+  push:
+    branches: [ master ]
+    
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: get sources
+      uses: actions/checkout@v2
+
+    - name: Setup .NET 5.0 SDK
+      uses: actions/setup-dotnet@v1.7.2
+      with:
+        dotnet-version: 5.0.x
+
+    - name: restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    # тестирование со сборкой результатов покрытия по конфигурации в файле по умолчанию
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal --collect:"XPlat code coverage"
+
+    # публикация результатов покрытия тестами на code-cov
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+
+    - name: Publish
+      run: dotnet publish src/SafeHouseCRM.WasmApp/ -c Release -o release
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2.2.3
+      with:
+        path: release/
+        
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: dowload build artifact
+        uses: actions/download-artifact@v2.0.9
+        with:        
+          path: release/      
+      # заменить базовый URL с / на /SafeHouseCRM
+      - name: Change base-tag in index.html
+        run: sed -i 's/<base href="\/" \/>/<base href="\/SafeHouseCRM\/" \/>/g' release/wwwroot/index.html
+
+      # добавить файл .nojekyll чтобы отвязаться от правила Jekyll по игнорированию путей начинающихся с нижнего подчеркивания. Это критично важно для blazor
+      - name: Add .nojekyll file
+        run: touch release/wwwroot/.nojekyll
+
+      - name: Patch appsettings.json
+        uses: onlyutkarsh/patch-files-action@v1.0.1
+        with:
+          files: "**/appsettings.json"
+          patch-syntax: |
+            = Okta/Authority => "${{ secrets.OKTA_AUTHORITY }}"
+            = Okta/ClientId => "${{ secrets.OKTA_CLIENTID }}"
+        
+      # наконец, закоммитить результаты в ветку gh-pages
+      - name: Commit wwwroot to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: release/wwwroot
