@@ -60,10 +60,10 @@ jobs:
       - name: Patch appsettings.json
         uses: onlyutkarsh/patch-files-action@v1.0.1
         with:
-          files: "/**/appsettings.json"
+          files: "**/appsettings.json"
           patch-syntax: |
-            = Okta/Authority => "${{ secrets.OKTA_AUTHORITY }}"
-            = Okta/ClientId => "${{ secrets.OKTA_CLIENTID }}"
+            = /Okta/Authority => "${{ secrets.OKTA_AUTHORITY }}"
+            = /Okta/ClientId => "${{ secrets.OKTA_CLIENTID }}"
           output-patched-file: false
           fail-if-no-files-patched: true
           fail-if-error: true
