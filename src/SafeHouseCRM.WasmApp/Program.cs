@@ -19,6 +19,8 @@ namespace SafeHouseCRM.WasmApp
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
+            builder.Services.AddAuthorizationCore();
+            
             builder.Services.AddOidcAuthentication(options =>
             {
                 // Replace the Okta placeholders with your Okta values in the appsettings.json file.
@@ -27,7 +29,7 @@ namespace SafeHouseCRM.WasmApp
 
                 options.ProviderOptions.ResponseType = "code";
             });
-
+            
             await builder.Build().RunAsync();
         }
     }
