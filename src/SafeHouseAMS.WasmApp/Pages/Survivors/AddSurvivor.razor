@@ -1,0 +1,36 @@
+﻿@page "/AddSurvivor"
+@using SafeHouseAMS.BizLayer.Abstractions.Models
+@using SafeHouseAMS.BizLayer.Abstractions.Services
+@inject ISurvivorCatalogue _survivorCatalogue;
+@inject NavigationManager _navigation;
+
+<h3>Новая карточка постардавшего</h3>
+
+<div class="row">
+    <div class="col-xl-6">
+        <h4>ID записи</h4>
+        <RadzenLabel Text="@_survivor.ID.ToString()"/>
+        <h4>Имя</h4>
+        <RadzenTextBox Placeholder="Введите имя..."  @bind-Value="_survivor.Name"/>
+        <h4>Фамилия</h4>
+        <RadzenTextBox Placeholder="Введите фамилию..."  @bind-Value="_survivor.Surname"/>
+    </div>
+    <div class="col-xl-6">
+        <h4>Дата рождения</h4>
+        <RadzenDatePicker @bind-Value="_survivor.BirthDate" DateFormat="d" />
+    </div>
+</div>
+<div class="row">
+    <RadzenButton Text="Сохранить" Click="Callback"/>
+</div>
+
+@code {
+    private readonly Survivor _survivor = new(){ID = Guid.NewGuid()};
+
+    private async Task Callback()
+    {
+        await _survivorCatalogue.Add(_survivor);
+        _navigation.NavigateTo(nameof(SurvivorCatalogue));
+    }
+
+}

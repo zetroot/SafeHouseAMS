@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <WarningLevel>9999</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>SafeHouseAMS.WasmApp</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SafeHouseCRM.BizLayer.Abstractions\SafeHouseCRM.BizLayer.Abstractions.csproj" />
+    <ProjectReference Include="..\SafeHouseAMS.BizLayer.Abstractions\SafeHouseAMS.BizLayer.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

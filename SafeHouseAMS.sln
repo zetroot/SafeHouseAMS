@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3D9A4064-4EF5-4AB2-8AAC-CD0812D95E1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseCRM.WasmApp", "src\SafeHouseCRM.WasmApp\SafeHouseCRM.WasmApp.csproj", "{B3126762-9A6C-4500-9BBD-1D00F83763D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseAMS.WasmApp", "src\SafeHouseAMS.WasmApp\SafeHouseAMS.WasmApp.csproj", "{B3126762-9A6C-4500-9BBD-1D00F83763D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseCRM.BizLayer.Abstractions", "src\SafeHouseCRM.BizLayer.Abstractions\SafeHouseCRM.BizLayer.Abstractions.csproj", "{49C973B1-5976-41E8-A35B-9122267CA30C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseAMS.BizLayer.Abstractions", "src\SafeHouseAMS.BizLayer.Abstractions\SafeHouseAMS.BizLayer.Abstractions.csproj", "{49C973B1-5976-41E8-A35B-9122267CA30C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
