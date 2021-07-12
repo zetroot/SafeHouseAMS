@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace SafeHouseCRM.BizLayer.Abstractions.Models
+namespace SafeHouseAMS.BizLayer.Abstractions.Models
 {
     /// <summary>
     /// Карточка пострадавшего
     /// </summary>
-    public class Person : IBizRecord
+    public class Survivor : IBizRecord
     {
         /// <summary>
         /// Идентификатор записи

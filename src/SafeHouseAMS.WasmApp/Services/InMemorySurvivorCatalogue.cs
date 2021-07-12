@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SafeHouseCRM.BizLayer.Abstractions.Models;
-using SafeHouseCRM.BizLayer.Abstractions.Services;
+using SafeHouseAMS.BizLayer.Abstractions.Models;
+using SafeHouseAMS.BizLayer.Abstractions.Services;
 
-namespace SafeHouseCRM.WasmApp.Services
+namespace SafeHouseAMS.WasmApp.Services
 {
     /// <summary>
     /// каталог пострадавших - демо
     /// </summary>
-    public class InMemoryPersonCatalogue : IPersonCatalogue
+    public class InMemorySurvivorCatalogue : ISurvivorCatalogue
     {
-        private readonly List<Person> _store = new()
+        private readonly List<Survivor> _store = new()
         {
             new()
             {
@@ -28,7 +28,7 @@ namespace SafeHouseCRM.WasmApp.Services
             }
         };
         
-        public async IAsyncEnumerable<Person> GetCollection()
+        public async IAsyncEnumerable<Survivor> GetCollection()
         {
             foreach (var person in _store)
             {
@@ -37,14 +37,14 @@ namespace SafeHouseCRM.WasmApp.Services
             }
         }
 
-        public Task<Person> Add(Person adding)
+        public Task<Survivor> Add(Survivor adding)
         {
             adding.ID = Guid.NewGuid();
             _store.Add(adding);
             return Task.FromResult(adding);
         }
 
-        public Task<Person> Update(Person updating)
+        public Task<Survivor> Update(Survivor updating)
         {
             if (_store.Any(x => x.ID == updating.ID))
             {

@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <WarningLevel>9999</WarningLevel>
+        <RootNamespace>SafeHouseAMS.BizLayer.Abstractions</RootNamespace>
     </PropertyGroup>
 
 </Project>

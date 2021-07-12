@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "SafeHouseCRM.WasmApp": {
+    "SafeHouseAMS.WasmApp": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
