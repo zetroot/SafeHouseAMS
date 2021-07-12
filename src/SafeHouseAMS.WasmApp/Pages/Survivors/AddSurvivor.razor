@@ -6,28 +6,47 @@
 
 <h3>Новая карточка постардавшего</h3>
 
-<div class="row">
-    <div class="col-xl-6">
-        <h4>ID записи</h4>
-        <RadzenLabel Text="@_survivor.ID.ToString()"/>
-        <h4>Имя</h4>
-        <RadzenTextBox Placeholder="Введите имя..."  @bind-Value="_survivor.Name"/>
-        <h4>Фамилия</h4>
-        <RadzenTextBox Placeholder="Введите фамилию..."  @bind-Value="_survivor.Surname"/>
+<RadzenTemplateForm TItem="Survivor" Submit="SubmitSurvivor" Data=@_survivor>
+    <div class="row">
+        <div class="col-md-6">
+            <RadzenFieldset Text="Общая информация">
+                <div class="row">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Имя" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenTextBox Name="NameTextBox" Placeholder="Введите имя..." @bind-Value=@_survivor.Name />
+                        <RadzenRequiredValidator Component="NameTextBox" Text="Имя обязательно для заполнения" Popup="false" Style="position: absolute"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Card #" />
+                    </div>
+                    <div class="col-md-8">
+                        <RadzenTextBox style="width: 100%;" Name="CardNr" />
+                    </div>
+                </div>
+            </RadzenFieldset>
+        </div>
     </div>
-    <div class="col-xl-6">
-        <h4>Дата рождения</h4>
-        <RadzenDatePicker @bind-Value="_survivor.BirthDate" DateFormat="d" />
+    <div class="row justify-content-center">
+        <div class="col-md-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+            <RadzenButton ButtonType="ButtonType.Submit" Icon="save" Text="Добавить"/>
+            <RadzenButton ButtonStyle="ButtonStyle.Light" Icon="cancel" style="display: inline-block; margin-left: 10px;" Text="Отмена" Click="CancelClick"/>
+        </div>
     </div>
-</div>
-<div class="row">
-    <RadzenButton Text="Сохранить" Click="Callback"/>
-</div>
+</RadzenTemplateForm>
 
 @code {
-    private readonly Survivor _survivor = new(){ID = Guid.NewGuid()};
+    private readonly Survivor _survivor = new() {ID = Guid.NewGuid()};
 
-    private async Task Callback()
+    private void CancelClick()
+    {
+        _navigation.NavigateTo(nameof(SurvivorCatalogue));
+    }
+
+    private async Task SubmitSurvivor(Survivor obj)
     {
         await _survivorCatalogue.Add(_survivor);
         _navigation.NavigateTo(nameof(SurvivorCatalogue));
