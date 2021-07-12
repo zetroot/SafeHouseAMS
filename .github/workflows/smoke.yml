@@ -1,4 +1,4 @@
-name: Build and deploy wasm client
+name: smoke test
 on:
   push:
     branches: [ master ]
