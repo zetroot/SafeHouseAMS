@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Radzen;
 using SafeHouseCRM.BizLayer.Abstractions.Services;
 using SafeHouseCRM.WasmApp.Services;
 
@@ -33,6 +34,11 @@ namespace SafeHouseCRM.WasmApp
             });
 
             builder.Services.AddSingleton<IPersonCatalogue, InMemoryPersonCatalogue>();
+            
+            builder.Services.AddScoped<DialogService>();
+            builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddScoped<TooltipService>();
+            builder.Services.AddScoped<ContextMenuService>();
             
             await builder.Build().RunAsync();
         }
