@@ -1,0 +1,53 @@
+﻿@page "/PersonCatalogue"
+@using SafeHouseCRM.BizLayer.Abstractions.Services
+@using SafeHouseCRM.BizLayer.Abstractions.Models
+@using System.Collections.ObjectModel
+@inject IPersonCatalogue _personCatalogue
+@inject NavigationManager _navigation
+
+<h3>Каталог пострадавших</h3>
+
+<div class="row">
+    <RadzenDataGrid 
+        TItem="Person"
+        Data="@_persons"
+        @ref="personsGrid">
+        <Columns>
+            <RadzenDataGridColumn TItem="Person" Property="ID" Title="ID"/>
+            <RadzenDataGridColumn TItem="Person" Property="Name" Title="Имя"/>
+            <RadzenDataGridColumn TItem="Person" Property="Surname" Title="Фамилия"/>
+            <RadzenDataGridColumn TItem="Person" Property="BirthDate" Title="Дата рождения" FormatString="{0:d}"/>
+            <RadzenDataGridColumn TItem="Person" Title="Архивный">
+                <Template Context="data">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@data.IsDeleted" Disabled="true"/>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</div>
+<div class="row">
+    <RadzenButton Text="Добавить новую карточку" Click="NewPersonClick"/>
+</div>
+
+
+@code {
+
+    RadzenDataGrid<Person>? personsGrid;
+    private ObservableCollection<Person> _persons = new();
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await foreach (var person in _personCatalogue.GetCollection())
+        {
+            _persons.Add(person);
+        }
+        await base.OnInitializedAsync();
+        personsGrid?.Reload();
+    }
+
+    private void NewPersonClick()
+    {
+        _navigation.NavigateTo(nameof(AddPerson));
+    }
+
+}

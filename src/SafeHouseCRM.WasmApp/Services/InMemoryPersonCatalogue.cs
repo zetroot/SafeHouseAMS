@@ -20,7 +20,7 @@ namespace SafeHouseCRM.WasmApp.Services
             },
             new()
             {
-                ID = Guid.NewGuid(), Name = "Boris", Surname = "Hren popadesh", BirthDate = DateTime.Today, IsDeleted = false
+                ID = Guid.NewGuid(), Name = "Boris", Surname = "Hren popadesh", BirthDate = DateTime.Today, IsDeleted = true
             },
             new()
             {
@@ -33,7 +33,6 @@ namespace SafeHouseCRM.WasmApp.Services
             foreach (var person in _store)
             {
                 await Task.Yield();
-                await Task.Delay(2000);
                 yield return person;
             }
         }
