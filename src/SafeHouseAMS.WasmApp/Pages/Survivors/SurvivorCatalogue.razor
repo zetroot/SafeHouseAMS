@@ -13,15 +13,25 @@
         Data="@_persons"
         @ref="personsGrid">
         <Columns>
-            <RadzenDataGridColumn TItem="Survivor" Property="ID" Title="ID"/>
+            <RadzenDataGridColumn TItem="Survivor" Property="Num" Title="Код"/>
             <RadzenDataGridColumn TItem="Survivor" Property="Name" Title="Имя"/>
-            <RadzenDataGridColumn TItem="Survivor" Property="Surname" Title="Фамилия"/>
-            <RadzenDataGridColumn TItem="Survivor" Property="BirthDate" Title="Дата рождения" FormatString="{0:d}"/>
-            <RadzenDataGridColumn TItem="Survivor" Title="Удален">
+            <RadzenDataGridColumn TItem="Survivor" Title="Пол">
                 <Template Context="data">
-                    <RadzenCheckBox TValue="bool" @bind-Value="@data.IsDeleted" Disabled="true"/>
+                    @switch (data.Sex)
+                    {
+                        case SexEnum.Female:
+                            <RadzenLabel Text="Женский"/>
+                            break;
+                        case SexEnum.Male:
+                            <RadzenLabel Text="Мужской"/>
+                            break;
+                        default:
+                            <RadzenLabel Text=@data.OtherSex/>
+                            break;
+                    }
                 </Template>
             </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="Survivor" Property="Age" Title="Возраст, лет"/>
         </Columns>
     </RadzenDataGrid>
 </div>
