@@ -8,12 +8,10 @@
 <h3>Каталог пострадавших</h3>
 
 <div class="row">
-    <RadzenDataGrid 
-        TItem="Survivor"
-        Data="@_persons"
-        @ref="personsGrid">
+    <RadzenDataGrid TItem="Survivor" Data="@_persons" @ref="personsGrid" 
+                    AllowColumnResize="true">
         <Columns>
-            <RadzenDataGridColumn TItem="Survivor" Property="Num" Title="Код"/>
+            <RadzenDataGridColumn TItem="Survivor" Property="Num" Title="Код" Width="50px" TextAlign="TextAlign.Center"/>
             <RadzenDataGridColumn TItem="Survivor" Property="Name" Title="Имя"/>
             <RadzenDataGridColumn TItem="Survivor" Title="Пол">
                 <Template Context="data">
