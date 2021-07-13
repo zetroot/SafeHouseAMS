@@ -21,10 +21,42 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 align-items-center d-flex">
-                        <RadzenLabel Text="Card #" />
+                        <RadzenLabel Text="Пол" />
                     </div>
-                    <div class="col-md-8">
-                        <RadzenTextBox style="width: 100%;" Name="CardNr" />
+                    <div class="col-md-4">
+                        <RadzenDropDown @bind-Value="_survivor.Sex" Data="_sexes"
+                                        TextProperty="@nameof(SexEnumVM.description)" ValueProperty="@nameof(SexEnumVM.sexValue)"/>
+                    </div>
+                    @if (_survivor.Sex == SexEnum.Other)
+                    {
+                        <div class="col-md-4">
+                            <RadzenTextBox Placeholder="Уточните, если возможно" @bind-Value=@_survivor.OtherSex />
+                        </div>
+                    }
+                </div>
+                <div class="row">
+                    <div class="col-md-4 align-items-center d-flex">
+                        <RadzenLabel Text="Дата рождения"/>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="row">
+                            <RadzenRadioButtonList @bind-Value=@_dobIsAccurate TValue="bool">
+                                <Items>
+                                    <RadzenRadioButtonListItem Text="Известна" Value="true" />
+                                    <RadzenRadioButtonListItem Text="Возраст" Value="false" />
+                                </Items>
+                            </RadzenRadioButtonList>
+                        </div>
+                        <div class="row">
+                            @if (_dobIsAccurate)
+                            {
+                                <RadzenDatePicker @bind-Value=@_survivor.BirthDateAccurate DateFormat="d" />
+                            }
+                            else
+                            {
+                                <RadzenTextBox Placeholder="Полных лет сегодня"  Change="AgeChange"/>
+                            }
+                        </div>
                     </div>
                 </div>
             </RadzenFieldset>
@@ -39,6 +71,14 @@
 </RadzenTemplateForm>
 
 @code {
+    private bool _dobIsAccurate = true;
+    private record SexEnumVM(SexEnum sexValue, string description);
+
+    private readonly SexEnumVM[] _sexes = {
+        new(SexEnum.Female, "женский"), new(SexEnum.Male, "мужской"),
+        new(SexEnum.Other, "другой"),
+    };
+    
     private readonly Survivor _survivor = new() {ID = Guid.NewGuid()};
 
     private void CancelClick()
@@ -50,6 +90,18 @@
     {
         await _survivorCatalogue.Add(_survivor);
         _navigation.NavigateTo(nameof(SurvivorCatalogue));
+    }
+
+    private void AgeChange(string ageString)
+    {
+        if (string.IsNullOrWhiteSpace(ageString))
+        {
+            _survivor.BirthDateCalculated = null;
+            return;
+        }
+        
+        if (int.TryParse(ageString, out var age) && age > 0)
+            _survivor.BirthDateCalculated = DateTime.Today.AddYears(age * -1).AddDays(-180);
     }
 
 }
