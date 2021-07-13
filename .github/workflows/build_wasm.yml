@@ -32,7 +32,7 @@ jobs:
       uses: codecov/codecov-action@v1
 
     - name: Publish
-      run: dotnet publish src/SafeHouseCRM.WasmApp/ -c Release -o release
+      run: dotnet publish src/SafeHouseAMS.WasmApp/ -c Release -o release
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v2.2.3
