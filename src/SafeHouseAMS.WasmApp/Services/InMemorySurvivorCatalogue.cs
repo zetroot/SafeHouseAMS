@@ -66,5 +66,13 @@ namespace SafeHouseAMS.WasmApp.Services
 
             throw new InvalidOperationException();
         }
+
+        public Task<Survivor> GetSingleAsync(Guid id)
+        {
+            var item = _store.SingleOrDefault(x => x.ID == id);
+            if (item == null)
+                throw new InvalidOperationException();
+            return Task.FromResult(item);
+        }
     }
 }

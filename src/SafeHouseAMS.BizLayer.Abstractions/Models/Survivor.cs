@@ -35,7 +35,17 @@ namespace SafeHouseAMS.BizLayer.Abstractions.Models
         /// <summary>
         /// Уточнение другого пола
         /// </summary>
-        public string? OtherSex { get; set; } 
+        public string? OtherSex { get; set; }
+
+        /// <summary>
+        /// Пол для отображения
+        /// </summary>
+        public string SexDisplay => Sex switch
+        {
+            SexEnum.Female => "женский",
+            SexEnum.Male => "мужской",
+            _ => OtherSex ?? "другой"
+        };
         
         /// <summary>
         /// Точная дата рождения - если известна

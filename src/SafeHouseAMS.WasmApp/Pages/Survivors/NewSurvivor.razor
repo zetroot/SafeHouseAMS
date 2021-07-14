@@ -1,0 +1,114 @@
+﻿@page "/NewSurvivor"
+@using SafeHouseAMS.BizLayer.Abstractions.Models
+@using SafeHouseAMS.BizLayer.Abstractions.Services
+@inject ISurvivorCatalogue _survivorCatalogue;
+@inject NotificationService _notificationService;
+@inject NavigationManager _navigationManager;
+
+<h3>Новая карточка постардавшего</h3>
+
+<div class="row">
+    <div class="col-12">
+        <RadzenTemplateForm TItem="Survivor" Submit="SubmitSurvivor" Data=@_survivor>
+            <div class="row">
+                <div class="col-8">
+                    <RadzenFieldset Text="Общая информация">
+                        <div class="row" style="margin: 5px">
+                            <div class="col-2 align-items-center d-flex">
+                                <RadzenLabel Text="Имя"/>
+                            </div>
+                            <div class="col-6">
+                                <RadzenRequiredValidator Component="NameTextBox" Text="Имя обязательно для заполнения" Popup="false" Style="position: absolute" />
+                                <RadzenTextBox Style="width: 100%" Name="NameTextBox" Placeholder="Введите имя..." @bind-Value=@_survivor.Name />
+                            </div>
+                        </div>
+                        <div class="row" style="margin: 5px">
+                            <div class="col-2 align-items-center d-flex">
+                                <RadzenLabel Text="Пол"/>
+                            </div>
+                            <div class="col-2">
+                                <RadzenDropDown @bind-Value="_survivor.Sex" Data="_sexes" Style="width: 100%"
+                                                TextProperty="@nameof(SexEnumVM.description)" ValueProperty="@nameof(SexEnumVM.sexValue)"/>
+                            </div>
+                            @if (_survivor.Sex == SexEnum.Other)
+                            {
+                                <div class="col-4">
+                                    <RadzenTextBox Style="width: 100%; margin-left: 5px" Placeholder="Уточните, если возможно" @bind-Value=@_survivor.OtherSex />
+                                </div>
+                            }
+                        </div>
+                        <div class="row" style="margin: 5px">
+                            <div class="col-2 align-items-center d-flex">
+                                <RadzenLabel Text="Дата рождения"/>
+                            </div>
+                            <div class="col-8">
+                                <div class="row" style="margin: 0">
+                                    <RadzenRadioButtonList @bind-Value=@_dobIsAccurate TValue="bool">
+                                        <Items>
+                                            <RadzenRadioButtonListItem Text="Известна" Value="true"/>
+                                            <RadzenRadioButtonListItem Text="Возраст" Value="false"/>
+                                        </Items>
+                                    </RadzenRadioButtonList>
+                                </div>
+                                <div class="row" style="margin-left: 0; margin-top: 5px">
+                                    @if (_dobIsAccurate)
+                                    {
+                                        <RadzenDatePicker @bind-Value=@_survivor.BirthDateAccurate DateFormat="d"/>
+                                    }
+                                    else
+                                    {
+                                        <RadzenTextBox Placeholder="Полных лет сегодня" Change="AgeChange"/>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </RadzenFieldset>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                    <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
+                    <button type="reset" style="margin-left: 8px" class="btn btn-warning" @onclick="@CancelClick">Отмена</button>
+                </div>
+            </div>
+        </RadzenTemplateForm>
+    </div>
+</div>
+
+@code {
+    private bool _dobIsAccurate = true;
+    private record SexEnumVM(SexEnum sexValue, string description);
+
+    private readonly SexEnumVM[] _sexes = {
+        new(SexEnum.Female, "женский"), new(SexEnum.Male, "мужской"),
+        new(SexEnum.Other, "другой"),
+    };
+    
+    private readonly Survivor _survivor = new() {ID = Guid.NewGuid()};
+
+    private void CancelClick()
+    {
+        _notificationService.Notify(new(){Severity = NotificationSeverity.Info, Summary = "Операция отменена"});
+        _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
+    }
+
+    private async Task SubmitSurvivor(Survivor obj)
+    {
+        await _survivorCatalogue.Add(_survivor);
+        _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
+        _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
+    }
+
+    private void AgeChange(string ageString)
+    {
+        if (string.IsNullOrWhiteSpace(ageString))
+        {
+            _survivor.BirthDateCalculated = null;
+            return;
+        }
+        
+        if (int.TryParse(ageString, out var age) && age > 0)
+            _survivor.BirthDateCalculated = DateTime.Today.AddYears(age * -1).AddDays(-180);
+    }
+
+}
