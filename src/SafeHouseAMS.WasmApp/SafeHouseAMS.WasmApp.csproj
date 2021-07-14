@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SafeHouseAMS.BizLayer.Abstractions\SafeHouseAMS.BizLayer.Abstractions.csproj" />
+    <ProjectReference Include="..\SafeHouseAMS.BizLayer\SafeHouseAMS.BizLayer.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Radzen;
-using SafeHouseAMS.BizLayer.Abstractions.Services;
+using SafeHouseAMS.BizLayer.Services;
 using SafeHouseAMS.WasmApp.Services;
 
 namespace SafeHouseAMS.WasmApp

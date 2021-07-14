@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SafeHouseAMS.BizLayer.Abstractions.Models;
+using SafeHouseAMS.BizLayer.Models;
 
-namespace SafeHouseAMS.BizLayer.Abstractions.Services
+namespace SafeHouseAMS.BizLayer.Services
 {
     /// <summary>
     /// Интерфейс каталога пострадавших

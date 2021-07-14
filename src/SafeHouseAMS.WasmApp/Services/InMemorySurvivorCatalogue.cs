@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SafeHouseAMS.BizLayer.Abstractions.Models;
-using SafeHouseAMS.BizLayer.Abstractions.Services;
+using SafeHouseAMS.BizLayer.Models;
+using SafeHouseAMS.BizLayer.Services;
 
 namespace SafeHouseAMS.WasmApp.Services
 {

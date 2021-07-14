@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SafeHouseAMS.BizLayer.Abstractions.Models
+namespace SafeHouseAMS.BizLayer.Models
 {
     public interface IBizRecord
     {
