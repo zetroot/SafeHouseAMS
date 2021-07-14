@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SafeHouseAMS.BizLayer.Models;
-using SafeHouseAMS.BizLayer.Services;
+using SafeHouseAMS.BizLayer.Survivor;
 
 namespace SafeHouseAMS.WasmApp.Services
 {
