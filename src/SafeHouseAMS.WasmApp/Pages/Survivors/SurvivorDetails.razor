@@ -1,0 +1,58 @@
+﻿@page "/SurvivorDetails/{SurvivorID}"
+@using SafeHouseAMS.BizLayer.Abstractions.Services
+@using SafeHouseAMS.BizLayer.Abstractions.Models
+@inject ISurvivorCatalogue _survivorCatalogue;
+@inject NavigationManager _navigationManager;
+
+<h3>Карточка пострадавшего</h3>
+<div class="row" style="margin: 5px">
+    <div class="col-12">
+        <button type="button" class="btn btn-primary" @onclick="() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue))">В каталог</button>
+    </div>
+</div>
+<div class="row" style="margin: 5px">
+    <div class="col-12">
+        <RadzenFieldset Text="Основная информация">
+            <div class="row">
+                <div class="col-2">
+                    № @_survivor?.Num
+                </div>
+                <div class="col-2">
+                    Имя: @_survivor?.Name
+                </div>
+                <div class="col-2">
+                    Пол: @_survivor?.SexDisplay
+                </div>
+                <div class="col-4">
+                    @if (_survivor?.BirthDateAccurate is {} accDob)
+                    {
+                        <p>Дата рождения</p> 
+                        <RadzenDatePicker DateFormat="d" Disabled="true" @bind-Value=@accDob Style="margin: 16px"/>
+                        <p style="margin-top: 5px">(полных лет @_survivor?.Age)</p>
+                    }
+                    else if (_survivor?.Age is not null)
+                    {
+                        <p>Полных лет: @_survivor?.Age</p>
+                    }
+                    else
+                    {
+                        <p>Не известно</p>
+                    }
+                </div>
+            </div>
+        </RadzenFieldset>
+    </div>
+</div>
+
+@code {
+    private Survivor? _survivor;
+    
+    [Parameter] public string? SurvivorID { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(Guid.TryParse(SurvivorID, out var surId))
+            _survivor = await _survivorCatalogue.GetSingleAsync(surId);
+        await base.OnParametersSetAsync();
+    }
+}

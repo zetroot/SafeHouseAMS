@@ -14,5 +14,6 @@ namespace SafeHouseAMS.BizLayer.Abstractions.Services
         Task<Survivor> Add(Survivor adding);
         Task<Survivor> Update(Survivor updating);
         Task Delete(Guid id);
+        Task<Survivor> GetSingleAsync(Guid id);
     }
 }
