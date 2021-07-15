@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SafeHouseAMS.BizLayer.Survivor.Commands;
 
-namespace SafeHouseAMS.BizLayer.Survivor.Commands
+namespace SafeHouseAMS.BizLayer.Survivor
 {
     internal class SurvivorCatalogue : ISurvivorCatalogue
     {
