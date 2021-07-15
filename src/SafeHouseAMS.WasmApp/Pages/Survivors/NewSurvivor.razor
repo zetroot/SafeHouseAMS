@@ -10,7 +10,7 @@
 
 <div class="row">
     <div class="col-12">
-        <RadzenTemplateForm TItem="Survivor" Submit="SubmitSurvivor">
+        <RadzenTemplateForm TItem="SurvivorCreationRequest" Submit="SubmitSurvivor" Data="@_survivor">
             <div class="row">
                 <div class="col-8">
                     <RadzenFieldset Text="Общая информация">
@@ -20,7 +20,7 @@
                             </div>
                             <div class="col-6">
                                 <RadzenRequiredValidator Component="NameTextBox" Text="Имя обязательно для заполнения" Popup="false" Style="position: absolute" />
-                                <RadzenTextBox Style="width: 100%" Name="NameTextBox" Placeholder="Введите имя..." @bind-Value=@_name />
+                                <RadzenTextBox Style="width: 100%" Name="NameTextBox" Placeholder="Введите имя..." @bind-Value=@_survivor.Name />
                             </div>
                         </div>
                         <div class="row" style="margin: 5px">
@@ -28,13 +28,13 @@
                                 <RadzenLabel Text="Пол"/>
                             </div>
                             <div class="col-2">
-                                <RadzenDropDown @bind-Value="@_sex" Data="_sexes" Style="width: 100%"
+                                <RadzenDropDown @bind-Value="@_survivor.Sex" Data="_sexes" Style="width: 100%"
                                                 TextProperty="@nameof(SexEnumVM.description)" ValueProperty="@nameof(SexEnumVM.sexValue)"/>
                             </div>
-                            @if (_sex == SexEnum.Other)
+                            @if (_survivor.Sex == SexEnum.Other)
                             {
                                 <div class="col-4">
-                                    <RadzenTextBox Style="width: 100%; margin-left: 5px" Placeholder="Уточните, если возможно" @bind-Value=@_otherSex />
+                                    <RadzenTextBox Style="width: 100%; margin-left: 5px" Placeholder="Уточните, если возможно" @bind-Value=@_survivor.OtherSex />
                                 </div>
                             }
                         </div>
@@ -54,7 +54,7 @@
                                 <div class="row" style="margin-left: 0; margin-top: 5px">
                                     @if (_dobIsAccurate)
                                     {
-                                        <RadzenDatePicker @bind-Value=@_accurateDob DateFormat="d"/>
+                                        <RadzenDatePicker @bind-Value=@_survivor.AccurateDob DateFormat="d"/>
                                     }
                                     else
                                     {
@@ -85,23 +85,29 @@
         new(SexEnum.Other, "другой"),
     };
 
-    private string _name = string.Empty;
-    private SexEnum _sex;
-    private string? _otherSex;
-    private DateTime? _accurateDob;
-    private DateTime? _calcDob;
+    private class SurvivorCreationRequest
+    {
+        public string Name { get; set; } = string.Empty;
+        public SexEnum Sex { get; set; }
+        public string? OtherSex { get; set; }
+        public DateTime? AccurateDob { get; set; }
+        public DateTime? CalcDob { get; set; }
+    }
 
+    private readonly SurvivorCreationRequest _survivor = new();
+    
     private void CancelClick()
     {
         _notificationService.Notify(new(){Severity = NotificationSeverity.Info, Summary = "Операция отменена"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }
 
-    private async Task SubmitSurvivor(Survivor obj)
+    private async Task SubmitSurvivor()
     {
         await _survivorCatalogue.ApplyCommand(
-            new CreateSurvivor(Guid.NewGuid(), _name, _sex, _otherSex, _accurateDob, _accurateDob.HasValue ? default : _calcDob),
-            CancellationToken.None);
+            new CreateSurvivor(Guid.NewGuid(), _survivor.Name,
+                _survivor.Sex, _survivor.OtherSex,
+                _survivor.AccurateDob, _survivor.AccurateDob.HasValue ? default : _survivor.CalcDob), CancellationToken.None);
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }
@@ -110,12 +116,12 @@
     {
         if (string.IsNullOrWhiteSpace(ageString))
         {
-            _calcDob = null;
+            _survivor.CalcDob = null;
             return;
         }
         
         if (int.TryParse(ageString, out var age) && age > 0)
-            _calcDob = DateTime.Today.AddYears(age * -1).AddDays(-180);
+            _survivor.CalcDob = DateTime.Today.AddYears(age * -1).AddDays(-180);
     }
 
 }
