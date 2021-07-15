@@ -2,8 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using SafeHouseAMS.BizLayer.Survivor;
-using SafeHouseAMS.BizLayer.Survivor.Commands;
+using SafeHouseAMS.BizLayer.Survivors;
 
 namespace SafeHouseAMS.BizLayer
 {

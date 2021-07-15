@@ -1,4 +1,4 @@
-﻿namespace SafeHouseAMS.BizLayer.Survivor
+﻿namespace SafeHouseAMS.BizLayer.Survivors
 {
     /// <summary>
     /// Перечисление типов пола

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Moq;
-using SafeHouseAMS.BizLayer.Survivor;
-using SafeHouseAMS.BizLayer.Survivor.Commands;
+using SafeHouseAMS.BizLayer.Survivors;
+using SafeHouseAMS.BizLayer.Survivors.Commands;
 using Xunit;
 using Xunit.Categories;
 
-namespace SafeHouseAMS.Test.BizLayer.Survivor
+namespace SafeHouseAMS.Test.BizLayer.Survivors
 {
     public class CreateSurvivorTests
     {
@@ -36,7 +36,10 @@ namespace SafeHouseAMS.Test.BizLayer.Survivor
             const string otherSex = "OTHER";
             var accurateDob = DateTimeOffset.Now;
             var repoMock = new Mock<ISurvivorRepository>();
-            repoMock.Setup(x => x.Create(It.IsAny<Guid>(), It.IsAny<string>(), 
+            repoMock.Setup(x => x.Create(It.IsAny<Guid>(), It.IsAny<bool>(),
+                    It.IsAny<DateTimeOffset>(),
+                    It.IsAny<DateTimeOffset>(),
+                    It.IsAny<string>(), 
                     It.IsAny<SexEnum>(), It.IsAny<string?>(),
                     It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
                 .Returns(Task.CompletedTask);
@@ -47,7 +50,10 @@ namespace SafeHouseAMS.Test.BizLayer.Survivor
             await sut.ApplyOn(repoMock.Object).ConfigureAwait(false);
             
             //assert
-            repoMock.Verify(x => x.Create(id, name, sex, otherSex, accurateDob, null), Times.Once());
+            repoMock.Verify(x => x.Create(id, false, 
+                It.Is<DateTimeOffset>(d => d != default),
+                It.Is<DateTimeOffset>(d => d != default),
+                name, sex, otherSex, accurateDob, null), Times.Once());
         }
     }
 }

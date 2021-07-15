@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SafeHouseAMS.BizLayer.Survivor
+namespace SafeHouseAMS.BizLayer.Survivors
 {
     /// <summary>
     /// Карточка пострадавшего
@@ -40,12 +40,12 @@ namespace SafeHouseAMS.BizLayer.Survivor
         /// <summary>
         /// Точная дата рождения - если известна
         /// </summary>
-        public DateTime? BirthDateAccurate { get; }
+        public DateTimeOffset? BirthDateAccurate { get; }
 
         /// <summary>
         /// Вычисленная (приблизительная) дата рождения. Если неизвестна точная
         /// </summary>
-        public DateTime? BirthDateCalculated { get; }
+        public DateTimeOffset? BirthDateCalculated { get; }
 
         /// <summary>
         /// Возраст
@@ -55,7 +55,7 @@ namespace SafeHouseAMS.BizLayer.Survivor
             BirthDateCalculated.HasValue ? CalcTodayAge(BirthDateCalculated.Value) : null;
 
 
-        private static int CalcTodayAge(DateTime dob)
+        private static int CalcTodayAge(DateTimeOffset dob)
         {
             // Save today's date.
             var today = DateTime.Today;
@@ -87,8 +87,8 @@ namespace SafeHouseAMS.BizLayer.Survivor
             int num,
             SexEnum sex,
             string? otherSex,
-            DateTime? birthDateAccurate,
-            DateTime? birthDateCalculated) :
+            DateTimeOffset? birthDateAccurate,
+            DateTimeOffset? birthDateCalculated) :
             base(id, isDeleted, created, lastEdit)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));

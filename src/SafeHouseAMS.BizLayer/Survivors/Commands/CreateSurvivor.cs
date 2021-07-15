@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace SafeHouseAMS.BizLayer.Survivor.Commands
+namespace SafeHouseAMS.BizLayer.Survivors.Commands
 {
     /// <summary>
     /// Команда создания нового пострадавшего
@@ -42,7 +42,10 @@ namespace SafeHouseAMS.BizLayer.Survivor.Commands
         internal override Task ApplyOn(ISurvivorRepository repository)
         {
             if (repository is null) throw new ArgumentNullException(nameof(repository));
-            return repository.Create(EntityID, name, sex, otherSex, birthDateAccurate, birthDateCalculated);
+            return repository.Create(EntityID, false, DateTimeOffset.Now, DateTimeOffset.Now, 
+                name, 
+                sex, otherSex, 
+                birthDateAccurate, birthDateCalculated);
         }
     }
 }

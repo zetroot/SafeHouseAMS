@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SafeHouseAMS.BizLayer.Survivor.Commands
+namespace SafeHouseAMS.BizLayer.Survivors.Commands
 {
     /// <summary>
     /// Базовый класс команды агрегата реестра постардавших

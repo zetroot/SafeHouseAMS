@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
-using SafeHouseAMS.BizLayer.Survivor.Commands;
+using SafeHouseAMS.BizLayer.Survivors.Commands;
 
-namespace SafeHouseAMS.BizLayer.Survivor
+namespace SafeHouseAMS.BizLayer.Survivors
 {
     /// <summary>
     /// Интерфейс агрегата бизнес-логики реестра пострадавих 
     /// </summary>
-    public interface ISurvivorCatalogue : IDomainAggregate<Survivor, SurvivorCommand>
+    public interface ISurvivorCatalogue : IDomainAggregate<Survivors.Survivor, SurvivorCommand>
     {
         /// <summary>
         /// Получить список пострадавших
         /// </summary>
         /// <returns></returns>
-        IAsyncEnumerable<Survivor> GetCollection();
+        IAsyncEnumerable<Survivors.Survivor> GetCollection();
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SafeHouseAMS.BizLayer.Survivor
+namespace SafeHouseAMS.BizLayer.Survivors
 {
     /// <summary>
     /// Репозиторий карточек пострадавших
@@ -13,12 +14,16 @@ namespace SafeHouseAMS.BizLayer.Survivor
         /// Создать новую запись
         /// </summary>
         /// <param name="id">идентификатор</param>
+        /// <param name="lastEdit">дата время последнего редактирования</param>
         /// <param name="name">имя</param>
         /// <param name="sex">пол</param>
         /// <param name="otherSex">уточнение пола</param>
         /// <param name="accurateDob">точная дата рождения</param>
         /// <param name="calculatedDob">вычисленная дата рождения</param>
-        Task Create(Guid id, string name, SexEnum sex, string? otherSex, DateTimeOffset? accurateDob, DateTimeOffset? calculatedDob);
+        /// <param name="isDeleted">Удалена ли запись</param>
+        /// <param name="created">дата-время создания</param>
+        Task Create(Guid id, bool isDeleted, DateTimeOffset created, DateTimeOffset lastEdit, string name, SexEnum sex,
+            string? otherSex, DateTimeOffset? accurateDob, DateTimeOffset? calculatedDob);
 
         /// <summary>
         /// Получить одиночную запись по идентификатору
@@ -27,5 +32,11 @@ namespace SafeHouseAMS.BizLayer.Survivor
         /// <param name="cancellationToken">Токен отмены</param>
         /// <returns>Найденая запись</returns>
         Task<Survivor> GetSingleAsync(Guid id, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить коллекцию записей пострадавших
+        /// </summary>
+        /// <returns>Асинхронная последовательность записей пострадавших</returns>
+        IAsyncEnumerable<Survivor> GetCollection();
     }
 }

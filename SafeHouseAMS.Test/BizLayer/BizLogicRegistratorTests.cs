@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using SafeHouseAMS.BizLayer;
-using SafeHouseAMS.BizLayer.Survivor;
+using SafeHouseAMS.BizLayer.Survivors;
 using Xunit;
 using Xunit.Categories;
 
