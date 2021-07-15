@@ -1,6 +1,7 @@
 ﻿@page "/NewSurvivor"
-@using SafeHouseAMS.BizLayer.Abstractions.Models
-@using SafeHouseAMS.BizLayer.Abstractions.Services
+@using System.Threading
+@using SafeHouseAMS.BizLayer.Survivors
+@using SafeHouseAMS.BizLayer.Survivors.Commands
 @inject ISurvivorCatalogue _survivorCatalogue;
 @inject NotificationService _notificationService;
 @inject NavigationManager _navigationManager;
@@ -9,7 +10,7 @@
 
 <div class="row">
     <div class="col-12">
-        <RadzenTemplateForm TItem="Survivor" Submit="SubmitSurvivor" Data=@_survivor>
+        <RadzenTemplateForm TItem="SurvivorCreationRequest" Submit="SubmitSurvivor" Data="@_survivor">
             <div class="row">
                 <div class="col-8">
                     <RadzenFieldset Text="Общая информация">
@@ -27,7 +28,7 @@
                                 <RadzenLabel Text="Пол"/>
                             </div>
                             <div class="col-2">
-                                <RadzenDropDown @bind-Value="_survivor.Sex" Data="_sexes" Style="width: 100%"
+                                <RadzenDropDown @bind-Value="@_survivor.Sex" Data="_sexes" Style="width: 100%"
                                                 TextProperty="@nameof(SexEnumVM.description)" ValueProperty="@nameof(SexEnumVM.sexValue)"/>
                             </div>
                             @if (_survivor.Sex == SexEnum.Other)
@@ -53,7 +54,7 @@
                                 <div class="row" style="margin-left: 0; margin-top: 5px">
                                     @if (_dobIsAccurate)
                                     {
-                                        <RadzenDatePicker @bind-Value=@_survivor.BirthDateAccurate DateFormat="d"/>
+                                        <RadzenDatePicker @bind-Value=@_survivor.AccurateDob DateFormat="d"/>
                                     }
                                     else
                                     {
@@ -83,18 +84,30 @@
         new(SexEnum.Female, "женский"), new(SexEnum.Male, "мужской"),
         new(SexEnum.Other, "другой"),
     };
-    
-    private readonly Survivor _survivor = new() {ID = Guid.NewGuid()};
 
+    private class SurvivorCreationRequest
+    {
+        public string Name { get; set; } = string.Empty;
+        public SexEnum Sex { get; set; }
+        public string? OtherSex { get; set; }
+        public DateTime? AccurateDob { get; set; }
+        public DateTime? CalcDob { get; set; }
+    }
+
+    private readonly SurvivorCreationRequest _survivor = new();
+    
     private void CancelClick()
     {
         _notificationService.Notify(new(){Severity = NotificationSeverity.Info, Summary = "Операция отменена"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }
 
-    private async Task SubmitSurvivor(Survivor obj)
+    private async Task SubmitSurvivor()
     {
-        await _survivorCatalogue.Add(_survivor);
+        await _survivorCatalogue.ApplyCommand(
+            new CreateSurvivor(Guid.NewGuid(), _survivor.Name,
+                _survivor.Sex, _survivor.OtherSex,
+                _survivor.AccurateDob, _survivor.AccurateDob.HasValue ? default : _survivor.CalcDob), CancellationToken.None);
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }
@@ -103,12 +116,12 @@
     {
         if (string.IsNullOrWhiteSpace(ageString))
         {
-            _survivor.BirthDateCalculated = null;
+            _survivor.CalcDob = null;
             return;
         }
         
         if (int.TryParse(ageString, out var age) && age > 0)
-            _survivor.BirthDateCalculated = DateTime.Today.AddYears(age * -1).AddDays(-180);
+            _survivor.CalcDob = DateTime.Today.AddYears(age * -1).AddDays(-180);
     }
 
 }

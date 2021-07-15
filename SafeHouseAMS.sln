@@ -7,7 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3D9A4064-4EF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseAMS.WasmApp", "src\SafeHouseAMS.WasmApp\SafeHouseAMS.WasmApp.csproj", "{B3126762-9A6C-4500-9BBD-1D00F83763D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseAMS.BizLayer.Abstractions", "src\SafeHouseAMS.BizLayer.Abstractions\SafeHouseAMS.BizLayer.Abstractions.csproj", "{49C973B1-5976-41E8-A35B-9122267CA30C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseAMS.BizLayer", "src\SafeHouseAMS.BizLayer\SafeHouseAMS.BizLayer.csproj", "{49C973B1-5976-41E8-A35B-9122267CA30C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CB1FC8EB-EA6B-4514-A870-2D7D99E4C0E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseAMS.Test", "SafeHouseAMS.Test\SafeHouseAMS.Test.csproj", "{F6AE4255-F515-4A11-A876-69DACF6FB7CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +27,10 @@ Global
 		{49C973B1-5976-41E8-A35B-9122267CA30C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49C973B1-5976-41E8-A35B-9122267CA30C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49C973B1-5976-41E8-A35B-9122267CA30C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6AE4255-F515-4A11-A876-69DACF6FB7CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6AE4255-F515-4A11-A876-69DACF6FB7CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6AE4255-F515-4A11-A876-69DACF6FB7CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6AE4255-F515-4A11-A876-69DACF6FB7CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -33,5 +41,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B3126762-9A6C-4500-9BBD-1D00F83763D8} = {3D9A4064-4EF5-4AB2-8AAC-CD0812D95E1B}
 		{49C973B1-5976-41E8-A35B-9122267CA30C} = {3D9A4064-4EF5-4AB2-8AAC-CD0812D95E1B}
+		{F6AE4255-F515-4A11-A876-69DACF6FB7CF} = {CB1FC8EB-EA6B-4514-A870-2D7D99E4C0E5}
 	EndGlobalSection
 EndGlobal

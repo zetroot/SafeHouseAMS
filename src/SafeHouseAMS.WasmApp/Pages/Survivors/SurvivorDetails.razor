@@ -1,6 +1,6 @@
 ﻿@page "/SurvivorDetails/{SurvivorID}"
-@using SafeHouseAMS.BizLayer.Abstractions.Services
-@using SafeHouseAMS.BizLayer.Abstractions.Models
+@using System.Threading
+@using SafeHouseAMS.BizLayer.Survivors
 @inject ISurvivorCatalogue _survivorCatalogue;
 @inject NavigationManager _navigationManager;
 
@@ -52,7 +52,7 @@
     protected override async Task OnParametersSetAsync()
     {
         if(Guid.TryParse(SurvivorID, out var surId))
-            _survivor = await _survivorCatalogue.GetSingleAsync(surId);
+            _survivor = await _survivorCatalogue.GetSingleAsync(surId, CancellationToken.None);
         await base.OnParametersSetAsync();
     }
 }
