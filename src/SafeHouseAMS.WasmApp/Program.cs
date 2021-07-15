@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Radzen;
 using SafeHouseAMS.BizLayer;
+using SafeHouseAMS.BizLayer.Survivors;
+using SafeHouseAMS.WasmApp.Services;
 
 namespace SafeHouseAMS.WasmApp
 {
@@ -29,6 +32,7 @@ namespace SafeHouseAMS.WasmApp
                 options.ProviderOptions.ResponseType = "code";
             });
 
+            builder.Services.TryAddSingleton<ISurvivorRepository, InMemorySurvivorsRepository>();
             builder.Services.AddBizLogic(builder.Configuration);
 
             builder.Services.AddScoped<DialogService>();
