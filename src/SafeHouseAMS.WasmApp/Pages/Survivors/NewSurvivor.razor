@@ -8,71 +8,73 @@
 
 <h3>Новая карточка постардавшего</h3>
 
-<div class="row">
-    <div class="col-12">
-        <RadzenTemplateForm TItem="SurvivorCreationRequest" Submit="SubmitSurvivor" Data="@_survivor">
-            <div class="row">
-                <div class="col-8">
-                    <RadzenFieldset Text="Общая информация">
-                        <div class="row" style="margin: 5px">
-                            <div class="col-2 align-items-center d-flex">
-                                <RadzenLabel Text="Имя"/>
-                            </div>
-                            <div class="col-6">
-                                <RadzenRequiredValidator Component="NameTextBox" Text="Имя обязательно для заполнения" Popup="false" Style="position: absolute" />
-                                <RadzenTextBox Style="width: 100%" Name="NameTextBox" Placeholder="Введите имя..." @bind-Value=@_survivor.Name />
-                            </div>
-                        </div>
-                        <div class="row" style="margin: 5px">
-                            <div class="col-2 align-items-center d-flex">
-                                <RadzenLabel Text="Пол"/>
-                            </div>
-                            <div class="col-2">
-                                <RadzenDropDown @bind-Value="@_survivor.Sex" Data="_sexes" Style="width: 100%"
-                                                TextProperty="@nameof(SexEnumVM.description)" ValueProperty="@nameof(SexEnumVM.sexValue)"/>
-                            </div>
-                            @if (_survivor.Sex == SexEnum.Other)
-                            {
-                                <div class="col-4">
-                                    <RadzenTextBox Style="width: 100%; margin-left: 5px" Placeholder="Уточните, если возможно" @bind-Value=@_survivor.OtherSex />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <RadzenTemplateForm TItem="SurvivorCreationRequest" Submit="SubmitSurvivor" Data="@_survivor">
+                <div class="row">
+                    <div class="col-md-8">
+                        <RadzenFieldset Text="Общая информация">
+                            <div class="row" style="margin: 5px">
+                                <div class="col-md-2 align-items-center d-flex">
+                                    Имя
                                 </div>
-                            }
-                        </div>
-                        <div class="row" style="margin: 5px">
-                            <div class="col-2 align-items-center d-flex">
-                                <RadzenLabel Text="Дата рождения"/>
-                            </div>
-                            <div class="col-8">
-                                <div class="row" style="margin: 0">
-                                    <RadzenRadioButtonList @bind-Value=@_dobIsAccurate TValue="bool">
-                                        <Items>
-                                            <RadzenRadioButtonListItem Text="Известна" Value="true"/>
-                                            <RadzenRadioButtonListItem Text="Возраст" Value="false"/>
-                                        </Items>
-                                    </RadzenRadioButtonList>
-                                </div>
-                                <div class="row" style="margin-left: 0; margin-top: 5px">
-                                    @if (_dobIsAccurate)
-                                    {
-                                        <RadzenDatePicker @bind-Value=@_survivor.AccurateDob DateFormat="d"/>
-                                    }
-                                    else
-                                    {
-                                        <RadzenTextBox Placeholder="Полных лет сегодня" Change="AgeChange"/>
-                                    }
+                                <div class="col-md">
+                                    <RadzenRequiredValidator Component="NameTextBox" Text="Имя обязательно для заполнения" Popup="false" Style="position: absolute" />
+                                    <RadzenTextBox Style="width: 100%" Name="NameTextBox" Placeholder="Введите имя..." @bind-Value=@_survivor.Name />
                                 </div>
                             </div>
-                        </div>
-                    </RadzenFieldset>
+                            <div class="row" style="margin: 5px">
+                                <div class="col-md-2 align-items-center d-flex">
+                                    Пол
+                                </div>
+                                <div class="col-md-4">
+                                    <RadzenDropDown @bind-Value="@_survivor.Sex" Data="_sexes" Style="width: 100%"
+                                                    TextProperty="@nameof(SexEnumVM.description)" ValueProperty="@nameof(SexEnumVM.sexValue)"/>
+                                </div>
+                                @if (_survivor.Sex == SexEnum.Other)
+                                {
+                                    <div class="col-md">
+                                        <RadzenTextBox Style="width: 100%; margin-left: 5px" Placeholder="Уточните, если возможно" @bind-Value=@_survivor.OtherSex />
+                                    </div>
+                                }
+                            </div>
+                            <div class="row" style="margin: 5px">
+                                <div class="col-md-2 align-items-center d-flex">
+                                    Дата рождения
+                                </div>
+                                <div class="col-md">
+                                    <div class="row" style="margin: 0">
+                                        <RadzenRadioButtonList @bind-Value=@_dobIsAccurate TValue="bool">
+                                            <Items>
+                                                <RadzenRadioButtonListItem Text="Известна" Value="true"/>
+                                                <RadzenRadioButtonListItem Text="Возраст" Value="false"/>
+                                            </Items>
+                                        </RadzenRadioButtonList>
+                                    </div>
+                                    <div class="row" style="margin-left: 0; margin-top: 5px">
+                                        @if (_dobIsAccurate)
+                                        {
+                                            <RadzenDatePicker @bind-Value=@_survivor.AccurateDob DateFormat="d"/>
+                                        }
+                                        else
+                                        {
+                                            <RadzenTextBox Placeholder="Полных лет сегодня" Change="AgeChange"/>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </RadzenFieldset>
+                    </div>
                 </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
-                    <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
-                    <button type="reset" style="margin-left: 8px" class="btn btn-warning" @onclick="@CancelClick">Отмена</button>
+                <div class="row justify-content-center">
+                    <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                        <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
+                        <button type="reset" style="margin-left: 8px" class="btn btn-warning" @onclick="@CancelClick">Отмена</button>
+                    </div>
                 </div>
-            </div>
-        </RadzenTemplateForm>
+            </RadzenTemplateForm>
+        </div>
     </div>
 </div>
 
