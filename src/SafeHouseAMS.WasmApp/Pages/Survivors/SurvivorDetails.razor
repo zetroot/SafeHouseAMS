@@ -5,43 +5,61 @@
 @inject NavigationManager _navigationManager;
 
 <h3>Карточка пострадавшего</h3>
-<div class="row" style="margin: 5px">
-    <div class="col-12">
-        <button type="button" class="btn btn-primary" @onclick="() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue))">В каталог</button>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12-md">
+            <button type="button" class="btn btn-primary" @onclick="() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue))">В каталог</button>
+        </div>
     </div>
-</div>
-<div class="row" style="margin: 5px">
-    <div class="col-12">
-        <RadzenFieldset Text="Основная информация">
-            <div class="row">
-                <div class="col-2">
-                    № @_survivor?.Num
-                </div>
-                <div class="col-2">
-                    Имя: @_survivor?.Name
-                </div>
-                <div class="col-2">
-                    Пол: @_survivor?.SexDisplay
-                </div>
-                <div class="col-4">
-                    @if (_survivor?.BirthDateAccurate is {} accDob)
-                    {
-                        <p>Дата рождения</p> 
-                        <RadzenDatePicker DateFormat="d" Disabled="true" @bind-Value=@accDob Style="margin: 16px"/>
-                        <p style="margin-top: 5px">(полных лет @_survivor?.Age)</p>
-                    }
-                    else if (_survivor?.Age is not null)
-                    {
-                        <p>Полных лет: @_survivor?.Age</p>
-                    }
-                    else
-                    {
-                        <p>Не известно</p>
-                    }
-                </div>
+    @if (_survivor is null)
+    {
+        <p>Загрузка информации..</p>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-sm-8">
+                <RadzenFieldset Style="align-self: stretch" Text="Основная информация">
+                    <div class="row">
+                        <div class="col-sm">
+                            № @_survivor.Num <br/>
+                            Имя: @_survivor.Name <br/>
+                            Пол: @_survivor.SexDisplay <br/>
+                        </div>
+                        <div class="col-sm">
+                            @if (_survivor?.BirthDateAccurate is {} accDob)
+                            {
+                                <p>Дата рождения @accDob.Date.ToString("d") (полных лет @_survivor.Age)</p>
+                            }
+                            else if (_survivor!.Age is not null)
+                            {
+                                <p>Полных лет: @_survivor.Age</p>
+                            }
+                            else
+                            {
+                                <p>Возраст не известен</p>
+                            }
+                        </div>
+                    </div>
+                </RadzenFieldset>
             </div>
-        </RadzenFieldset>
-    </div>
+            <div class="col-sm-4 text-muted">
+                <RadzenFieldset AllowCollapse="true" Collapsed="true" Text="Системная информация">
+                    <div class="row">
+                        <div class="col-sm">
+                            ID: @_survivor.ID.ToString()
+                        </div>
+                        <div class="col-sm">
+                            Создана: @_survivor.Created.ToString("G") <br/> Изменена: @_survivor.LastEdit.ToString("G")
+                        </div>
+                        <div class="col-sm">
+                            Удалённая запись <input type="checkbox" disabled="disabled" value="@_survivor.IsDeleted" />
+                        </div>
+                    </div>
+                </RadzenFieldset>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
