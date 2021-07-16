@@ -46,7 +46,8 @@ namespace SafeHouseAMS.WasmApp.Services
         public async IAsyncEnumerable<Survivor> GetCollection(int skip, int? take)
         {
             await Task.Yield();
-            var slice = take.HasValue ? _store.Skip(skip).Take(take.Value) : _store.Skip(skip);
+            var cuttedLeft = _store.OrderByDescending(x => x.LastEdit).Skip(skip);
+            var slice = take.HasValue ? cuttedLeft.Take(take.Value) : cuttedLeft;
             foreach (var survivor in slice)
             {
                 yield return survivor;

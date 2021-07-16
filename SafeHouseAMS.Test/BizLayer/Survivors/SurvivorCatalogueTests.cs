@@ -90,5 +90,21 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
             repoMock.Verify(x => x.GetCollection(42, 54), Times.Once());
             resultedEnum.Should().BeSameAs(asyncEnum);
         }
+        
+        [Fact, UnitTest]
+        public void GetTotalCount_WhenCalled_InvokesRepositoryAndReturnsItsResult()
+        {
+            //arrangev
+            var repoMock = new Mock<ISurvivorRepository>();
+            repoMock.Setup(x => x.GetTotalCount()).ReturnsAsync(42);
+            var sut = new SurvivorCatalogue(repoMock.Object);
+
+            //act
+            var result = sut.GetTotalCount();
+            
+            //assert
+            repoMock.Verify(x => x.GetTotalCount(), Times.Once());
+            result.Should().Be(42);
+        }
     }
 }
