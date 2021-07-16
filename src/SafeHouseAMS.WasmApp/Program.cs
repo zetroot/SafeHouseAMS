@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using Radzen;
 using SafeHouseAMS.BizLayer;
 using SafeHouseAMS.BizLayer.Survivors;
 using SafeHouseAMS.WasmApp.Services;
+using Serilog;
 
 namespace SafeHouseAMS.WasmApp
 {
@@ -19,28 +21,51 @@ namespace SafeHouseAMS.WasmApp
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
-            builder.Services.AddAuthorizationCore();
-            
-            builder.Services.AddOidcAuthentication(options =>
-            {
-                // Replace the Okta placeholders with your Okta values in the appsettings.json file.
-                options.ProviderOptions.Authority = builder.Configuration.GetValue<string>("Okta:Authority");
-                options.ProviderOptions.ClientId = builder.Configuration.GetValue<string>("Okta:ClientId");
-
-                options.ProviderOptions.ResponseType = "code";
-            });
+            ConfigureLogging(builder.Logging, builder.Configuration);
+            ConfigureServices(builder.Services, builder.Configuration);
 
             builder.Services.TryAddSingleton<ISurvivorRepository, InMemorySurvivorsRepository>();
-            builder.Services.AddBizLogic(builder.Configuration);
-
-            builder.Services.AddScoped<DialogService>();
-            builder.Services.AddScoped<NotificationService>();
-            builder.Services.AddScoped<TooltipService>();
-            builder.Services.AddScoped<ContextMenuService>();
             
             await builder.Build().RunAsync();
+        }
+        
+        /// <summary>
+        /// Конфигурация DI-контейнера
+        /// </summary>
+        /// <param name="services">Коллекция служб - собственно контейнер</param>
+        /// <param name="configuration">Конфигурация</param>
+        private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        {
+            services
+                .AddAuthorizationCore()
+                .AddOidcAuthentication(options =>
+                {
+                    // Replace the Okta placeholders with your Okta values in the appsettings.json file.
+                    options.ProviderOptions.Authority = configuration.GetValue<string>("Okta:Authority");
+                    options.ProviderOptions.ClientId = configuration.GetValue<string>("Okta:ClientId");
+
+                    options.ProviderOptions.ResponseType = "code";
+                });
+            
+            services.AddBizLogic(configuration);
+                
+            services.AddScoped<DialogService>()
+                .AddScoped<NotificationService>()
+                .AddScoped<TooltipService>()
+                .AddScoped<ContextMenuService>();
+        }
+        
+        /// <summary>
+        /// Настройка логирования.
+        /// По умолчанию используется Serilog. Конфигурация логгера задаётся через IConfiguration, из секции "Serilog"
+        /// </summary>
+        /// <param name="builderLogging">Билдер логгера</param>
+        /// <param name="builderConfiguration">Конфигурация</param>
+        private static void ConfigureLogging(ILoggingBuilder builderLogging, IConfiguration builderConfiguration)
+        {
+            builderLogging.ClearProviders();
+            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builderConfiguration, "Serilog").CreateLogger();
+            builderLogging.AddSerilog();
         }
     }
 }
