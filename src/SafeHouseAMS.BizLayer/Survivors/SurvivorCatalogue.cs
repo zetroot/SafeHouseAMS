@@ -14,16 +14,19 @@ namespace SafeHouseAMS.BizLayer.Survivors
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
+
         public Task ApplyCommand(SurvivorCommand command, CancellationToken cancellationToken)
         {
             if (command is null) throw new ArgumentNullException(nameof(command));
             cancellationToken.ThrowIfCancellationRequested();
             return command.ApplyOn(_repository);
         }
-        
+
+        public IAsyncEnumerable<Survivor> GetCollection(int skip, int? take) => _repository.GetCollection(skip, take);
+
+        public Task<int> GetTotalCount() => _repository.GetTotalCount();
+
         public Task<Survivor> GetSingleAsync(Guid id, CancellationToken cancellationToken) =>
             _repository.GetSingleAsync(id, cancellationToken);
-
-        public IAsyncEnumerable<Survivor> GetCollection() => _repository.GetCollection();
     }
 }
