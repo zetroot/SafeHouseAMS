@@ -35,7 +35,7 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
 
         private class MockCommand : SurvivorCommand
         {
-            public int ApplyOnInvocationsCounter { get; private set; } = 0;
+            public int ApplyOnInvocationsCounter { get; private set; }
             public ISurvivorRepository? LastUsedRepository { get; private set; }
             public MockCommand() : base(default) { }
 
@@ -80,14 +80,14 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
             //arrange
             var asyncEnum = GetEmptyAsyncEnumerable<Survivor>();
             var repoMock = new Mock<ISurvivorRepository>();
-            repoMock.Setup(x => x.GetCollection()).Returns(asyncEnum);
+            repoMock.Setup(x => x.GetCollection(It.IsAny<int>(), It.IsAny<int?>())).Returns(asyncEnum);
             var sut = new SurvivorCatalogue(repoMock.Object);
 
             //act
-            var resultedEnum = sut.GetCollection();
+            var resultedEnum = sut.GetCollection(42, 54);
             
             //assert
-            repoMock.Verify(x => x.GetCollection(), Times.Once());
+            repoMock.Verify(x => x.GetCollection(42, 54), Times.Once());
             resultedEnum.Should().BeSameAs(asyncEnum);
         }
     }

@@ -3,6 +3,7 @@
 @using SafeHouseAMS.BizLayer.Survivors
 @inject ISurvivorCatalogue _survivorCatalogue
 @inject NavigationManager _navigation
+@inject ILogger<SurvivorCatalogue> _logger
 
 <h3>Каталог пострадавших</h3>
 
@@ -14,7 +15,10 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <RadzenDataGrid TItem="Survivor" Data="@_persons" @ref="personsGrid" AllowColumnResize="true">
+            <RadzenDataGrid TItem="Survivor" Data="@_persons" Count="@count" 
+                            @ref="personsGrid" AllowColumnResize="true"
+                            LoadData="LoadDataHandler"
+                            AllowPaging="true" PageSize="20">
                 <Columns>
                     <RadzenDataGridColumn TItem="Survivor" Property="Num" Title="Код" Width="80px" TextAlign="TextAlign.Center"/>
                     <RadzenDataGridColumn TItem="Survivor" Property="Name" Title="Имя"/>
@@ -36,15 +40,34 @@
 
 @code {
     RadzenDataGrid<Survivor>? personsGrid;
-    private ObservableCollection<Survivor> _persons = new();
-    
+    private List<Survivor> _persons = new();
+    int count;
+
     protected override async Task OnInitializedAsync()
     {
-        await foreach (var survivor in _survivorCatalogue.GetCollection())
+        _logger.LogInformation("Initializing");
+        var items = new List<Survivor>();
+        await foreach (var survivor in _survivorCatalogue.GetCollection(0, 20))
         {
-            _persons.Add(survivor);
+            items.Add(survivor);
         }
+        _persons = items;
+        count = await _survivorCatalogue.GetTotalCount();
         await base.OnInitializedAsync();
-        personsGrid?.Reload();
+        _logger.LogInformation("Initialized");
     }
+
+    private async Task LoadDataHandler(LoadDataArgs loadArgs)
+    {
+        _logger.LogInformation("Loading data. Skip={Skip} take={Take}", loadArgs.Skip, loadArgs.Top);
+        var items = new List<Survivor>();
+        await foreach (var survivor in _survivorCatalogue.GetCollection(loadArgs.Skip ?? 0, loadArgs.Top))
+        {
+            items.Add(survivor);
+        }
+        _persons = items;
+        count = await _survivorCatalogue.GetTotalCount();
+        _logger.LogInformation("loaded");
+    }
+
 }

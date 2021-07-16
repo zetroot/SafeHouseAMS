@@ -64,7 +64,7 @@ namespace SafeHouseAMS.WasmApp
         private static void ConfigureLogging(ILoggingBuilder builderLogging, IConfiguration builderConfiguration)
         {
             builderLogging.ClearProviders();
-            Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builderConfiguration, "Serilog").CreateLogger();
+            Log.Logger = new LoggerConfiguration().WriteTo.BrowserConsole().MinimumLevel.Information().CreateLogger();
             builderLogging.AddSerilog();
         }
     }

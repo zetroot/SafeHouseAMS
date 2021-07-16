@@ -36,7 +36,15 @@ namespace SafeHouseAMS.BizLayer.Survivors
         /// <summary>
         /// Получить коллекцию записей пострадавших
         /// </summary>
+        /// <param name="skip">Пропустить первые записи</param>
+        /// <param name="take">Ограничить количество. Если null - не ограничивать</param>
         /// <returns>Асинхронная последовательность записей пострадавших</returns>
-        IAsyncEnumerable<Survivor> GetCollection();
+        IAsyncEnumerable<Survivor> GetCollection(int skip, int? take);
+        
+        /// <summary>
+        /// Получить общее количество записей в справочнике
+        /// </summary>
+        /// <returns>общее количество пострадавших</returns>
+        Task<int> GetTotalCount();
     }
 }
