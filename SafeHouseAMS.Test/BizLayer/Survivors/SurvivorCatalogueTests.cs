@@ -92,7 +92,7 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
         }
         
         [Fact, UnitTest]
-        public void GetTotalCount_WhenCalled_InvokesRepositoryAndReturnsItsResult()
+        public async Task GetTotalCount_WhenCalled_InvokesRepositoryAndReturnsItsResult()
         {
             //arrangev
             var repoMock = new Mock<ISurvivorRepository>();
@@ -100,7 +100,7 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
             var sut = new SurvivorCatalogue(repoMock.Object);
 
             //act
-            var result = sut.GetTotalCount();
+            var result = await sut.GetTotalCount();
             
             //assert
             repoMock.Verify(x => x.GetTotalCount(), Times.Once());
