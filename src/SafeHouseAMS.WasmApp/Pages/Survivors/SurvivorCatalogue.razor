@@ -6,29 +6,30 @@
 
 <h3>Каталог пострадавших</h3>
 
-<div class="row" style="margin: 5px">
-    <div class="col-12">
-        <button type="button" class="btn btn-primary" @onclick="() => _navigation.NavigateTo(nameof(NewSurvivor))">Добавить нового</button>
+<div class="container-fluid">
+    <div class="row" style="margin-bottom: 5px">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary" @onclick="() => _navigation.NavigateTo(nameof(NewSurvivor))">Добавить нового</button>
+        </div>
     </div>
-</div>
-<div class="row" style="margin: 5px">
-    <div class="col-12">
-        <RadzenDataGrid TItem="Survivor" Data="@_persons" @ref="personsGrid"
-                        AllowColumnResize="true">
-            <Columns>
-                <RadzenDataGridColumn TItem="Survivor" Property="Num" Title="Код" Width="80px" TextAlign="TextAlign.Center"/>
-                <RadzenDataGridColumn TItem="Survivor" Property="Name" Title="Имя"/>
-                <RadzenDataGridColumn TItem="Survivor" Property="SexDisplay" Title="Пол"/>
-                <RadzenDataGridColumn TItem="Survivor" Property="Age" Title="Возраст, лет"/>
-                <RadzenDataGridColumn TItem="Survivor" Property="Num" Title="Подробнее" Width="100px" TextAlign="TextAlign.Center">
-                    <Template Context="item">
-                        <button type="button" class="btn btn-outline-primary" @onclick="@(() => _navigation.NavigateTo($"{nameof(SurvivorDetails)}/{item.ID}"))">
-                            <span class="oi oi-list-rich"></span>
-                        </button>
-                    </Template>
-                </RadzenDataGridColumn>
-            </Columns>
-        </RadzenDataGrid>
+    <div class="row">
+        <div class="col-md-12">
+            <RadzenDataGrid TItem="Survivor" Data="@_persons" @ref="personsGrid" AllowColumnResize="true">
+                <Columns>
+                    <RadzenDataGridColumn TItem="Survivor" Property="Num" Title="Код" Width="80px" TextAlign="TextAlign.Center"/>
+                    <RadzenDataGridColumn TItem="Survivor" Property="Name" Title="Имя"/>
+                    <RadzenDataGridColumn TItem="Survivor" Property="SexDisplay" Title="Пол"/>
+                    <RadzenDataGridColumn TItem="Survivor" Property="Age" Title="Возраст, лет"/>
+                    <RadzenDataGridColumn TItem="Survivor" Property="Num" Title="Подробнее" Width="100px" TextAlign="TextAlign.Center">
+                        <Template Context="item">
+                            <button type="button" class="btn btn-outline-primary" @onclick="@(() => _navigation.NavigateTo($"{nameof(SurvivorDetails)}/{item.ID}"))">
+                                <span class="oi oi-list-rich"></span>
+                            </button>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </div>
     </div>
 </div>
 
