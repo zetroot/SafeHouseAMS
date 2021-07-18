@@ -13,11 +13,11 @@
         </div>
     </div>
     
-    <div class="row">
+    <div class="row" style="margin-top: 5px">
         <div class="col-md-6">
             <RadzenFieldset Text="Канал обращения">
                 <div class="row">
-                    <div class="col-2-md">
+                    <div class="col-2-md" style="margin-right: 5px">
                         <RadzenCheckBox TValue="bool" @bind-Value="@selfInquiry"/>
                         Самообращение
                     </div>
@@ -83,7 +83,7 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-2-md">
+                    <div class="col-2-md" style="margin-right: 5px">
                         <RadzenCheckBox TValue="bool" @bind-Value="@isForwardedBySurvivor"/>
                         Перенаправлен другим пострадавшим
                     </div>
@@ -95,26 +95,27 @@
                     }
                 </div>
                 <div class="row">
-                    <div class="col-2-md">
+                    <div class="col-2-md" style="margin-right: 5px">
                         <RadzenCheckBox TValue="bool" @bind-Value="@isForwardedByPerson"/>
                         Перенаправлен другим лицом
                     </div>
                     @if (isForwardedByPerson)
                     {
-                        <div class="col-10-md">
+                        <div class="col-10-md" style="margin-right: 5px">
                             <RadzenTextBox Placeholder="Укажите каким" @bind-Value="@forwardedByPerson"></RadzenTextBox>
                         </div>
                     }
                 </div>
                 <div class="row">
-                    <div class="col-2-md">
+                    <div class="col-2-md" style="margin-right: 5px">
                         <RadzenCheckBox TValue="bool" @bind-Value="@isForwardedByOrganization"/>
-                        Перенаправлен другой организацией
+                        <RadzenLabel Text="Перенаправлен другой организацией"/>
                     </div>
                     @if (isForwardedByOrganization)
                     {
                         <div class="col-10-md">
-                            <RadzenTextBox Placeholder="Название организации" @bind-Value="@forwardedByOrganization"></RadzenTextBox>
+                            <RadzenTextBox Style="display: block" Name="ForwardedOrganizationTextBox" Placeholder="Название организации" @bind-Value="@forwardedByOrganization"/>
+                            <RadzenRequiredValidator Component="ForwardedOrganizationTextBox" Text="Укажите организацию" Style="position: absolute"/>
                         </div>
                     }
                 </div>
@@ -123,8 +124,9 @@
         <div class="col-md-6">
             <RadzenFieldset Text="Гражданство">
                 <div class="row">
-                    <div class="col-md">
-                        <RadzenTextBox Placeholder="Укажите гражданство"/>
+                    <div class="col-md-12">
+                        <RadzenTextBox Style="display: block" Name="CitizenshipTextBox" Placeholder="Укажите гражданство" @bind-Value="@Citizenship"/>
+                        <RadzenRequiredValidator Style="position: absolute" Component="CitizenshipTextBox" Text="Гражданство обязательно для заполнения"/>
                     </div>
                 </div>
             </RadzenFieldset>
@@ -154,7 +156,9 @@
     private string forwardedByPerson = string.Empty;
     
     private bool isForwardedByOrganization;
-    private string forwardedByOrganization = string.Empty;
+    private string? forwardedByOrganization;
+    
+    public string? Citizenship { get; private set; } 
 
     public IReadOnlyCollection<IInquirySource> InquirySources
     {
@@ -177,7 +181,7 @@
             }
             if(isForwardedBySurvivor) result.Add(new ForwardedBySurvivor(forwardedBySurvivor));
             if(isForwardedByPerson) result.Add(new ForwardedByPerson(forwardedByPerson));
-            if(isForwardedByOrganization) result.Add(new ForwardedByOrganization(forwardedByOrganization));
+            if(isForwardedByOrganization && !string.IsNullOrWhiteSpace(forwardedByOrganization)) result.Add(new ForwardedByOrganization(forwardedByOrganization));
             return result;
         }
     }

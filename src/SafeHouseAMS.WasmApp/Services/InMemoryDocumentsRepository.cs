@@ -37,7 +37,7 @@ namespace SafeHouseAMS.WasmApp.Services
             var survivor = await _survivorRepository.GetSingleAsync(survivorID, CancellationToken.None);
             _documentsStore.Add(new Inquiry(documentId, isDeleted, created, lastEdit, documentDate, survivor, isJuvenile, inquirySources, new(default, ""), null, null, null, null, null, null));
         }
-        public Task AddRecord<T>(Guid documentId, T record) where T : BaseRecord
+        public Task AddRecord(Guid documentId, BaseRecord record)
         {
             _recordsStore.Add(record);
             return Task.CompletedTask;

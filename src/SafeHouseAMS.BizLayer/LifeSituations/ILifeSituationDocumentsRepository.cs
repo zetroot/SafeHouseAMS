@@ -41,13 +41,12 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="inquirySources">источники обращения</param>
         Task CreateInquiry(Guid documentId, bool isDeleted, DateTimeOffset created, DateTimeOffset lastEdit,
             Guid survivorID, DateTimeOffset documentDate, bool isJuvenile, IEnumerable<IInquirySource> inquirySources);
-        
+
         /// <summary>
         /// Добавить новую запись о жизненной ситуации
         /// </summary>
         /// <param name="documentId">Идентификатор документа, создавшего запись</param>
         /// <param name="record">Собственно объект записи</param>
-        /// <typeparam name="T">Тип записи</typeparam>
-        Task AddRecord<T>(Guid documentId, T record) where T : BaseRecord;
+        Task AddRecord(Guid documentId, BaseRecord record);
     }
 }

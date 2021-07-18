@@ -1,8 +1,11 @@
 ﻿@page "/NewSurvivor"
 @using System.Threading
+@using SafeHouseAMS.BizLayer.LifeSituations
+@using SafeHouseAMS.BizLayer.LifeSituations.Commands
 @using SafeHouseAMS.BizLayer.Survivors
 @using SafeHouseAMS.BizLayer.Survivors.Commands
 @inject ISurvivorCatalogue _survivorCatalogue;
+@inject ILifeSituationDocumentsAggregate _documentsAggregate;
 @inject NotificationService _notificationService;
 @inject NavigationManager _navigationManager;
 
@@ -20,7 +23,7 @@
                                     Имя
                                 </div>
                                 <div class="col-md">
-                                    <RadzenRequiredValidator Component="NameTextBox" Text="Имя обязательно для заполнения" Popup="false" Style="position: absolute" />
+                                    <RadzenRequiredValidator Component="NameTextBox" Text="Имя обязательно для заполнения"/>
                                     <RadzenTextBox Style="width: 100%" Name="NameTextBox" Placeholder="Введите имя..." @bind-Value=@_survivor.Name />
                                 </div>
                             </div>
@@ -113,11 +116,22 @@
 
     private async Task SubmitSurvivor()
     {
+        if (_createInquiry is null)
+        {
+            _notificationService.Notify(new(){Severity = NotificationSeverity.Error, Summary = "Ошибка на странице"});
+            return;
+        }
+        var survivorId = Guid.NewGuid();
+        var inquiryId = Guid.NewGuid();
+        
         await _survivorCatalogue.ApplyCommand(
-            new CreateSurvivor(Guid.NewGuid(), _survivor.Name,
+            new CreateSurvivor(survivorId, _survivor.Name,
                 _survivor.Sex, _survivor.OtherSex,
                 _survivor.AccurateDob, _survivor.AccurateDob.HasValue ? default : _survivor.CalcDob), CancellationToken.None);
-        
+
+        await _documentsAggregate.ApplyCommand(new CreateInquiry(
+            inquiryId, _createInquiry.DocumentDate, survivorId, 
+            _createInquiry.IsJuvenile, _createInquiry.InquirySources, _createInquiry.Citizenship ?? string.Empty), CancellationToken.None);
         
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
