@@ -1,7 +1,9 @@
 ﻿@page "/SurvivorDetails/{SurvivorID}"
 @using System.Threading
+@using SafeHouseAMS.BizLayer.LifeSituations
 @using SafeHouseAMS.BizLayer.Survivors
 @inject ISurvivorCatalogue _survivorCatalogue;
+@inject ILifeSituationDocumentsAggregate _documentsAggregate;
 @inject NavigationManager _navigationManager;
 
 <h3>Карточка пострадавшего</h3>
@@ -60,6 +62,29 @@
             </div>
         </div>
     }
+    @if (!_documents.Any())
+    {
+        <p>Нет документов для отображения</p>
+    }
+    else
+    {
+        @foreach (var doc in _documents)
+        {
+            switch (doc)
+            {
+                case Inquiry inquiry:
+                    <div class="row">
+                        <InquiryView Inquiry="@inquiry"/>
+                    </div>
+                    break;
+                default:
+                    <div class="row">
+                        Неизвестный тип документа. Дата - @doc.DocumentDate
+                    </div>
+                    break;
+            }
+        }
+    }
 </div>
 
 @code {
@@ -67,10 +92,18 @@
     
     [Parameter] public string? SurvivorID { get; set; }
 
+    private List<LifeSituationDocument> _documents = new();
+
     protected override async Task OnParametersSetAsync()
     {
-        if(Guid.TryParse(SurvivorID, out var surId))
+        if (Guid.TryParse(SurvivorID, out var surId))
+        {
             _survivor = await _survivorCatalogue.GetSingleAsync(surId, CancellationToken.None);
+            await foreach (var doc in _documentsAggregate.GetAllBySurvivor(surId, CancellationToken.None))
+            {
+                _documents.Add(doc);
+            }
+        }
         await base.OnParametersSetAsync();
     }
 }

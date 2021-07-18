@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
 
 namespace SafeHouseAMS.BizLayer
@@ -23,6 +24,7 @@ namespace SafeHouseAMS.BizLayer
             if (configuration is null) throw new ArgumentNullException(nameof(configuration));
             
             services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogue>();
+            services.TryAddTransient<ILifeSituationDocumentsAggregate, LifeSituationDocumentsAggregate>();
             return services;
         }  
     }
