@@ -8,11 +8,11 @@
             <RadzenDatePicker @bind-Value="@DocumentDate" ShowTime="true"/>
         </div>
         <div class="col-md-4">
-            <RadzenCheckBox TValue="bool?" TriState="true" @bind-Value="@IsJuvenile" />
+            <RadzenCheckBox TValue="bool?" TriState="true" @bind-Value="@IsJuvenile"/>
             <RadzenLabel Text="Несовершеннолетний на момент обращения"/>
         </div>
     </div>
-    
+
     <div class="row" style="margin-top: 5px">
         <div class="col-md-6">
             <RadzenFieldset Text="Канал обращения">
@@ -135,9 +135,11 @@
 </div>
 
 @code {
-    public DateTimeOffset DocumentDate { get; private set; } = DateTimeOffset.Now;
+
+    public DateTime DocumentDate { get; private set; } = DateTime.Now;
+
     public bool? IsJuvenile { get; private set; }
-    
+
     private bool selfInquiry;
     private bool Vk;
     private bool Facebook;
@@ -148,17 +150,17 @@
     private bool Viber;
     private bool Telegramm;
     private bool Signal;
-    
+
     private bool isForwardedBySurvivor;
     private string forwardedBySurvivor = string.Empty;
-    
+
     private bool isForwardedByPerson;
     private string forwardedByPerson = string.Empty;
-    
+
     private bool isForwardedByOrganization;
     private string? forwardedByOrganization;
-    
-    public string? Citizenship { get; private set; } 
+
+    public string? Citizenship { get; private set; }
 
     public IReadOnlyCollection<IInquirySource> InquirySources
     {
@@ -179,9 +181,9 @@
                 if (Signal) channel |= SelfInquiry.InquiryChannel.Signal;
                 result.Add(new SelfInquiry(channel));
             }
-            if(isForwardedBySurvivor) result.Add(new ForwardedBySurvivor(forwardedBySurvivor));
-            if(isForwardedByPerson) result.Add(new ForwardedByPerson(forwardedByPerson));
-            if(isForwardedByOrganization && !string.IsNullOrWhiteSpace(forwardedByOrganization)) result.Add(new ForwardedByOrganization(forwardedByOrganization));
+            if (isForwardedBySurvivor) result.Add(new ForwardedBySurvivor(forwardedBySurvivor));
+            if (isForwardedByPerson) result.Add(new ForwardedByPerson(forwardedByPerson));
+            if (isForwardedByOrganization && !string.IsNullOrWhiteSpace(forwardedByOrganization)) result.Add(new ForwardedByOrganization(forwardedByOrganization));
             return result;
         }
     }

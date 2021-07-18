@@ -26,7 +26,7 @@ namespace SafeHouseAMS.WasmApp.Services
         public async IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             await Task.Yield();
-            foreach (var document in _documentsStore)
+            foreach (var document in _documentsStore.Where(x => x.Survivor.ID == survivorId).OrderByDescending(x => x.DocumentDate))
             {
                 yield return document;
             }

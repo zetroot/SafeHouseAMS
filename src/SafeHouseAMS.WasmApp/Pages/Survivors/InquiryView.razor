@@ -1,0 +1,117 @@
+﻿@using SafeHouseAMS.BizLayer.LifeSituations
+@using SafeHouseAMS.BizLayer.LifeSituations.InquirySources
+@using System.Text
+
+<div class="container-fluid">
+    <RadzenFieldset Text="Обращение за помощью">
+        <div class="row">
+            <div class="col-md-8">
+                <RadzenLabel Text="Дата обращения"/>
+                <RadzenLabel Text="@Inquiry?.DocumentDate.ToString()"/>
+            </div>
+            <div class="col-md-4">
+                <RadzenCheckBox TValue="bool?" Disabled="true" Value="@Inquiry?.IsJuvenile"/>
+                <RadzenLabel Text="Несовершеннолетний в момент обращения"/>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 5px">
+            @foreach (var inquirySource in Inquiry?.InquirySources ?? Enumerable.Empty<IInquirySource>())
+            {
+                switch (inquirySource)
+                {
+                    case SelfInquiry self:
+                        <div class="col-md-3">
+                            <div class="col-md">
+                                <RadzenLabel Text="Самообращение:"/>
+                            </div>
+                            <div class="col-md">
+                                <RadzenLabel Text="@Compose(self.Channel)"/>
+                            </div>
+                        </div>
+                        break;
+                    case ForwardedBySurvivor forwardSurvivor:
+                        <div class="col-md-3">
+                            <div class="col-md">
+                                <RadzenLabel Text="Направлен другим пострадавшим:"/>
+                            </div>
+                            <div class="col-md">
+                                <RadzenLabel Text="@forwardSurvivor.ForwardedBy"/>
+                            </div>
+                        </div>
+                        break;
+                    case ForwardedByPerson forwardPerson:
+                        <div class="col-md-3">
+                            <div class="col-md">
+                                <RadzenLabel Text="Направлен другим лицом:"/>
+                            </div>
+                            <div class="col-md">
+                                <RadzenLabel Text="@forwardPerson.ForwardedBy"/>
+                            </div>
+                            </div>
+                        break;
+                    case ForwardedByOrganization forwardOrg:
+                        <div class="col-md-3">
+                            <div class="col-md">
+                                <RadzenLabel Text="Направлен другой организацией"/>
+                            </div>
+                            <div class="col-md">
+                                <RadzenLabel Text="@forwardOrg.ForwardedBy"/>
+                            </div>
+                        </div>
+                        break;
+                }
+            }
+        </div>
+        <div class="row" style="margin-top: 5px">
+            <div class="col-md-12">
+                <RadzenLabel Text="Гражданство:"/>
+                <RadzenLabel Text="@Inquiry?.Сitizenship.Citizenship"/>
+            </div>
+        </div>
+    </RadzenFieldset>
+</div>
+@code {
+    [Parameter] public Inquiry? Inquiry { get; set; }
+
+    private static ICollection<SelfInquiry.InquiryChannel> Decompose(SelfInquiry.InquiryChannel chan)
+    {
+        var allValuesColelction = Enum.GetValues(typeof(SelfInquiry.InquiryChannel))
+            .OfType<SelfInquiry.InquiryChannel>()
+            .Where(x => x != SelfInquiry.InquiryChannel.None);
+        var result = new List<SelfInquiry.InquiryChannel>();
+        foreach (var candidate in allValuesColelction)
+        {
+            if((chan & candidate) == candidate)
+                result.Add(candidate);
+        }
+        return result.Distinct().ToList();
+    }
+    
+    private static string MapSelfInqurySources(SelfInquiry.InquiryChannel chan) => 
+        chan switch
+        {
+            SelfInquiry.InquiryChannel.Vk => "Вконтакте",
+            SelfInquiry.InquiryChannel.Facebook => "Фейсбук",
+            SelfInquiry.InquiryChannel.Instagramm => "ИНстаграмм",
+            SelfInquiry.InquiryChannel.Email => "Почта",
+            SelfInquiry.InquiryChannel.Phone => "Телефон",
+            SelfInquiry.InquiryChannel.Whatsapp => "Whatsapp",
+            SelfInquiry.InquiryChannel.Viber => "Viber",
+            SelfInquiry.InquiryChannel.Telegramm => "Telegramm",
+            SelfInquiry.InquiryChannel.Signal => "Signal",
+            _ => chan.ToString()
+        };
+
+    private static string Compose(SelfInquiry.InquiryChannel chan)
+    {
+        if (chan == SelfInquiry.InquiryChannel.None) return "не указано";
+        var sb = new StringBuilder();
+        foreach (var val in Decompose(chan))
+        {
+            if (sb.Length != 0)
+                sb.Append(", ");
+            sb.Append(MapSelfInqurySources(val));
+        }
+        return sb.ToString();
+    }
+}
