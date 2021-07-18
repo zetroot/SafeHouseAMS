@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
 {
@@ -11,6 +12,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         /// ctor
         /// </summary>
         /// <param name="entityID">идентификатор документа на котором выполняется команда</param>
-        protected LifeSituationDocumentCommand(Guid entityID) : base(entityID) { }
+        protected LifeSituationDocumentCommand(Guid entityID) : base(entityID) {}
     }
+
 }
