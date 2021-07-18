@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Radzen;
 using SafeHouseAMS.BizLayer;
+using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
 using SafeHouseAMS.WasmApp.Services;
 using Serilog;
@@ -25,6 +26,7 @@ namespace SafeHouseAMS.WasmApp
             ConfigureServices(builder.Services, builder.Configuration);
 
             builder.Services.TryAddSingleton<ISurvivorRepository, InMemorySurvivorsRepository>();
+            builder.Services.TryAddSingleton<ILifeSituationDocumentsRepository, InMemoryDocumentsRepository>();
             
             await builder.Build().RunAsync();
         }

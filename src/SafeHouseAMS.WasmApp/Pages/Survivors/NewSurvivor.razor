@@ -67,6 +67,11 @@
                         </RadzenFieldset>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <CreateInquiryComponent @ref="@_createInquiry"/>
+                    </div>
+                </div>
                 <div class="row justify-content-center">
                     <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
                         <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
@@ -97,6 +102,8 @@
     }
 
     private readonly SurvivorCreationRequest _survivor = new();
+
+    private CreateInquiryComponent? _createInquiry;
     
     private void CancelClick()
     {
@@ -110,6 +117,8 @@
             new CreateSurvivor(Guid.NewGuid(), _survivor.Name,
                 _survivor.Sex, _survivor.OtherSex,
                 _survivor.AccurateDob, _survivor.AccurateDob.HasValue ? default : _survivor.CalcDob), CancellationToken.None);
+        
+        
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }
