@@ -3,6 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using SafeHouseAMS.BizLayer.Survivors;
+using SafeHouseAMS.DataLayer.Repositories;
 
 namespace SafeHouseAMS.DataLayer
 {
@@ -43,6 +46,8 @@ namespace SafeHouseAMS.DataLayer
             }
             
             services.AddAutoMapper(typeof(DataLayerInjector).Assembly);
+            
+            services.TryAddScoped<ISurvivorRepository, SurvivorsRepository>();
             return services;
         }
     }

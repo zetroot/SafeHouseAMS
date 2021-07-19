@@ -14,7 +14,7 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.Property(x => x.IsDeleted).HasComment("Признак удаленной записи");
             builder.Property(x => x.Created).HasComment("Дата создания");
             builder.Property(x => x.LastEdit).HasComment("Дата последнего редактирования");
-            builder.Property(x => x.Num).HasComment("Номер карточки");
+            builder.Property(x => x.Num).ValueGeneratedOnAdd().HasComment("Номер карточки");
             builder.Property(x => x.Name).HasComment("Имя");
             builder.Property(x => x.Sex).HasComment("Пол");
             builder.Property(x => x.OtherSex).HasComment("Уточнение пола");
