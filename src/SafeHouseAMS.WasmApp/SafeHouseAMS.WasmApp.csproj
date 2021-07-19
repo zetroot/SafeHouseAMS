@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SafeHouseAMS.BizLayer\SafeHouseAMS.BizLayer.csproj" />
+    <ProjectReference Include="..\SafeHouseAMS.DataLayer\SafeHouseAMS.DataLayer.csproj" />
   </ItemGroup>
 
 </Project>

@@ -10,6 +10,7 @@ using Radzen;
 using SafeHouseAMS.BizLayer;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
+using SafeHouseAMS.DataLayer;
 using SafeHouseAMS.WasmApp.Services;
 using Serilog;
 
@@ -25,8 +26,8 @@ namespace SafeHouseAMS.WasmApp
             ConfigureLogging(builder.Logging, builder.Configuration);
             ConfigureServices(builder.Services, builder.Configuration);
 
-            builder.Services.TryAddSingleton<ISurvivorRepository, InMemorySurvivorsRepository>();
-            builder.Services.TryAddSingleton<ILifeSituationDocumentsRepository, InMemoryDocumentsRepository>();
+            //builder.Services.TryAddSingleton<ISurvivorRepository, InMemorySurvivorsRepository>();
+            builder.Services.TryAddScoped<ILifeSituationDocumentsRepository, InMemoryDocumentsRepository>();
             
             await builder.Build().RunAsync();
         }
@@ -49,7 +50,9 @@ namespace SafeHouseAMS.WasmApp
                     options.ProviderOptions.ResponseType = "code";
                 });
             
-            services.AddBizLogic(configuration);
+            services
+                .AddBizLogic(configuration)
+                .ConnectToDatabase(configuration);
                 
             services.AddScoped<DialogService>()
                 .AddScoped<NotificationService>()
