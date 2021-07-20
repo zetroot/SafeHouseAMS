@@ -20,8 +20,8 @@ namespace SafeHouseAMS.DataLayer.Repositories
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         
-        public async Task Create(Guid id, bool isDeleted, DateTimeOffset created, DateTimeOffset lastEdit, 
-            string name, SexEnum sex, string? otherSex, DateTimeOffset? accurateDob, DateTimeOffset? calculatedDob)
+        public async Task Create(Guid id, bool isDeleted, DateTime created, DateTime lastEdit, 
+            string name, SexEnum sex, string? otherSex, DateTime? accurateDob, DateTime? calculatedDob)
         {
             if (_dataContext.Survivors is null) throw new InvalidOperationException();
             await _dataContext.Survivors.AddAsync(new(){

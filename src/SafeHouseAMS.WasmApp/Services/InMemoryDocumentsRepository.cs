@@ -32,7 +32,7 @@ namespace SafeHouseAMS.WasmApp.Services
             }
         }
         
-        public async Task CreateInquiry(Guid documentId, bool isDeleted, DateTimeOffset created, DateTimeOffset lastEdit, Guid survivorID, DateTimeOffset documentDate, bool isJuvenile, IEnumerable<IInquirySource> inquirySources)
+        public async Task CreateInquiry(Guid documentId, bool isDeleted, DateTime created, DateTime lastEdit, Guid survivorID, DateTime documentDate, bool isJuvenile, IEnumerable<IInquirySource> inquirySources)
         {
             var survivor = await _survivorRepository.GetSingleAsync(survivorID, CancellationToken.None);
             _documentsStore.Add(new Inquiry(documentId, isDeleted, created, lastEdit, documentDate, survivor, isJuvenile, inquirySources, new(default, ""), null, null, null, null, null, null));

@@ -20,7 +20,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         /// <summary>
         /// Дата документа
         /// </summary>
-        public DateTimeOffset DocumentDate { get; }
+        public DateTime DocumentDate { get; }
 
         /// <summary>
         /// несовершеннолетний на момент обращения
@@ -47,7 +47,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         /// <param name="inquirySources">источники обращения</param>
         /// <param name="citizenship">гражданство</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public CreateInquiry(Guid entityID, DateTimeOffset documentDate, Guid survivorId, bool? isJuvenile, IEnumerable<IInquirySource> inquirySources, string citizenship) :
+        public CreateInquiry(Guid entityID, DateTime documentDate, Guid survivorId, bool? isJuvenile, IEnumerable<IInquirySource> inquirySources, string citizenship) :
             base(entityID)
         {
             SurvivorID = survivorId;
@@ -61,7 +61,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         
         internal override async Task ApplyOn(ILifeSituationDocumentsRepository repository)
         {
-            var now = DateTimeOffset.Now;
+            var now = DateTime.Now;
             await repository.CreateInquiry(EntityID, false, now, now,
             SurvivorID, DocumentDate, 
             IsJuvenile, InquirySources);

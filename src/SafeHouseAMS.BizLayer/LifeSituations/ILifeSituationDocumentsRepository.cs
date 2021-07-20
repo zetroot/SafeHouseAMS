@@ -39,8 +39,8 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="documentDate">дата документа</param>
         /// <param name="isJuvenile">несовершеннолетний в момент обращения</param>
         /// <param name="inquirySources">источники обращения</param>
-        Task CreateInquiry(Guid documentId, bool isDeleted, DateTimeOffset created, DateTimeOffset lastEdit,
-            Guid survivorID, DateTimeOffset documentDate, bool isJuvenile, IEnumerable<IInquirySource> inquirySources);
+        Task CreateInquiry(Guid documentId, bool isDeleted, DateTime created, DateTime lastEdit,
+            Guid survivorID, DateTime documentDate, bool isJuvenile, IEnumerable<IInquirySource> inquirySources);
 
         /// <summary>
         /// Добавить новую запись о жизненной ситуации

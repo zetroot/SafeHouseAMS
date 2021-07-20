@@ -77,8 +77,8 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="workingExperience">опыт работы</param>
         /// <param name="vulnerabilityFactors">факторы уязвимости</param>
         /// <exception cref="ArgumentNullException">если нет гражданства или источников обращения</exception>
-        public Inquiry(Guid id, bool isDeleted, DateTimeOffset created, DateTimeOffset lastEdit,
-            DateTimeOffset documentDate, Survivor survivor,
+        public Inquiry(Guid id, bool isDeleted, DateTime created, DateTime lastEdit,
+            DateTime documentDate, Survivor survivor,
             bool isJuvenile, IEnumerable<IInquirySource> inquirySources, 
             CitizenshipRecord сitizenship, 
             DomicileRecord? domicile,

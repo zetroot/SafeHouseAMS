@@ -11,7 +11,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <summary>
         /// Дата документа
         /// </summary>
-        public DateTimeOffset DocumentDate { get; }
+        public DateTime DocumentDate { get; }
 
         /// <summary>
         /// Пострадавший к которому относится эта запись
@@ -27,7 +27,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="lastEdit">дата последнего редактирования</param>
         /// <param name="documentDate">дата действия документа</param>
         /// <param name="survivor">Пострадавший, к которому относится этот документ</param>
-        protected LifeSituationDocument(Guid id, bool isDeleted, DateTimeOffset created, DateTimeOffset lastEdit, DateTimeOffset documentDate, Survivor survivor) :
+        protected LifeSituationDocument(Guid id, bool isDeleted, DateTime created, DateTime lastEdit, DateTime documentDate, Survivor survivor) :
             base(id, isDeleted, created, lastEdit)
         {
             DocumentDate = documentDate;

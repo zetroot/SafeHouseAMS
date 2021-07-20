@@ -27,12 +27,12 @@ namespace SafeHouseAMS.DataLayer.Models.Survivors
         /// <summary>
         /// Точная дата рождения - если известна
         /// </summary>
-        public DateTimeOffset? BirthDateAccurate { get; set; }
+        public DateTime? BirthDateAccurate { get; set; }
 
         /// <summary>
         /// Вычисленная (приблизительная) дата рождения. Если неизвестна точная
         /// </summary>
-        public DateTimeOffset? BirthDateCalculated { get; set; }
+        public DateTime? BirthDateCalculated { get; set; }
 
     }
 }

@@ -22,8 +22,8 @@ namespace SafeHouseAMS.BizLayer.Survivors
         /// <param name="calculatedDob">вычисленная дата рождения</param>
         /// <param name="isDeleted">Удалена ли запись</param>
         /// <param name="created">дата-время создания</param>
-        Task Create(Guid id, bool isDeleted, DateTimeOffset created, DateTimeOffset lastEdit, string name, SexEnum sex,
-            string? otherSex, DateTimeOffset? accurateDob, DateTimeOffset? calculatedDob);
+        Task Create(Guid id, bool isDeleted, DateTime created, DateTime lastEdit, string name, SexEnum sex,
+            string? otherSex, DateTime? accurateDob, DateTime? calculatedDob);
 
         /// <summary>
         /// Получить одиночную запись по идентификатору

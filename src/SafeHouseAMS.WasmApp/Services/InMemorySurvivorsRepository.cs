@@ -17,7 +17,7 @@ namespace SafeHouseAMS.WasmApp.Services
                 .Range(42, 200)
                 .Select(x =>
                 {
-                    var lastEdit = DateTimeOffset.Now - TimeSpan.FromHours(Faker.RandomNumber.Next(24, 24000));
+                    var lastEdit = DateTime.Now - TimeSpan.FromHours(Faker.RandomNumber.Next(24, 24000));
                     var created = lastEdit - TimeSpan.FromHours(Faker.RandomNumber.Next(24, 24000));
                     var dob = DateTime.Today - TimeSpan.FromDays(Faker.RandomNumber.Next(7000, 19000));
                     return new Survivor(Guid.NewGuid(), Faker.Boolean.Random(), created, lastEdit,
@@ -28,8 +28,8 @@ namespace SafeHouseAMS.WasmApp.Services
                 .ToList();
         }
 
-        public Task Create(Guid id, bool isDeleted, DateTimeOffset created, DateTimeOffset lastEdit, string name, SexEnum sex,
-            string? otherSex, DateTimeOffset? accurateDob, DateTimeOffset? calculatedDob)
+        public Task Create(Guid id, bool isDeleted, DateTime created, DateTime lastEdit, string name, SexEnum sex,
+            string? otherSex, DateTime? accurateDob, DateTime? calculatedDob)
         {
             if (_store.Any(x => x.ID == id)) throw new InvalidOperationException();
             var nextNum = _store.Max(x => x.Num) + 1;

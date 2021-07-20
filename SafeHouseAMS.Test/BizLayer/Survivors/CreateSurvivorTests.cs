@@ -34,14 +34,14 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
             const string name = "NAME";
             var sex = SexEnum.Other;
             const string otherSex = "OTHER";
-            var accurateDob = DateTimeOffset.Now;
+            var accurateDob = DateTime.Now;
             var repoMock = new Mock<ISurvivorRepository>();
             repoMock.Setup(x => x.Create(It.IsAny<Guid>(), It.IsAny<bool>(),
-                    It.IsAny<DateTimeOffset>(),
-                    It.IsAny<DateTimeOffset>(),
+                    It.IsAny<DateTime>(),
+                    It.IsAny<DateTime>(),
                     It.IsAny<string>(), 
                     It.IsAny<SexEnum>(), It.IsAny<string?>(),
-                    It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
+                    It.IsAny<DateTime?>(), It.IsAny<DateTime?>()))
                 .Returns(Task.CompletedTask);
             
             var sut = new CreateSurvivor(id, name, sex, otherSex, accurateDob, null);
@@ -51,8 +51,8 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
             
             //assert
             repoMock.Verify(x => x.Create(id, false, 
-                It.Is<DateTimeOffset>(d => d != default),
-                It.Is<DateTimeOffset>(d => d != default),
+                It.Is<DateTime>(d => d != default),
+                It.Is<DateTime>(d => d != default),
                 name, sex, otherSex, accurateDob, null), Times.Once());
         }
     }
