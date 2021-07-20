@@ -98,5 +98,31 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
             result.Should().BeOfType<DomicileRecord>()
                 .And.BeEquivalentTo(recordBl);
         }
+        
+        [Theory, UnitTest]
+        [InlineData(EducationLevelRecord.EduLevel.High, null)]
+        [InlineData(EducationLevelRecord.EduLevel.High, "null")]
+        [InlineData(EducationLevelRecord.EduLevel.None, "null")]
+        [InlineData(EducationLevelRecord.EduLevel.None, null)]
+        [InlineData(EducationLevelRecord.EduLevel.None, "")]
+        public void Mapper_MapsEducationLevelRecord_Dal2Bl(EducationLevelRecord.EduLevel level, string? details)
+        {
+            //arrange
+            var recordId = Guid.NewGuid();
+            var srcRec = new EducationLevelRecord(recordId, level, details);
+            var src = new EducationLevelRecordDAL
+            {
+                ID = recordId,
+                Content = JsonSerializer.Serialize(srcRec)
+            } as BaseRecordDAL;
+            var sut = BuildMapper();
+            
+            //act
+            var result = sut.Map<BaseRecord>(src);
+
+            //assert
+            result.Should().BeOfType<EducationLevelRecord>()
+                .And.BeEquivalentTo(srcRec);
+        }
     }
 }
