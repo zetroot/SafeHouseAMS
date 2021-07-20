@@ -26,7 +26,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <summary>
         /// Гражданство в момент обращения
         /// </summary>
-        public CitizenshipRecord Сitizenship { get; }
+        public CitizenshipRecord Citizenship { get; }
 
         /// <summary>
         /// Место проживания в момент обращения + где проиживает
@@ -91,7 +91,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         {
             IsJuvenile = isJuvenile;
             InquirySources = inquirySources?.ToList() ?? throw new ArgumentNullException(nameof(inquirySources));
-            Сitizenship = сitizenship ?? throw new ArgumentNullException(nameof(сitizenship));
+            Citizenship = сitizenship ?? throw new ArgumentNullException(nameof(сitizenship));
             Domicile = domicile;
             HasChildren = hasChildren;
             EducationLevel = educationLevel?.ToList();

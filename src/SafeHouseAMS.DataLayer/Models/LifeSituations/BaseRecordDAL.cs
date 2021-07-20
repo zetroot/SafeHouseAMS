@@ -24,7 +24,6 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
     }
 
     internal class ChildrenRecordDAL : BaseRecordDAL { }
-
     internal class CitizenshipRecordDAL : BaseRecordDAL { }
     internal class DomicileRecordDAL : BaseRecordDAL { }
     internal class EducationLevelRecordDAL : BaseRecordDAL { }
