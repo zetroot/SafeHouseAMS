@@ -15,7 +15,13 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
             MapCitizenshipRecords();
             MapDomicileRecords();
             MapEducationLevelRecords();
-            
+            MapSpecialityRecords();
+        }
+        private void MapSpecialityRecords()
+        {
+            CreateMap<SpecialityRecordDAL, SpecialityRecord>()
+                .IncludeBase<BaseRecordDAL, BaseRecord>()
+                .ConstructUsing((src,_) => JsonSerializer.Deserialize<SpecialityRecord>(src.Content) ?? throw new SerializationException());
         }
         private void MapEducationLevelRecords()
         {
