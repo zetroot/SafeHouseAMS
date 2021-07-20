@@ -27,6 +27,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\src\SafeHouseAMS.BizLayer\SafeHouseAMS.BizLayer.csproj" />
+      <ProjectReference Include="..\src\SafeHouseAMS.DataLayer\SafeHouseAMS.DataLayer.csproj" />
     </ItemGroup>
 
 </Project>
