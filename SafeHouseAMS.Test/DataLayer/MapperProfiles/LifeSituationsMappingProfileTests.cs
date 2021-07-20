@@ -114,31 +114,31 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
 
             result.IsJuvenile.Should().BeTrue();
             result.InquirySources.Should().HaveCount(4)
-                .And.Contain(new SelfInquiry(inquiryChannel))
-                .And.Contain(new ForwardedBySurvivor(forwardedBySurvivor))
-                .And.Contain(new ForwardedByPerson(forwardedByPerson))
-                .And.Contain(new ForwardedByOrganization(forwardedByOrgannization));
+                .And.ContainEquivalentOf(new SelfInquiry(inquiryChannel))
+                .And.ContainEquivalentOf(new ForwardedBySurvivor(forwardedBySurvivor))
+                .And.ContainEquivalentOf(new ForwardedByPerson(forwardedByPerson))
+                .And.ContainEquivalentOf(new ForwardedByOrganization(forwardedByOrgannization));
             
-            result.Citizenship.Should().Be(citizenshipRecord);
-            result.Domicile.Should().Be(domicile);
-            result.HasChildren.Should().Be(childrenRecord);
+            result.Citizenship.Should().BeEquivalentTo(citizenshipRecord);
+            result.Domicile.Should().BeEquivalentTo(domicile);
+            result.HasChildren.Should().BeEquivalentTo(childrenRecord);
             result.EducationLevel.Should().HaveCount(2)
-                .And.Contain(eduRec1)
-                .And.Contain(eduRec2);
+                .And.ContainEquivalentOf(eduRec1)
+                .And.ContainEquivalentOf(eduRec2);
             result.Specialities.Should().HaveCount(2)
-                .And.Contain(specRec1)
-                .And.Contain(specRec2);
+                .And.ContainEquivalentOf(specRec1)
+                .And.ContainEquivalentOf(specRec2);
 
             result.WorkingExperience.Should().Be(workingExperience);
 
             result.VulnerabilityFactors.Should().HaveCount(7)
-                .And.Contain(new Addiction(addictionKind))
-                .And.Contain(new ChildhoodViolence())
-                .And.Contain(new Homelessness())
-                .And.Contain(new Migration())
-                .And.Contain(new OrphanageExperience())
-                .And.Contain(new Other(otherVulnerabilityDetails))
-                .And.Contain(new HealthStatus(healthStatusVulnerabilityType, otherHealthStatusVulnerabilityDetail));
+                .And.ContainEquivalentOf(new Addiction(addictionKind))
+                .And.ContainSingle(x => x is ChildhoodViolence)
+                .And.ContainSingle(x => x is Homelessness)
+                .And.ContainSingle(x => x is Migration)
+                .And.ContainSingle(x => x is OrphanageExperience)
+                .And.ContainEquivalentOf(new Other(otherVulnerabilityDetails))
+                .And.ContainEquivalentOf(new HealthStatus(healthStatusVulnerabilityType, otherHealthStatusVulnerabilityDetail));
 
         }
     }
