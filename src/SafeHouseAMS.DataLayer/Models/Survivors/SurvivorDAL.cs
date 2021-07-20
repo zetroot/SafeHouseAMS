@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SafeHouseAMS.DataLayer.Models
+namespace SafeHouseAMS.DataLayer.Models.Survivors
 {
     internal class SurvivorDAL : BaseDalModel
     {

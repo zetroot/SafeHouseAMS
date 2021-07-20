@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SafeHouseAMS.DataLayer.Models;
+using SafeHouseAMS.DataLayer.Models.Survivors;
 
 namespace SafeHouseAMS.DataLayer
 {
