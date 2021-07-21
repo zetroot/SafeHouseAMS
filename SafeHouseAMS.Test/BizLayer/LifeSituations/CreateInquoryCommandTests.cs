@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using FluentAssertions;
+using Moq;
+using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
+using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using Xunit;
 using Xunit.Categories;
 
@@ -52,6 +56,23 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
             cmd.IsJuvenile.Should().BeFalse();
         }
         
+        [Fact, UnitTest]
+        public async Task AplpyOn_WhenCalled_InvokesRepository()
+        {
+            //arrange
+            var cmd = new CreateInquiry(default, default, default, null, new List<IInquirySource>(), "citizenship");
+            var repoMock = new Mock<ILifeSituationDocumentsRepository>();
+            repoMock.Setup(x => x.CreateInquiry(It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<bool>(), It.IsAny<IEnumerable<IInquirySource>>()));
+            repoMock.Setup(x => x.AddRecord(It.IsAny<Guid>(), It.IsAny<BaseRecord>()));
+            
+            //act
+            await cmd.ApplyOn(repoMock.Object);
+            
+            //assert
+            repoMock.Verify(x => x.CreateInquiry(It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<bool>(), It.IsAny<IEnumerable<IInquirySource>>()), Times.Once());
+            repoMock.Verify(x => x.AddRecord(It.IsAny<Guid>(), It.IsAny<BaseRecord>()), Times.Once());
+        }
+
     }
     
 }
