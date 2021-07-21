@@ -30,7 +30,9 @@ namespace SafeHouseAMS.DataLayer.Repositories
         {
             throw new NotImplementedException();
         }
-        public Task CreateInquiry(Guid documentId, bool isDeleted, DateTime created, DateTime lastEdit, Guid survivorID, DateTime documentDate, bool isJuvenile, IEnumerable<IInquirySource> inquirySources)
+        public Task CreateInquiry(Guid documentId, bool isDeleted, DateTime created, DateTime lastEdit,
+            Guid survivorID, DateTime documentDate,
+            bool isJuvenile, IEnumerable<IInquirySource> inquirySources)
         {
             throw new NotImplementedException();
         }

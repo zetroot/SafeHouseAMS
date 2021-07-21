@@ -8,6 +8,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using SafeHouseAMS.BizLayer.LifeSituations;
+using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.DataLayer;
 using SafeHouseAMS.DataLayer.Models.LifeSituations;
@@ -97,6 +98,30 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             var ct = new CancellationToken(true);
             //act && assert
             await Assert.ThrowsAnyAsync<OperationCanceledException>(() => sut.GetSingleAsync(default, ct));
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task CreateInquiry_WhenCalled_ActuallyAddsNewRecord()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            var id = Guid.NewGuid();
+            var time = DateTime.Now;
+            
+            //act
+            await sut.CreateInquiry(id, false, time, time, surId, DateTime.Today, false, new IInquirySource[0]);
+            
+            //assert
+            var foundRecord = await ctx.LifeSituationDocuments.SingleAsync(x => x.ID == id);
+
+            foundRecord.ID.Should().Be(id);
+            foundRecord.IsDeleted.Should().Be(false);
+            foundRecord.Created.Should().Be(time);
+            foundRecord.LastEdit.Should().Be(time);
         }
     }
 }
