@@ -21,7 +21,7 @@ jobs:
       - uses: microsoft/setup-msbuild@v1.0.2
       
       - name: Set up projects for analysis
-        uses: security-code-scan/security-code-scan-add-action@main
+        uses: security-code-scan/security-code-scan-add-action@v1.1
         
       - name: Restore dependencies	
         run: dotnet restore
@@ -30,7 +30,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Convert sarif for uploading to GitHub
-        uses: security-code-scan/security-code-scan-results-action@main
+        uses: security-code-scan/security-code-scan-results-action@v1.3
 
       - name: Upload sarif
         uses: github/codeql-action/upload-sarif@v1
