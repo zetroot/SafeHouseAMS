@@ -23,18 +23,21 @@ namespace SafeHouseAMS.DataLayer.Repositories
         public async Task Create(Guid id, bool isDeleted, DateTime created, DateTime lastEdit, 
             string name, SexEnum sex, string? otherSex, DateTime? accurateDob, DateTime? calculatedDob)
         {
-            if (_dataContext.Survivors is null) throw new InvalidOperationException();
+            int maxNum = 0;
+            if(await _dataContext.Survivors.AnyAsync())
+                maxNum = await _dataContext.Survivors.MaxAsync(x => x.Num);
+            
             await _dataContext.Survivors.AddAsync(new(){
-                ID = id, IsDeleted = isDeleted, Created = created, LastEdit = lastEdit,
+                ID = id, IsDeleted = isDeleted, Created = created, LastEdit = lastEdit, Num = maxNum+1,
                 Name = name, Sex = (int) sex, OtherSex = otherSex, BirthDateAccurate = accurateDob, BirthDateCalculated = calculatedDob});
             await _dataContext.SaveChangesAsync();
         }
         public async Task<Survivor> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
-            if (_dataContext.Survivors is null) throw new InvalidOperationException();
-            var survivor = await _dataContext.Survivors.SingleAsync(x => x.ID == id, cancellationToken);
+            var survivor = await _dataContext.Survivors.SingleAsync(x => !x.IsDeleted && x.ID == id, cancellationToken);
             return _mapper.Map<Survivor>(survivor);
         }
+        
         public IAsyncEnumerable<Survivor> GetCollection(int skip, int? take)
         {
             if (take.HasValue)
@@ -44,8 +47,8 @@ namespace SafeHouseAMS.DataLayer.Repositories
         }
         private async IAsyncEnumerable<Survivor> GetCollectionUnlimited(int skip)
         {
-            if (_dataContext.Survivors is null) throw new InvalidOperationException();
             var filteredRecortds = _dataContext.Survivors
+                .OrderByDescending(x => x.LastEdit)
                 .Where(x => !x.IsDeleted)
                 .Skip(skip)
                 .AsAsyncEnumerable();
@@ -57,8 +60,8 @@ namespace SafeHouseAMS.DataLayer.Repositories
         
         private async IAsyncEnumerable<Survivor> GetCollectionLimited(int skip, int take)
         {
-            if (_dataContext.Survivors is null) throw new InvalidOperationException();
             var filteredRecortds = _dataContext.Survivors
+                .OrderByDescending(x => x.LastEdit)
                 .Where(x => !x.IsDeleted)
                 .Skip(skip)
                 .Take(take)
@@ -71,7 +74,6 @@ namespace SafeHouseAMS.DataLayer.Repositories
         
         public Task<int> GetTotalCount()
         {
-            if (_dataContext.Survivors is null) throw new InvalidOperationException();
             return _dataContext.Survivors.CountAsync(x => !x.IsDeleted);
         }
     }
