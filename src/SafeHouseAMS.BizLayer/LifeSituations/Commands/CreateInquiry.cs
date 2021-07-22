@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
-using SafeHouseAMS.BizLayer.Survivors;
 
 namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
 {

@@ -31,12 +31,13 @@ namespace SafeHouseAMS.DataLayer
 
             if (!string.IsNullOrWhiteSpace(inmemoryConncetionString))
             {
-                services.AddDbContextPool<DataContext>(opt => 
+                services.AddDbContext<DataContext>(opt => 
                     opt
                         .UseLazyLoadingProxies()
                         .EnableSensitiveDataLogging()
-                        .UseInMemoryDatabase(inmemoryConncetionString)
-                    );
+                        .UseInMemoryDatabase(inmemoryConncetionString),
+                ServiceLifetime.Singleton,
+                ServiceLifetime.Singleton);
                 
                 services.AddScoped<IDatabaseMigrator, DataContext>(_ =>
                 {

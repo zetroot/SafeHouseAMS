@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
@@ -27,12 +28,14 @@ namespace SafeHouseAMS.DataLayer.Repositories
         public async Task<LifeSituationDocument> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             var doc = await _context.LifeSituationDocuments
+                .Include(x => (x as InquiryDAL)!.Citizenship)
                 .SingleAsync(x => !x.IsDeleted && x.ID == id, cancellationToken);
             return _mapper.Map<LifeSituationDocument>(doc);
         }
         public async IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var documents = _context.LifeSituationDocuments
+                .Include(x => (x as InquiryDAL)!.Citizenship)
                 .Where(x => !x.IsDeleted && x.SurvivorID == survivorId).AsAsyncEnumerable();
             await foreach (var doc in documents.WithCancellation(cancellationToken))
                 yield return _mapper.Map<LifeSituationDocument>(doc);
@@ -78,18 +81,14 @@ namespace SafeHouseAMS.DataLayer.Repositories
         {
             BaseRecordDAL addingRecord = record switch
             {
-                ChildrenRecord _ => new ChildrenRecordDAL(),
-                CitizenshipRecord _ => new CitizenshipRecordDAL(),
-                DomicileRecord _ => new DomicileRecordDAL(),
-                EducationLevelRecord _ => new EducationLevelRecordDAL(),
-                SpecialityRecord _ => new SpecialityRecordDAL(),
+                ChildrenRecord x => new ChildrenRecordDAL{ID = record.ID, DocumentID = documentId, Content = JsonSerializer.Serialize(x)},
+                CitizenshipRecord x => new CitizenshipRecordDAL{ID = record.ID, DocumentID = documentId, Content = JsonSerializer.Serialize(x)},
+                DomicileRecord x => new DomicileRecordDAL{ID = record.ID, DocumentID = documentId, Content = JsonSerializer.Serialize(x)},
+                EducationLevelRecord x => new EducationLevelRecordDAL{ID = record.ID, DocumentID = documentId, Content = JsonSerializer.Serialize(x)},
+                SpecialityRecord x => new SpecialityRecordDAL{ID = record.ID, DocumentID = documentId, Content = JsonSerializer.Serialize(x)},
                 _ => throw new ArgumentException("Не реализовано сохранение записи такого типа")
             };
-
-            addingRecord.ID = record.ID;
-            addingRecord.DocumentID = documentId;
-            addingRecord.Content = JsonSerializer.Serialize(record);
-
+            
             await _context.Records.AddAsync(addingRecord);
             await _context.SaveChangesAsync();
         }

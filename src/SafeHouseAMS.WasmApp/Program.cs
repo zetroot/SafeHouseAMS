@@ -1,17 +1,11 @@
-using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Radzen;
 using SafeHouseAMS.BizLayer;
-using SafeHouseAMS.BizLayer.LifeSituations;
-using SafeHouseAMS.BizLayer.Survivors;
 using SafeHouseAMS.DataLayer;
-using SafeHouseAMS.WasmApp.Services;
 using Serilog;
 
 namespace SafeHouseAMS.WasmApp
@@ -25,9 +19,6 @@ namespace SafeHouseAMS.WasmApp
 
             ConfigureLogging(builder.Logging, builder.Configuration);
             ConfigureServices(builder.Services, builder.Configuration);
-
-            //builder.Services.TryAddSingleton<ISurvivorRepository, InMemorySurvivorsRepository>();
-            builder.Services.TryAddScoped<ILifeSituationDocumentsRepository, InMemoryDocumentsRepository>();
             
             await builder.Build().RunAsync();
         }
