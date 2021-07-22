@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
+using SafeHouseAMS.DataLayer.Models.LifeSituations;
 
 namespace SafeHouseAMS.DataLayer.Repositories
 {
@@ -26,19 +30,68 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 .SingleAsync(x => !x.IsDeleted && x.ID == id, cancellationToken);
             return _mapper.Map<LifeSituationDocument>(doc);
         }
-        public IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId, CancellationToken cancellationToken)
+        public async IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var documents = _context.LifeSituationDocuments
+                .Where(x => !x.IsDeleted && x.SurvivorID == survivorId).AsAsyncEnumerable();
+            await foreach (var doc in documents.WithCancellation(cancellationToken))
+                yield return _mapper.Map<LifeSituationDocument>(doc);
         }
-        public Task CreateInquiry(Guid documentId, bool isDeleted, DateTime created, DateTime lastEdit,
+        
+        public async Task CreateInquiry(Guid documentId, bool isDeleted, DateTime created, DateTime lastEdit,
             Guid survivorID, DateTime documentDate,
             bool isJuvenile, IEnumerable<IInquirySource> inquirySources)
         {
-            throw new NotImplementedException();
+            var creatingDocument = new InquiryDAL
+            {
+                ID = documentId, IsDeleted = isDeleted, Created = created, LastEdit = lastEdit,
+                SurvivorID = survivorID, DocumentDate = documentDate,
+                IsJuvenile = isJuvenile
+            };
+            foreach (var source in inquirySources)
+            {
+                switch (source)
+                {
+                    case SelfInquiry selfInquiry:
+                        creatingDocument.IsSelfInquiry = true;
+                        creatingDocument.SelfInquirySourcesMask = (int) selfInquiry.Channel;
+                        break;
+                    case ForwardedBySurvivor forwardedBySurvivor:
+                        creatingDocument.IsForwardedBySurvivor = true;
+                        creatingDocument.ForwardedBySurvivor = forwardedBySurvivor.ForwardedBy;
+                        break;
+                    case ForwardedByPerson forwardedByPerson:
+                        creatingDocument.IsForwardedByPerson = true;
+                        creatingDocument.ForwardedByPerson = forwardedByPerson.ForwardedBy;
+                        break;
+                    case ForwardedByOrganization forwardedByOrganization:
+                        creatingDocument.IsForwardedByOrganization = true;
+                        creatingDocument.ForwardedByOrgannization = forwardedByOrganization.ForwardedBy;
+                        break;
+                }
+            }
+            await _context.LifeSituationDocuments.AddAsync(creatingDocument);
+            await _context.SaveChangesAsync();
         }
-        public Task AddRecord(Guid documentId, BaseRecord record)
+        
+        public async Task AddRecord(Guid documentId, BaseRecord record)
         {
-            throw new NotImplementedException();
+            BaseRecordDAL addingRecord = record switch
+            {
+                ChildrenRecord _ => new ChildrenRecordDAL(),
+                CitizenshipRecord _ => new CitizenshipRecordDAL(),
+                DomicileRecord _ => new DomicileRecordDAL(),
+                EducationLevelRecord _ => new EducationLevelRecordDAL(),
+                SpecialityRecord _ => new SpecialityRecordDAL(),
+                _ => throw new ArgumentException("Не реализовано сохранение записи такого типа")
+            };
+
+            addingRecord.ID = record.ID;
+            addingRecord.DocumentID = documentId;
+            addingRecord.Content = JsonSerializer.Serialize(record);
+
+            await _context.Records.AddAsync(addingRecord);
+            await _context.SaveChangesAsync();
         }
     }
 }

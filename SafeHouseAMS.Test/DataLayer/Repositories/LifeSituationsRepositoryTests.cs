@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -113,7 +114,14 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             var time = DateTime.Now;
             
             //act
-            await sut.CreateInquiry(id, false, time, time, surId, DateTime.Today, false, new IInquirySource[0]);
+            var inqSources = new List<IInquirySource>
+            {
+                new SelfInquiry(SelfInquiry.InquiryChannel.Email | SelfInquiry.InquiryChannel.Phone),
+                new ForwardedByOrganization("org"),
+                new ForwardedByPerson("person"),
+                new ForwardedBySurvivor("survivor"),
+            };
+            await sut.CreateInquiry(id, false, time, time, surId, DateTime.Today, false, inqSources);
             
             //assert
             var foundRecord = await ctx.LifeSituationDocuments.SingleAsync(x => x.ID == id);
@@ -122,6 +130,117 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             foundRecord.IsDeleted.Should().Be(false);
             foundRecord.Created.Should().Be(time);
             foundRecord.LastEdit.Should().Be(time);
+            foundRecord.Should().BeOfType<InquiryDAL>();
+            var inquiry = foundRecord as InquiryDAL;
+            
+            inquiry?.IsForwardedByOrganization.Should().BeTrue();
+            inquiry?.ForwardedByOrgannization.Should().Be("org");
+            
+            inquiry?.IsForwardedByPerson.Should().BeTrue();
+            inquiry?.ForwardedByPerson.Should().Be("person");
+            
+            inquiry?.IsForwardedBySurvivor.Should().BeTrue();
+            inquiry?.ForwardedBySurvivor.Should().Be("survivor");
+            
+            inquiry?.IsSelfInquiry.Should().BeTrue();
+            inquiry?.SelfInquirySourcesMask.Should().Be(24);
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task GetAllbySurvivor_WhenCalled_ReturnsOnlyForSelectedSurvivor()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            var surId2 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+            await ctx.Survivors.AddAsync(new() {ID = surId2, Num = 43, Name = "azaza"});
+            
+            var docId1 = Guid.NewGuid();
+            var docId2 = Guid.NewGuid();
+            var docId3 = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddRangeAsync(
+            new InquiryDAL {ID = docId1, SurvivorID = surId1},
+            new InquiryDAL {ID = docId2, SurvivorID = surId1},
+            new InquiryDAL {ID = docId3, SurvivorID = surId2});
+
+            var mockRecordContent = JsonSerializer.Serialize(new CitizenshipRecord(default, "citi"));
+            await ctx.Records.AddRangeAsync(
+                new CitizenshipRecordDAL{ID = Guid.NewGuid(), DocumentID = docId1, Content = mockRecordContent},
+                new CitizenshipRecordDAL{ID = Guid.NewGuid(), DocumentID = docId2, Content = mockRecordContent});
+            
+            await ctx.SaveChangesAsync();
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            
+            //act
+            var result = new List<LifeSituationDocument>();
+            await foreach(var doc in sut.GetAllBySurvivor(surId1, CancellationToken.None))
+                result.Add(doc);
+            
+            //assert
+            result.Should().HaveCount(2);
+            result.Should().OnlyContain(x => x.Survivor.ID == surId1);
+        }
+
+        [Fact, IntegrationTest]
+        public Task AddRecord_WhenCalled_AddsChildrenRecord() =>
+            AddRecord_TestCore<ChildrenRecord, ChildrenRecordDAL>(new (Guid.NewGuid(), true, "details"));
+
+        [Fact, IntegrationTest]
+        public Task AddRecord_WhenCalled_AddsCitizenshipRecord() =>
+            AddRecord_TestCore<CitizenshipRecord, CitizenshipRecordDAL>(new (Guid.NewGuid(), "details"));
+
+        [Fact, IntegrationTest]
+        public Task AddRecord_WhenCalled_AddsDomicileRecord() =>
+            AddRecord_TestCore<DomicileRecord, DomicileRecordDAL>(new(Guid.NewGuid(), "details",
+                DomicileRecord.PlaceKind.Dorm, default, default, default, default,
+                default, default, default, default,
+                default, default));
+
+        [Fact, IntegrationTest]
+        public Task AddRecord_WhenCalled_AddsEducationLevelRecord() =>
+            AddRecord_TestCore<EducationLevelRecord, EducationLevelRecordDAL>(new (Guid.NewGuid(), EducationLevelRecord.EduLevel.Courses, "details"));
+        
+        [Fact, IntegrationTest]
+        public Task AddRecord_WhenCalled_AddsSpecialityRecord() =>
+            AddRecord_TestCore<SpecialityRecord, SpecialityRecordDAL>(new (Guid.NewGuid(), "details"));
+
+        private class MockRecord : BaseRecord
+        {
+            public MockRecord() : base(Guid.NewGuid())
+            {
+            }
+        }
+        private class MockRecordDAL : BaseRecordDAL {}
+        
+        [Fact, IntegrationTest]
+        public Task AddRecord_WhenCalledWithUnknownRecord_Throws() =>
+            Assert.ThrowsAsync<ArgumentException>(()=> AddRecord_TestCore<MockRecord, MockRecordDAL>(new ()));
+
+        private async Task AddRecord_TestCore<TRecord, TRecordDAL>(TRecord srcRecord)
+            where TRecord : BaseRecord
+            where TRecordDAL : BaseRecordDAL
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId1 = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId1, SurvivorID = surId1});
+            
+            await ctx.SaveChangesAsync();
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            
+            //act
+            await sut.AddRecord(docId1, srcRecord);
+            
+            //assert
+            var record = await ctx.Records.SingleAsync(x => x.ID == srcRecord.ID);
+            record.Should().BeOfType<TRecordDAL>();
+            record.DocumentID.Should().Be(docId1);
         }
     }
 }
