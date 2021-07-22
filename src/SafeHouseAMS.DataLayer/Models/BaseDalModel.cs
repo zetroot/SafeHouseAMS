@@ -6,7 +6,7 @@ namespace SafeHouseAMS.DataLayer.Models
     {
         public Guid ID { get; set; }
         public bool IsDeleted { get; set; }
-        public DateTimeOffset Created { get; set; }
-        public DateTimeOffset LastEdit { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastEdit { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
 using SafeHouseAMS.DataLayer.Repositories;
 
@@ -30,12 +31,13 @@ namespace SafeHouseAMS.DataLayer
 
             if (!string.IsNullOrWhiteSpace(inmemoryConncetionString))
             {
-                services.AddDbContextPool<DataContext>(opt => 
+                services.AddDbContext<DataContext>(opt => 
                     opt
                         .UseLazyLoadingProxies()
                         .EnableSensitiveDataLogging()
-                        .UseInMemoryDatabase(inmemoryConncetionString)
-                    );
+                        .UseInMemoryDatabase(inmemoryConncetionString),
+                ServiceLifetime.Singleton,
+                ServiceLifetime.Singleton);
                 
                 services.AddScoped<IDatabaseMigrator, DataContext>(_ =>
                 {
@@ -48,6 +50,7 @@ namespace SafeHouseAMS.DataLayer
             services.AddAutoMapper(typeof(DataLayerInjector).Assembly);
             
             services.TryAddScoped<ISurvivorRepository, SurvivorsRepository>();
+            services.TryAddScoped<ILifeSituationDocumentsRepository, LifeSituationDocumentsRepository>();
             return services;
         }
     }

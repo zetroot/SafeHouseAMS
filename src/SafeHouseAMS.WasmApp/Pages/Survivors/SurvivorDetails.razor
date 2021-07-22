@@ -5,6 +5,7 @@
 @inject ISurvivorCatalogue _survivorCatalogue;
 @inject ILifeSituationDocumentsAggregate _documentsAggregate;
 @inject NavigationManager _navigationManager;
+@inject ILogger<SurvivorDetails> _logger;
 
 <h3>Карточка пострадавшего</h3>
 <div class="container-fluid">
@@ -101,6 +102,7 @@
             _survivor = await _survivorCatalogue.GetSingleAsync(surId, CancellationToken.None);
             await foreach (var doc in _documentsAggregate.GetAllBySurvivor(surId, CancellationToken.None))
             {
+                _logger.LogInformation("Getting document");
                 _documents.Add(doc);
             }
         }

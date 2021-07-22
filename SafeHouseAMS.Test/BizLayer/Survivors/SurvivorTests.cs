@@ -26,14 +26,14 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
         {
             //arrange
             var id = Guid.NewGuid();
-            var createdAt = DateTimeOffset.Now - TimeSpan.FromHours(1);
-            var lastEdit = DateTimeOffset.Now;
+            var createdAt = DateTime.Now - TimeSpan.FromHours(1);
+            var lastEdit = DateTime.Now;
             const string name = "NAME";
             var num = 42;
             var sex = SexEnum.Other;
             const string otherSex = "OTHER";
-            var dobAccurate = new DateTimeOffset(1970, 04, 12, 0, 0, 0, TimeSpan.FromHours(3));
-            var dobCalc = new DateTimeOffset(1990, 12, 27, 0, 0, 0, TimeSpan.FromHours(3));
+            var dobAccurate = new DateTime(1970, 04, 12, 0, 0, 0);
+            var dobCalc = new DateTime(1990, 12, 27, 0, 0, 0);
             
             //act
             var sut = new Survivor(id, false, createdAt, lastEdit, name, num, sex, otherSex, dobAccurate, dobCalc);

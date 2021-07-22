@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SafeHouseAMS.BizLayer.Survivors;
-using SafeHouseAMS.DataLayer.Models;
+using SafeHouseAMS.DataLayer.Models.Survivors;
 
 namespace SafeHouseAMS.DataLayer.MapperProfiles
 {

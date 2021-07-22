@@ -20,11 +20,11 @@ namespace SafeHouseAMS.BizLayer
         /// <summary>
         /// Timestamp создания модели
         /// </summary>
-        DateTimeOffset Created { get; }
+        DateTime Created { get; }
         
         /// <summary>
         /// Timestamp последнего изменения модели
         /// </summary>
-        DateTimeOffset LastEdit { get; }
+        DateTime LastEdit { get; }
     }
 }

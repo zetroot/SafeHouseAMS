@@ -40,12 +40,12 @@ namespace SafeHouseAMS.BizLayer.Survivors
         /// <summary>
         /// Точная дата рождения - если известна
         /// </summary>
-        public DateTimeOffset? BirthDateAccurate { get; }
+        public DateTime? BirthDateAccurate { get; }
 
         /// <summary>
         /// Вычисленная (приблизительная) дата рождения. Если неизвестна точная
         /// </summary>
-        public DateTimeOffset? BirthDateCalculated { get; }
+        public DateTime? BirthDateCalculated { get; }
 
         /// <summary>
         /// Возраст
@@ -55,7 +55,7 @@ namespace SafeHouseAMS.BizLayer.Survivors
             BirthDateCalculated.HasValue ? CalcTodayAge(BirthDateCalculated.Value) : null;
 
 
-        private static int CalcTodayAge(DateTimeOffset dob)
+        private static int CalcTodayAge(DateTime dob)
         {
             // Save today's date.
             var today = DateTime.Today;
@@ -81,14 +81,14 @@ namespace SafeHouseAMS.BizLayer.Survivors
         /// <param name="birthDateCalculated">Приблизительная дата рождения</param>
         public Survivor(Guid id,
             bool isDeleted,
-            DateTimeOffset created,
-            DateTimeOffset lastEdit,
+            DateTime created,
+            DateTime lastEdit,
             string name,
             int num,
             SexEnum sex,
             string? otherSex,
-            DateTimeOffset? birthDateAccurate,
-            DateTimeOffset? birthDateCalculated) :
+            DateTime? birthDateAccurate,
+            DateTime? birthDateCalculated) :
             base(id, isDeleted, created, lastEdit)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));

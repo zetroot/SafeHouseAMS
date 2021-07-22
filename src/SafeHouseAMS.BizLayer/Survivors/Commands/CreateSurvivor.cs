@@ -11,8 +11,8 @@ namespace SafeHouseAMS.BizLayer.Survivors.Commands
         private readonly string name;
         private readonly SexEnum sex;
         private readonly string? otherSex;
-        private readonly DateTimeOffset? birthDateAccurate;
-        private readonly DateTimeOffset? birthDateCalculated;
+        private readonly DateTime? birthDateAccurate;
+        private readonly DateTime? birthDateCalculated;
 
         /// <summary>
         /// ctor
@@ -28,8 +28,8 @@ namespace SafeHouseAMS.BizLayer.Survivors.Commands
             string name,
             SexEnum sex,
             string? otherSex,
-            DateTimeOffset? birthDateAccurate,
-            DateTimeOffset? birthDateCalculated) : base(entityID)
+            DateTime? birthDateAccurate,
+            DateTime? birthDateCalculated) : base(entityID)
         {
             this.name = name ?? throw new ArgumentNullException(nameof(name));
             this.sex = sex;
@@ -42,7 +42,7 @@ namespace SafeHouseAMS.BizLayer.Survivors.Commands
         internal override Task ApplyOn(ISurvivorRepository repository)
         {
             if (repository is null) throw new ArgumentNullException(nameof(repository));
-            return repository.Create(EntityID, false, DateTimeOffset.Now, DateTimeOffset.Now, 
+            return repository.Create(EntityID, false, DateTime.Now, DateTime.Now, 
                 name, 
                 sex, otherSex, 
                 birthDateAccurate, birthDateCalculated);

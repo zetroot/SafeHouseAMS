@@ -14,10 +14,10 @@ namespace SafeHouseAMS.BizLayer
         public bool IsDeleted { get; }
 
         /// <inheritdoc />
-        public DateTimeOffset Created { get; }
+        public DateTime Created { get; }
 
         /// <inheritdoc />
-        public DateTimeOffset LastEdit { get; }
+        public DateTime LastEdit { get; }
         
         /// <summary>
         /// Ctor 
@@ -26,7 +26,7 @@ namespace SafeHouseAMS.BizLayer
         /// <param name="isDeleted">признак удаленной записи</param>
         /// <param name="created">временная метка создания</param>
         /// <param name="lastEdit">временная метка последнего редактирования</param>
-        protected BaseDomainModel(Guid id, bool isDeleted, DateTimeOffset created, DateTimeOffset lastEdit)
+        protected BaseDomainModel(Guid id, bool isDeleted, DateTime created, DateTime lastEdit)
         {
             ID = id;
             IsDeleted = isDeleted;

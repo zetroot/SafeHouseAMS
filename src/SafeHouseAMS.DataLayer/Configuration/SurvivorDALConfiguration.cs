@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SafeHouseAMS.DataLayer.Models;
+using SafeHouseAMS.DataLayer.Models.Survivors;
 
 namespace SafeHouseAMS.DataLayer.Configuration
 {
