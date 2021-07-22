@@ -1,0 +1,90 @@
+﻿@using SafeHouseAMS.BizLayer.LifeSituations.Records
+
+<div class="container-fluid">
+    <RadzenFieldset Text="Информация о месте жительства">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2">
+                    <RadzenLabel Text="Место проживания на момент обращения"/>
+                </div>
+                <div class="col-md-6">
+                    <RadzenTextBox @bind-Value="@livingPlace" Placeholder="Укажите город"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <RadzenLabel Text="Тип жилья"/>
+                </div>
+                <div class="col-md-6">
+                    <RadzenDropDown @bind-Value="@_placeKind" Data="@_placeKinds" Style="width: 100%"
+                                    TextProperty="@nameof(PlaceKindVM.Description)" ValueProperty="@nameof(PlaceKindVM.Kind)"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <RadzenLabel Text="С кем проживает"/>
+                </div>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md">
+                            <RadzenLabel Text="Од_на"/>
+                            <RadzenCheckBox TValue="bool" @bind-Value="@_livesAlone" Change="LiveAlone_OnChange"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <RadzenLabel Text="С партнёром/супругом"/>
+                            <RadzenCheckBox TValue="bool" @bind-Value="@_withPartner" Change="@(b => { if (b) _livesAlone = false;})"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </RadzenFieldset>
+</div>
+
+@code {
+
+    private record PlaceKindVM(DomicileRecord.PlaceKind? Kind, string Description);
+
+    private PlaceKindVM[] _placeKinds = new[]
+    {
+        new PlaceKindVM(DomicileRecord.PlaceKind.Homeless, "Нет жилья"),
+        new PlaceKindVM(DomicileRecord.PlaceKind.Temporary, "Временно живёт у кого то"),
+        new PlaceKindVM(DomicileRecord.PlaceKind.Dorm, "Общежитие"),
+        new PlaceKindVM(DomicileRecord.PlaceKind.RentRoom, "Арендует комнату"),
+        new PlaceKindVM(DomicileRecord.PlaceKind.RentFlat, "Арендует квартиру"),
+        new PlaceKindVM(DomicileRecord.PlaceKind.OwnHome, "Своё жильё"),
+    };
+
+    private string? livingPlace;
+    private DomicileRecord.PlaceKind? _placeKind;
+    
+    private bool _livesAlone;
+    
+    private bool _withPartner;
+
+    // private bool _withChildren;
+    // private string? _childrenDetails;
+    //
+    // private bool _withParents;
+    // private string? _parentsDetails;
+    //
+    // private bool _withOtherRelatives;
+    // private string? _otherRelativesDetails;
+    //
+    // private bool _withOtherPeople;
+    // private string? _otherPeopleDetails;
+    
+    private void LiveAlone_OnChange()
+    {
+        if (_livesAlone)
+        {
+            _withPartner = false;
+            // _withChildren = false;
+            // _withOtherPeople = false;
+            // _withParents = false;
+            // _withOtherRelatives = false;
+        }
+    }
+}
