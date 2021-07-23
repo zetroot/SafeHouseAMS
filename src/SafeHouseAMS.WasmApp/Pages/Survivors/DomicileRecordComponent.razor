@@ -16,7 +16,7 @@
                     <RadzenLabel Text="Тип жилья"/>
                 </div>
                 <div class="col-md-6">
-                    <RadzenDropDown @bind-Value="@_placeKind" Data="@_placeKinds" Style="width: 100%"
+                    <RadzenDropDown @bind-Value="@_placeKind" Data="@_placeKinds"
                                     TextProperty="@nameof(PlaceKindVM.Description)" ValueProperty="@nameof(PlaceKindVM.Kind)"/>
                 </div>
             </div>
@@ -24,19 +24,67 @@
                 <div class="col-md-2">
                     <RadzenLabel Text="С кем проживает"/>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md">
-                            <RadzenLabel Text="Од_на"/>
+                        <div class="col-md-3">
                             <RadzenCheckBox TValue="bool" @bind-Value="@_livesAlone" Change="LiveAlone_OnChange"/>
+                            <RadzenLabel Style="margin-left: 5px" Text="Од_на"/>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md">
-                            <RadzenLabel Text="С партнёром/супругом"/>
+                        <div class="col-md-3">
                             <RadzenCheckBox TValue="bool" @bind-Value="@_withPartner" Change="@(b => { if (b) _livesAlone = false;})"/>
+                            <RadzenLabel Style="margin-left: 5px" Text="С партнёром/супругом"/>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <RadzenCheckBox TValue="bool" @bind-Value="@_withChildren" Change="@(b => { if (b) _livesAlone = false;})"/>
+                            <RadzenLabel Style="margin-left: 5px" Text="С детьми"/>
+                        </div>
+                        @if (_withChildren)
+                        {
+                            <div class="col-md">
+                                <RadzenTextBox @bind-Value="@_childrenDetails" Placeholder="Уточните количество и состав"/>
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <RadzenCheckBox TValue="bool" @bind-Value="@_withParents" Change="@(b => { if (b) _livesAlone = false;})"/>
+                            <RadzenLabel Style="margin-left: 5px" Text="С родителями"/>
+                        </div>
+                        @if (_withParents)
+                        {
+                            <div class="col-md">
+                                <RadzenTextBox @bind-Value="@_parentsDetails" Placeholder="Уточните с кем"/>
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <RadzenCheckBox TValue="bool" @bind-Value="@_withOtherRelatives" Change="@(b => { if (b) _livesAlone = false;})"/>
+                            <RadzenLabel Style="margin-left: 5px" Text="С другими родственниками"/>
+                        </div>
+                        @if (_withOtherRelatives)
+                        {
+                            <div class="col-md">
+                                <RadzenTextBox @bind-Value="@_otherRelativesDetails" Placeholder="Уточните с кем"/>
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <RadzenCheckBox TValue="bool" @bind-Value="@_withOtherPeople" Change="@(b => { if (b) _livesAlone = false;})"/>
+                            <RadzenLabel Style="margin-left: 5px" Text="С другими людьми"/>
+                        </div>
+                        @if (_withOtherPeople)
+                        {
+                            <div class="col-md">
+                                <RadzenTextBox @bind-Value="@_otherPeopleDetails" Placeholder="Уточните с кем"/>
+                            </div>
+                        }
+                    </div>                    
                 </div>
             </div>
         </div>
@@ -64,27 +112,27 @@
     
     private bool _withPartner;
 
-    // private bool _withChildren;
-    // private string? _childrenDetails;
-    //
-    // private bool _withParents;
-    // private string? _parentsDetails;
-    //
-    // private bool _withOtherRelatives;
-    // private string? _otherRelativesDetails;
-    //
-    // private bool _withOtherPeople;
-    // private string? _otherPeopleDetails;
+    private bool _withChildren;
+    private string? _childrenDetails;
+    
+    private bool _withParents;
+    private string? _parentsDetails;
+    
+    private bool _withOtherRelatives;
+    private string? _otherRelativesDetails;
+    
+    private bool _withOtherPeople;
+    private string? _otherPeopleDetails;
     
     private void LiveAlone_OnChange()
     {
         if (_livesAlone)
         {
             _withPartner = false;
-            // _withChildren = false;
-            // _withOtherPeople = false;
-            // _withParents = false;
-            // _withOtherRelatives = false;
+            _withChildren = false;
+            _withOtherPeople = false;
+            _withParents = false;
+            _withOtherRelatives = false;
         }
     }
 }
