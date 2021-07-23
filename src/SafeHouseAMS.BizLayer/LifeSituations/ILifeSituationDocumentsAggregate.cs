@@ -17,6 +17,13 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="cancellationToken">токен отмены операции</param>
         /// <returns>Асинхронный поток документов, относящихся к пострадавшему</returns>
         IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить список гражданств введённых для автозаполнения
+        /// </summary>
+        /// <param name="cancellationToken">токен отмены операции</param>
+        /// <returns>Асинхронная последовательность строк - что вводили в поле "гражданство"</returns>
+        IAsyncEnumerable<string> GetCitizenshipsCompletions(CancellationToken cancellationToken);
     }
 
 }

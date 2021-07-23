@@ -48,5 +48,12 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="documentId">Идентификатор документа, создавшего запись</param>
         /// <param name="record">Собственно объект записи</param>
         Task AddRecord(Guid documentId, BaseRecord record);
+        
+        /// <summary>
+        /// Получить список гражданств введённых для автозаполнения
+        /// </summary>
+        /// <param name="cancellationToken">токен отмены операции</param>
+        /// <returns>Асинхронная последовательность строк - что вводили в поле "гражданство"</returns>
+        IAsyncEnumerable<string> GetCitizenshipsCompletions(CancellationToken cancellationToken);
     }
 }
