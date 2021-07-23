@@ -1,4 +1,5 @@
 ﻿@using SafeHouseAMS.BizLayer.LifeSituations.Records
+@using SafeHouseAMS.BizLayer.LifeSituations.Commands
 
 <div class="container-fluid">
     <RadzenFieldset Text="Информация о месте жительства">
@@ -105,7 +106,7 @@
         new PlaceKindVM(DomicileRecord.PlaceKind.OwnHome, "Своё жильё"),
     };
 
-    private string? livingPlace;
+    private string livingPlace = string.Empty;
     private DomicileRecord.PlaceKind? _placeKind;
     
     private bool _livesAlone;
@@ -123,6 +124,13 @@
     
     private bool _withOtherPeople;
     private string? _otherPeopleDetails;
+    
+    public SetDomicile BuildCommandForDocument(Guid docId) =>
+        new(docId, livingPlace, _placeKind, _livesAlone, _withPartner,
+            _withChildren ? (_childrenDetails ?? "") : null,
+            _withParents ? (_parentsDetails ?? "") : null,
+            _withOtherRelatives ? (_otherRelativesDetails ?? "") : null,
+            _withOtherPeople ? (_otherPeopleDetails ?? "") : null);
     
     private void LiveAlone_OnChange()
     {

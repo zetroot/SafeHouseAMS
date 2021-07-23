@@ -77,7 +77,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <DomicileRecordComponent />
+                        <DomicileRecordComponent @ref="@_domicileRecord"/>
                     </div>
                 </div>
                 <div class="row justify-content-center">
@@ -112,6 +112,7 @@
     private readonly SurvivorCreationRequest _survivor = new();
 
     private InquiryHeaderComponent? _createInquiry;
+    private DomicileRecordComponent? _domicileRecord;
     
     private void CancelClick()
     {
@@ -137,6 +138,9 @@
         await _documentsAggregate.ApplyCommand(new CreateInquiry(
             inquiryId, _createInquiry.DocumentDate, survivorId, 
             _createInquiry.IsJuvenile, _createInquiry.InquirySources, _createInquiry.Citizenship ?? string.Empty), CancellationToken.None);
+
+        if(_domicileRecord is not null)
+            await _documentsAggregate.ApplyCommand(_domicileRecord.BuildCommandForDocument(inquiryId), CancellationToken.None);
         
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
