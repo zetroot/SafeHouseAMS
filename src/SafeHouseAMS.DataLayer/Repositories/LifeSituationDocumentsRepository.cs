@@ -92,5 +92,22 @@ namespace SafeHouseAMS.DataLayer.Repositories
             await _context.Records.AddAsync(addingRecord);
             await _context.SaveChangesAsync();
         }
+        
+        public async IAsyncEnumerable<string> GetCitizenshipsCompletions([EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            var sourceRecords = _context.Records.OfType<CitizenshipRecordDAL>().AsAsyncEnumerable();
+            var temp = new List<string>(50);
+            await foreach(var record in sourceRecords.WithCancellation(cancellationToken))
+                temp.Add(_mapper.Map<CitizenshipRecord>(record).Citizenship);
+
+            var sortedList = temp
+                .Distinct()
+                .Select(x => (counts: temp.Count(y => y == x), citizenship: x))
+                .OrderByDescending(x => x.counts)
+                .Select(x => x.citizenship);
+
+            foreach (var item in sortedList)
+                yield return item;
+        }
     }
 }

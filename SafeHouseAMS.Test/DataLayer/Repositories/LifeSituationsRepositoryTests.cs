@@ -243,5 +243,53 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             record.Should().BeOfType<TRecordDAL>();
             record.DocumentID.Should().Be(docId1);
         }
+
+        [Fact, IntegrationTest]
+        public async Task GetCitizenshipsCompletions_WhenCalled_ReturnsCollectionFromAllRecords()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId1 = Guid.NewGuid();
+            var docId2 = Guid.NewGuid();
+            var docId3 = Guid.NewGuid();
+            var docId4 = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddRangeAsync(
+            new InquiryDAL {ID = docId1, SurvivorID = surId1},
+            new InquiryDAL {ID = docId2, SurvivorID = surId1},
+            new InquiryDAL {ID = docId3, SurvivorID = surId1},
+            new InquiryDAL {ID = docId4, SurvivorID = surId1});
+
+            const string c1 = "c1";
+            const string c2 = "c2";
+            const string jsonPattern = "\"id\":\"00000000-0000-0000-0000-000000000000\", \"Citizenship\":\"{0}\"";
+            
+            await ctx.Records.AddRangeAsync(
+            new CitizenshipRecordDAL{ID = Guid.NewGuid(), DocumentID = docId2,
+                Content = string.Concat("{", string.Format(jsonPattern, c2), "}")},
+            new CitizenshipRecordDAL{ID = Guid.NewGuid(), DocumentID = docId1, 
+                Content = string.Concat("{", string.Format(jsonPattern, c1), "}")},
+            new CitizenshipRecordDAL{ID = Guid.NewGuid(), DocumentID = docId2,
+                Content = string.Concat("{", string.Format(jsonPattern, c1), "}")},
+            new CitizenshipRecordDAL{ID = Guid.NewGuid(), DocumentID = docId3,
+                Content = string.Concat("{", string.Format(jsonPattern, c1), "}")},
+            new CitizenshipRecordDAL{ID = Guid.NewGuid(), DocumentID = docId4,
+                Content = string.Concat("{", string.Format(jsonPattern, c2), "}")});
+            
+            await ctx.SaveChangesAsync();
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            
+            //act
+            var result = new List<string>();
+            await foreach(var autoCompleteHint in sut.GetCitizenshipsCompletions(CancellationToken.None))
+                result.Add(autoCompleteHint);
+            
+            //assert
+            result.Should().HaveCount(2);
+            result.Should().ContainInOrder(c1, c2);
+        }
     }
 }

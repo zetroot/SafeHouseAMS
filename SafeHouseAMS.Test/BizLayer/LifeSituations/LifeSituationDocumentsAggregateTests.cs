@@ -88,5 +88,20 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
             cmdMock.LastRepo.Should().BeSameAs(repoMock);
         }
 
+        [Fact, UnitTest]
+        public void GetCitizenshipsCompletions_WhenCalled_InvokesRepo()
+        {
+            //arrange
+            var repoMock = new Mock<ILifeSituationDocumentsRepository>();
+            repoMock.Setup(x => x.GetCitizenshipsCompletions(It.IsAny<CancellationToken>()));
+            var sut = new LifeSituationDocumentsAggregate(repoMock.Object);
+            
+            //act
+            _ = sut.GetCitizenshipsCompletions(CancellationToken.None);
+            
+            //assert
+            repoMock.Verify(x => x.GetCitizenshipsCompletions(CancellationToken.None), Times.Once());
+        }
+
     }
 }
