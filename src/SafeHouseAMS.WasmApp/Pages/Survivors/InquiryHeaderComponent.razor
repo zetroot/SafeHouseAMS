@@ -1,5 +1,7 @@
 ﻿@using SafeHouseAMS.BizLayer.LifeSituations
 @using SafeHouseAMS.BizLayer.LifeSituations.InquirySources
+@using System.Threading
+@inject ILifeSituationDocumentsAggregate _documentsAggregate
 
 <div class="container-fluid">
     <div class="row" style="margin-top: 5px">
@@ -125,7 +127,8 @@
             <RadzenFieldset Text="Гражданство">
                 <div class="row">
                     <div class="col-md-12">
-                        <RadzenTextBox Style="display: block" Name="CitizenshipTextBox" Placeholder="Укажите гражданство" @bind-Value="@Citizenship"/>
+                        <RadzenAutoComplete Data="@_citizenshipAutoCompletions" TextProperty="Value" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                            Style="display: block" Name="CitizenshipTextBox" Placeholder="Укажите гражданство" @bind-Value="@Citizenship"/>
                         <RadzenRequiredValidator Style="position: absolute" Component="CitizenshipTextBox" Text="Гражданство обязательно для заполнения"/>
                     </div>
                 </div>
@@ -135,7 +138,7 @@
 </div>
 
 @code {
-
+    
     public DateTime DocumentDate { get; private set; } = DateTime.Now;
 
     public bool? IsJuvenile { get; private set; }
@@ -162,6 +165,13 @@
 
     public string? Citizenship { get; private set; }
 
+    private record CitizenshipAutoComplete(string Value)
+    {
+        public static implicit operator string(CitizenshipAutoComplete record) => record.Value;
+        public static implicit operator CitizenshipAutoComplete(string value) => new(value);
+    }
+    private IReadOnlyCollection<CitizenshipAutoComplete> _citizenshipAutoCompletions = new CitizenshipAutoComplete[0];
+
     public IReadOnlyCollection<IInquirySource> InquirySources
     {
         get
@@ -186,6 +196,16 @@
             if (isForwardedByOrganization && !string.IsNullOrWhiteSpace(forwardedByOrganization)) result.Add(new ForwardedByOrganization(forwardedByOrganization));
             return result;
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var completions = new List<CitizenshipAutoComplete>();
+        await foreach (var r in _documentsAggregate.GetCitizenshipsCompletions(CancellationToken.None))
+            completions.Add(r);
+        _citizenshipAutoCompletions = completions;
+        
+        await base.OnInitializedAsync();
     }
 
 }
