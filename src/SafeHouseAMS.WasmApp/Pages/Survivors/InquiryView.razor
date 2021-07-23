@@ -1,6 +1,7 @@
 ﻿@using SafeHouseAMS.BizLayer.LifeSituations
 @using SafeHouseAMS.BizLayer.LifeSituations.InquirySources
 @using System.Text
+@using SafeHouseAMS.WasmApp.Pages.RecordViews
 
 <div class="container-fluid">
     <RadzenFieldset Text="Обращение за помощью">
@@ -67,6 +68,9 @@
                 <RadzenLabel Text="Гражданство:"/>
                 <RadzenLabel Text="@Inquiry?.Citizenship.Citizenship"/>
             </div>
+        </div>
+        <div class="row" style="margin-top: 5px">
+            <DomicileRecordView Domicile="@Inquiry?.Domicile"/>
         </div>
     </RadzenFieldset>
 </div>
