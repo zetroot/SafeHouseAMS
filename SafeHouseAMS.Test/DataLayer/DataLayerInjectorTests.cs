@@ -63,5 +63,25 @@ namespace SafeHouseAMS.Test.DataLayer
             result.Should().Contain(x => x.ServiceType == typeof(DataContext));
             result.Should().Contain(x => x.ServiceType == typeof(IDatabaseMigrator));
         }
+        
+        [Fact, IntegrationTest]
+        public void ConnectToDatabase_WhenCalled_CanResolveDataContext()
+        {
+            //arrange
+            var services = new ServiceCollection();
+            var connectionStringConfigSection = new Mock<IConfigurationSection>();
+            connectionStringConfigSection.SetupGet(x => x["inMemory"]).Returns("mock connstring");
+            var configMock = new Mock<IConfiguration>();
+            configMock.Setup(x => x.GetSection("ConnectionStrings")).Returns(connectionStringConfigSection.Object);
+            
+            //act
+            var sp = services.ConnectToDatabase(configMock.Object).BuildServiceProvider();
+            var datacontext = sp.GetService<DataContext>();
+            var databaseMigrator = sp.GetService<IDatabaseMigrator>();
+
+            //assert
+            datacontext.Should().NotBeNull();
+            databaseMigrator.Should().NotBeNull();
+        }
     }
 }
