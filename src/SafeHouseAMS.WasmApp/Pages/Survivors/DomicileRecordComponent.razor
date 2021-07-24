@@ -5,7 +5,7 @@
     <RadzenFieldset Text="Информация о месте жительства">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <RadzenLabel Text="Место проживания на момент обращения"/>
                 </div>
                 <div class="col-md-6">
@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <RadzenLabel Text="Тип жилья"/>
                 </div>
                 <div class="col-md-6">
@@ -22,24 +22,24 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <RadzenLabel Text="С кем проживает"/>
                 </div>
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md">
                             <RadzenCheckBox TValue="bool" @bind-Value="@_livesAlone" Change="LiveAlone_OnChange"/>
                             <RadzenLabel Style="margin-left: 5px" Text="Од_на"/>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md">
                             <RadzenCheckBox TValue="bool" @bind-Value="@_withPartner" Change="@(b => { if (b) _livesAlone = false;})"/>
                             <RadzenLabel Style="margin-left: 5px" Text="С партнёром/супругом"/>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <RadzenCheckBox TValue="bool" @bind-Value="@_withChildren" Change="@(b => { if (b) _livesAlone = false;})"/>
                             <RadzenLabel Style="margin-left: 5px" Text="С детьми"/>
                         </div>
@@ -51,7 +51,7 @@
                         }
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <RadzenCheckBox TValue="bool" @bind-Value="@_withParents" Change="@(b => { if (b) _livesAlone = false;})"/>
                             <RadzenLabel Style="margin-left: 5px" Text="С родителями"/>
                         </div>
@@ -63,7 +63,7 @@
                         }
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <RadzenCheckBox TValue="bool" @bind-Value="@_withOtherRelatives" Change="@(b => { if (b) _livesAlone = false;})"/>
                             <RadzenLabel Style="margin-left: 5px" Text="С другими родственниками"/>
                         </div>
@@ -75,7 +75,7 @@
                         }
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <RadzenCheckBox TValue="bool" @bind-Value="@_withOtherPeople" Change="@(b => { if (b) _livesAlone = false;})"/>
                             <RadzenLabel Style="margin-left: 5px" Text="С другими людьми"/>
                         </div>

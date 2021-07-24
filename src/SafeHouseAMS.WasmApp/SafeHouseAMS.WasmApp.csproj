@@ -36,8 +36,4 @@
     <ProjectReference Include="..\SafeHouseAMS.DataLayer\SafeHouseAMS.DataLayer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\CommandPrototypes" />
-  </ItemGroup>
-
 </Project>
