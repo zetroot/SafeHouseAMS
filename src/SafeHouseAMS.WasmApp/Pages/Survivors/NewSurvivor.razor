@@ -146,6 +146,9 @@
 
         if(_domicileRecord is not null)
             await _documentsAggregate.ApplyCommand(_domicileRecord.BuildCommandForDocument(inquiryId), CancellationToken.None);
+
+        if (_childrenRecord is not null)
+            await _documentsAggregate.ApplyCommand(_childrenRecord.BuildCommand(inquiryId), CancellationToken.None);
         
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
