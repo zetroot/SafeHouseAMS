@@ -1,0 +1,26 @@
+﻿@using SafeHouseAMS.BizLayer.LifeSituations.Commands
+<div class="container-fluid">
+    <RadzenFieldset Text="Информация о детях">
+        <div class="row">
+            <div class="col-md-2">
+                <RadzenCheckBox TValue="bool" @bind-Value="@_hasChildren"/>
+                <RadzenLabel Text="Есть дети"/>
+            </div>
+        </div>
+            @if (_hasChildren)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <RadzenTextBox @bind-Value="@_childrenDetails" Placeholder="Уточните"/>
+                    </div>
+                </div>
+            }
+    </RadzenFieldset>
+</div>
+@code {
+    private bool _hasChildren;
+    private string? _childrenDetails;
+
+    public SetChildren BuildCommand(Guid documentId) => 
+        new(documentId, _hasChildren, _childrenDetails);
+}

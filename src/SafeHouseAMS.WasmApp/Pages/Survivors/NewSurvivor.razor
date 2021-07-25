@@ -76,10 +76,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <DomicileRecordComponent @ref="@_domicileRecord"/>
                     </div>
+                    <div class="col-md-6">
+                        <ChildrenRecordComponent @ref="@_childrenRecord"/>
+                    </div>
                 </div>
+                
                 <div class="row justify-content-center">
                     <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
                         <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
@@ -113,6 +117,7 @@
 
     private InquiryHeaderComponent? _createInquiry;
     private DomicileRecordComponent? _domicileRecord;
+    private ChildrenRecordComponent? _childrenRecord;
     
     private void CancelClick()
     {
@@ -141,6 +146,9 @@
 
         if(_domicileRecord is not null)
             await _documentsAggregate.ApplyCommand(_domicileRecord.BuildCommandForDocument(inquiryId), CancellationToken.None);
+
+        if (_childrenRecord is not null)
+            await _documentsAggregate.ApplyCommand(_childrenRecord.BuildCommand(inquiryId), CancellationToken.None);
         
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
