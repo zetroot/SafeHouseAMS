@@ -1,0 +1,56 @@
+﻿@using Microsoft.AspNetCore.Components
+@using SafeHouseAMS.BizLayer.LifeSituations.Records
+<div class="container-fluid">
+    <RadzenFieldset Text="Уровень образования">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-outline-primary" @onclick="@AddButton_Click">Добавить</button>
+            </div>
+        </div>
+        @foreach (var item in _items)
+        {
+            <div class="row" style="margin-top: 5px">
+                <div class="col-md-2">
+                    <RadzenDropDown @bind-Value=@item.Level 
+                                    TextProperty="@nameof(EduLevelVM.Description)" ValueProperty="@nameof(EduLevelVM.Level)" 
+                                    Data=@_eduLevels  />
+                </div>
+                <div class="col-md-2">
+                    <RadzenTextBox @bind-Value="@item.Details" Placeholder="Уточните.."/>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-outline-primary" @onclick="@(() => _items.Remove(item))">&Cross;</button>
+                </div>
+            </div>
+        }
+    </RadzenFieldset>
+</div>
+
+@code {
+
+    private class EducationLevelRecordModel
+    {
+        public EducationLevelRecord.EduLevel Level { get; set; }
+        public string? Details { get; set; }
+    }
+
+    private record EduLevelVM(EducationLevelRecord.EduLevel Level, string Description);
+
+    private readonly EduLevelVM[] _eduLevels = {
+        new(EducationLevelRecord.EduLevel.None, "нет"),
+        new(EducationLevelRecord.EduLevel.SchoolLess9, "Школа до 9 классов"),
+        new(EducationLevelRecord.EduLevel.School9, "Школа 9 классов"),
+        new(EducationLevelRecord.EduLevel.School11, "Школа 11 классов"),
+        new(EducationLevelRecord.EduLevel.Special, "Среднее-специальное"),
+        new(EducationLevelRecord.EduLevel.HighNotEnded, "Неоконченное высшее"),
+        new(EducationLevelRecord.EduLevel.High, "Высшее"),
+        new(EducationLevelRecord.EduLevel.Courses, "Курсы"),
+    };
+
+    private readonly List<EducationLevelRecordModel> _items = new();
+    
+    private void AddButton_Click()
+    {
+        _items.Add(new());
+    }
+}

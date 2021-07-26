@@ -85,7 +85,9 @@
                         <ChildrenRecordComponent @ref="@_childrenRecord"/>
                     </div>
                 </div>
-                
+                <div>
+                    <EducationLevelsComponent @ref="@_educationLevelRecords"/>
+                </div>
                 <div class="row justify-content-center">
                     <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
                         <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
@@ -120,6 +122,7 @@
     private InquiryHeaderComponent? _createInquiry;
     private DomicileRecordComponent? _domicileRecord;
     private ChildrenRecordComponent? _childrenRecord;
+    private EducationLevelsComponent? _educationLevelRecords;
     
     private void CancelClick()
     {
