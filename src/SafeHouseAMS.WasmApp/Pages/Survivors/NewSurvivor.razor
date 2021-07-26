@@ -160,7 +160,15 @@
 
         if (_childrenRecord is not null)
             await _documentsAggregate.ApplyCommand(_childrenRecord.BuildCommand(inquiryId), CancellationToken.None);
+
+        if (_educationLevelRecords is not null)
+            foreach (var cmd in _educationLevelRecords.BuildCommands(inquiryId))
+                await _documentsAggregate.ApplyCommand(cmd, CancellationToken.None);
         
+        if (_specialityRecords is not null)
+            foreach (var cmd in _specialityRecords.BuildCommands(inquiryId))
+                await _documentsAggregate.ApplyCommand(cmd, CancellationToken.None);
+
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }
