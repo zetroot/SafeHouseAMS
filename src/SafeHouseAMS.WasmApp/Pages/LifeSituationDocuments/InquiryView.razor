@@ -75,6 +75,42 @@
         <div class="row" style="margin-top: 5px">
             <ChildrenRecordView Record="@Inquiry?.HasChildren"/>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                @if (Inquiry?.EducationLevel?.Any() == true)
+                {
+                    @foreach (var rec in Inquiry.EducationLevel)
+                    {
+                        <div class="row">
+                            <EducationLevelRecordView Record="@rec"/>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <RadzenLabel Text="Нет информации об уровне образования"/>
+                    </div>
+                }
+            </div>
+            <div class="col-md-6">
+                @if (Inquiry?.Specialities?.Any() == true)
+                {
+                    @foreach (var rec in Inquiry.Specialities)
+                    {
+                        <div class="row">
+                            <SpecialityRecordView Record="@rec"/>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        <RadzenLabel Text="Нет информации о специальностях"/>
+                    </div>
+                }
+            </div>
+        </div>
     </RadzenFieldset>
 </div>
 @code {
