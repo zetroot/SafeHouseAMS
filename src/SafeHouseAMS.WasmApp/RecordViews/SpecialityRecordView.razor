@@ -1,0 +1,16 @@
+﻿@using SafeHouseAMS.BizLayer.LifeSituations.Records
+
+<div class="container-fluid">
+    @if (Record is not null)
+    {
+        <div class="row">
+            <div class="col-md">
+                <RadzenLabel Text="@Record.Speciality"/>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public SpecialityRecord? Record { get; set; }
+}
