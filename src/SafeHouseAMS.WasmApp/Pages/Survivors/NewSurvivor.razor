@@ -4,6 +4,8 @@
 @using SafeHouseAMS.BizLayer.LifeSituations.Commands
 @using SafeHouseAMS.BizLayer.Survivors
 @using SafeHouseAMS.BizLayer.Survivors.Commands
+@using SafeHouseAMS.WasmApp.Pages.LifeSituationDocuments
+@using SafeHouseAMS.WasmApp.RecordEditors
 @inject ISurvivorCatalogue _survivorCatalogue;
 @inject ILifeSituationDocumentsAggregate _documentsAggregate;
 @inject NotificationService _notificationService;
@@ -83,7 +85,14 @@
                         <ChildrenRecordComponent @ref="@_childrenRecord"/>
                     </div>
                 </div>
-                
+                <div class="row">
+                    <div class="col-md-6">
+                        <EducationLevelsComponent @ref="@_educationLevelRecords"/>
+                    </div>
+                    <div class="col-md-6">
+                        <SpecialityRecordsComponent @ref="@_specialityRecords"/>
+                    </div>
+                </div>
                 <div class="row justify-content-center">
                     <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
                         <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
@@ -118,6 +127,8 @@
     private InquiryHeaderComponent? _createInquiry;
     private DomicileRecordComponent? _domicileRecord;
     private ChildrenRecordComponent? _childrenRecord;
+    private EducationLevelsComponent? _educationLevelRecords;
+    private SpecialityRecordsComponent? _specialityRecords;
     
     private void CancelClick()
     {
@@ -149,7 +160,15 @@
 
         if (_childrenRecord is not null)
             await _documentsAggregate.ApplyCommand(_childrenRecord.BuildCommand(inquiryId), CancellationToken.None);
+
+        if (_educationLevelRecords is not null)
+            foreach (var cmd in _educationLevelRecords.BuildCommands(inquiryId))
+                await _documentsAggregate.ApplyCommand(cmd, CancellationToken.None);
         
+        if (_specialityRecords is not null)
+            foreach (var cmd in _specialityRecords.BuildCommands(inquiryId))
+                await _documentsAggregate.ApplyCommand(cmd, CancellationToken.None);
+
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }

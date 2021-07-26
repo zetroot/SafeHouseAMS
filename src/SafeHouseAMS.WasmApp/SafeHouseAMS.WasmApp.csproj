@@ -36,4 +36,9 @@
     <ProjectReference Include="..\SafeHouseAMS.DataLayer\SafeHouseAMS.DataLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\RecordViews\ChildrenRecordView.razor" />
+    <_ContentIncludedByDefault Remove="Pages\RecordViews\DomicileRecordView.razor" />
+  </ItemGroup>
+
 </Project>
