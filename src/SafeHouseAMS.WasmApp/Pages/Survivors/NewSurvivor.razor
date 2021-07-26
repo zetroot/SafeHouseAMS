@@ -86,8 +86,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <EducationLevelsComponent @ref="@_educationLevelRecords"/>
+                    </div>
+                    <div class="col-md-6">
+                        <SpecialityRecordsComponent @ref="@_specialityRecords"/>
                     </div>
                 </div>
                 <div class="row justify-content-center">
@@ -125,6 +128,7 @@
     private DomicileRecordComponent? _domicileRecord;
     private ChildrenRecordComponent? _childrenRecord;
     private EducationLevelsComponent? _educationLevelRecords;
+    private SpecialityRecordsComponent? _specialityRecords;
     
     private void CancelClick()
     {

@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Components
+
+<div class="container-fluid">
+    <RadzenFieldset Text="Специальности">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-outline-success" @onclick="@(() => _items.Add(new()))">Добавить</button>
+            </div>
+        </div>
+        @foreach (var item in _items)
+        {
+            <div class="row" style="margin-top: 5px">
+                <div class="col-md-12">
+                    <RadzenTextBox @bind-Value="@item.Speciality" Placeholder="Уточните.."/>
+                    <button type="button" class="btn btn-outline-primary" @onclick="@(() => _items.Remove(item))">&Cross;</button>
+                </div>
+            </div>
+        }
+    </RadzenFieldset>
+</div>
+
+@code {
+
+    private class SpecialityRecordModel
+    {
+        public string? Speciality { get; set; }
+    }
+
+    private readonly List<SpecialityRecordModel> _items = new();
+}

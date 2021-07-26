@@ -15,10 +15,8 @@
                                     TextProperty="@nameof(EduLevelVM.Description)" ValueProperty="@nameof(EduLevelVM.Level)" 
                                     Data=@_eduLevels  />
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-10">
                     <RadzenTextBox @bind-Value="@item.Details" Placeholder="Уточните.."/>
-                </div>
-                <div class="col-md-1">
                     <button type="button" class="btn btn-outline-primary" @onclick="@(() => _items.Remove(item))">&Cross;</button>
                 </div>
             </div>
@@ -48,9 +46,4 @@
     };
 
     private readonly List<EducationLevelRecordModel> _items = new();
-    
-    private void AddButton_Click()
-    {
-        _items.Add(new());
-    }
 }
