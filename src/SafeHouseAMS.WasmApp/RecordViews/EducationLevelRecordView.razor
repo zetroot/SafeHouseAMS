@@ -1,0 +1,30 @@
+﻿@using SafeHouseAMS.BizLayer.LifeSituations.Records
+
+<div class="container-fluid">
+    @if (Record is not null)
+    {
+        <div class="row">
+            <div class="col-md">
+                <RadzenLabel Text="@MapLevel(Record.Level)"/>
+                <RadzenLabel Text="@Record.Details"/>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public EducationLevelRecord? Record { get; set; }
+
+    private string MapLevel(EducationLevelRecord.EduLevel input) => input switch
+    {
+        EducationLevelRecord.EduLevel.None => "нет",
+        EducationLevelRecord.EduLevel.SchoolLess9 => "Школа до 9 классов",
+        EducationLevelRecord.EduLevel.School9 => "Школа 9 классов",
+        EducationLevelRecord.EduLevel.School11 => "Школа 11 классов",
+        EducationLevelRecord.EduLevel.Special => "Среднее специальное",
+        EducationLevelRecord.EduLevel.HighNotEnded => "Не оконченное высшее",
+        EducationLevelRecord.EduLevel.High => "Высшее",
+        EducationLevelRecord.EduLevel.Courses => "Курсы",
+        _ => "другое"
+    };
+}
