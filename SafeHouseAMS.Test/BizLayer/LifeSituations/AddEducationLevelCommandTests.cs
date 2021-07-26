@@ -33,7 +33,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
         [Fact, UnitTest]
         public Task ApplyOn_WhenRepositoryIsNull_Throws() =>
             Assert.ThrowsAsync<ArgumentNullException>(() => 
-                new SetChildren(Guid.NewGuid(), true, "").ApplyOn(null!));
+                new AddEducationLevel(Guid.NewGuid(), EducationLevelRecord.EduLevel.None, "").ApplyOn(null!));
 
         [Theory, UnitTest]
         [InlineData(EducationLevelRecord.EduLevel.None, "details")]
