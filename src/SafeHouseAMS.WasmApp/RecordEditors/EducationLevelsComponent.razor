@@ -4,7 +4,7 @@
     <RadzenFieldset Text="Уровень образования">
         <div class="row">
             <div class="col-md-12">
-                <button type="button" class="btn btn-outline-primary" @onclick="@AddButton_Click">Добавить</button>
+                <button type="button" class="btn btn-outline-success" @onclick="@(() => _items.Add(new()))">Добавить</button>
             </div>
         </div>
         @foreach (var item in _items)
