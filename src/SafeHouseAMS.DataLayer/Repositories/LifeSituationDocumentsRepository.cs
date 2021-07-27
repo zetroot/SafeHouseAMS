@@ -109,5 +109,14 @@ namespace SafeHouseAMS.DataLayer.Repositories
             foreach (var item in sortedList)
                 yield return item;
         }
+        public async Task SetWorkingExperience(Guid documentId, string workingExperience)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == documentId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.WorkingExperience = workingExperience;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

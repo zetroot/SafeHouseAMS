@@ -111,6 +111,15 @@
                 }
             </div>
         </div>
+        @if (!string.IsNullOrWhiteSpace(Inquiry?.WorkingExperience))
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    <RadzenLabel Text="Опыт работы"/>
+                    <RadzenLabel Text="@Inquiry.WorkingExperience"/>
+                </div>
+            </div>
+        }
     </RadzenFieldset>
 </div>
 @code {
