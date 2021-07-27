@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -290,6 +291,32 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             //assert
             result.Should().HaveCount(2);
             result.Should().ContainInOrder(c1, c2);
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task SetWorkingExperience_WhenCalled_SavesWorkingExperienceInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            const string workingExperience = "details";
+            //act
+            
+            await sut.SetWorkingExperience(docId, workingExperience);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.WorkingExperience.Should().Be(workingExperience);
         }
     }
 }
