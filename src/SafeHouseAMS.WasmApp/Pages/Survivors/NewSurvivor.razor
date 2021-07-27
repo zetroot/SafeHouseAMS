@@ -93,6 +93,9 @@
                         <SpecialityRecordsComponent @ref="@_specialityRecords"/>
                     </div>
                 </div>
+                <div>
+                    <WorkingExperienceEditorComponent @ref="@_workingExperienceEditor"/>
+                </div>
                 <div class="row justify-content-center">
                     <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
                         <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
@@ -129,6 +132,7 @@
     private ChildrenRecordComponent? _childrenRecord;
     private EducationLevelsComponent? _educationLevelRecords;
     private SpecialityRecordsComponent? _specialityRecords;
+    private WorkingExperienceEditorComponent? _workingExperienceEditor;
     
     private void CancelClick()
     {
@@ -169,6 +173,9 @@
             foreach (var cmd in _specialityRecords.BuildCommands(inquiryId))
                 await _documentsAggregate.ApplyCommand(cmd, CancellationToken.None);
 
+        if (_workingExperienceEditor?.BuildCommand(inquiryId) is {} workingExperienceCmd)
+            await _documentsAggregate.ApplyCommand(workingExperienceCmd, CancellationToken.None);
+        
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }

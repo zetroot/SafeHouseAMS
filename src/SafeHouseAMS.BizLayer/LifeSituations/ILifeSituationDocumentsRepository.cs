@@ -55,5 +55,12 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="cancellationToken">токен отмены операции</param>
         /// <returns>Асинхронная последовательность строк - что вводили в поле "гражданство"</returns>
         IAsyncEnumerable<string> GetCitizenshipsCompletions(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Заполнить "опыт работы"
+        /// </summary>
+        /// <param name="documentId">идентификатор документа</param>
+        /// <param name="workingExperience">строка-описание опыта работы</param>
+        Task SetWorkingExperience(Guid documentId, string workingExperience);
     }
 }

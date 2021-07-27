@@ -1,4 +1,5 @@
-﻿<div class="container-fluid">
+﻿@using SafeHouseAMS.BizLayer.LifeSituations.Commands
+<div class="container-fluid">
     <RadzenFieldset Text="Опыт работы">
         <div class="row">
             <div class="col-md-12">
@@ -10,4 +11,7 @@
 
 @code {
     private string? _workingExperience;
+
+    public SetWorkingExperience? BuildCommand(Guid docId) =>
+        string.IsNullOrWhiteSpace(_workingExperience) ? null : new(docId, _workingExperience);
 }
