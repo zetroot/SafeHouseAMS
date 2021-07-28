@@ -27,9 +27,46 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
             Vulnerabilities = vulnerabilities?.ToList() ?? throw new ArgumentNullException(nameof(vulnerabilities));
         }
 
-        internal override Task ApplyOn(ILifeSituationDocumentsRepository repository)
+        internal override async Task ApplyOn(ILifeSituationDocumentsRepository repository)
         {
-            throw new NotImplementedException();
+            if (repository is null) throw new ArgumentNullException(nameof(repository));
+
+            if (Vulnerabilities.Any(x => x is Homelessness))
+                await repository.SetHomeless(EntityID);
+            else
+                await repository.ClearHomeless(EntityID);
+            
+            if (Vulnerabilities.Any(x => x is Migration))
+                await repository.SetMigration(EntityID);
+            else
+                await repository.ClearMigration(EntityID);
+            
+            if (Vulnerabilities.Any(x => x is ChildhoodViolence))
+                await repository.SetChildhoodViolence(EntityID);
+            else
+                await repository.ClearChildhoodViolence(EntityID);
+            
+            if (Vulnerabilities.Any(x => x is OrphanageExperience))
+                await repository.SetOrphanageExperience(EntityID);
+            else
+                await repository.ClearOrphanageExperience(EntityID);
+            
+
+            if (Vulnerabilities.FirstOrDefault(x => x is Addiction) is Addiction addiction)
+                await repository.SetAddiction(EntityID, addiction.AddictionKind);
+            else
+                await repository.ClearAddiction(EntityID);
+            
+            if (Vulnerabilities.FirstOrDefault(x => x is Other) is Other other)
+                await repository.SetOther(EntityID, other.Details);
+            else
+                await repository.ClearOther(EntityID);
+
+            if (Vulnerabilities.FirstOrDefault(x => x is HealthStatus) is HealthStatus healthStatus)
+                await repository.SetHealthStatusVulnerability(EntityID, healthStatus.Kind, healthStatus.OtherDetailed);
+            else
+                await repository.ClearHealthStatusVulnerability(EntityID);
+
         }
     }
 }
