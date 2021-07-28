@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <VulnerabilitiesEditorComponent/>
+                    <VulnerabilitiesEditorComponent @ref="@_vulnerabilitiesEditor"/>
                 </div>
                 <div class="row justify-content-center">
                     <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
@@ -136,6 +136,7 @@
     private EducationLevelsComponent? _educationLevelRecords;
     private SpecialityRecordsComponent? _specialityRecords;
     private WorkingExperienceEditorComponent? _workingExperienceEditor;
+    private VulnerabilitiesEditorComponent? _vulnerabilitiesEditor;
     
     private void CancelClick()
     {
@@ -179,6 +180,9 @@
         if (_workingExperienceEditor?.BuildCommand(inquiryId) is {} workingExperienceCmd)
             await _documentsAggregate.ApplyCommand(workingExperienceCmd, CancellationToken.None);
         
+        if (_vulnerabilitiesEditor?.BuildCommand(inquiryId) is {} vulnerabilitiesCmd)
+            await _documentsAggregate.ApplyCommand(vulnerabilitiesCmd, CancellationToken.None);
+
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }

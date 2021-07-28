@@ -1,4 +1,5 @@
 ﻿@using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
+@using SafeHouseAMS.BizLayer.LifeSituations.Commands
 <div class="container-fluid">
     <RadzenFieldset Text="Факторы уязвимости">
         <div class="row">
@@ -141,4 +142,6 @@
         if(healthStatusVulnerability) result.Add(new HealthStatus(BuildHealthStatus(), otherHealthStatusDetails));
         return result;
     }
+
+    public SetVulnerabilities BuildCommand(Guid docId) => new(docId, GetVulnerabilities());
 }
