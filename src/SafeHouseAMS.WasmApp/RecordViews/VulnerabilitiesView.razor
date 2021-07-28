@@ -2,12 +2,10 @@
 
 @if(Vulnerabilities?.Any() == true)
 {
-    <div>
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-8">
                 <RadzenLabel Text="Факторы уязвимости"/>
-            </div>
-            <div class="col-md-6">
                 <ul>
                     @foreach (var factor in Vulnerabilities)
                     {
@@ -22,9 +20,11 @@
 }
 else
 {
-    <div class="alert alert-info">
-        <RadzenLabel Text="Информация факторах уязвимости не заполнена"/>
-    </div>    
+    <div class="container-fluid">
+        <div class="alert alert-info">
+            <RadzenLabel Text="Информация факторах уязвимости не заполнена"/>
+        </div>
+    </div>
 }
 
 @code {
