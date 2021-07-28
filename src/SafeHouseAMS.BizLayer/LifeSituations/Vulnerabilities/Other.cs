@@ -21,5 +21,8 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
         {
             Details = details ?? throw new ArgumentNullException(nameof(details));
         }
+
+        /// <inheritdoc />
+        public override string ToString() => string.IsNullOrEmpty(Details) ? "Иное" : $"Иное ({Details})";
     }
 }
