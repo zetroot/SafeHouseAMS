@@ -62,5 +62,19 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="documentId">идентификатор документа</param>
         /// <param name="workingExperience">строка-описание опыта работы</param>
         Task SetWorkingExperience(Guid documentId, string workingExperience);
+
+        Task SetAddiction(Guid inquiryId, string addictionKind);
+         
+        Task ClearAddiction(Guid inquiryId);
+        void SetHomeless(Guid id);
+        void ClearHomeless(Guid isAny);
+        void SetMigration(Guid isAny);
+        void ClearMigration(Guid isAny);
+        void SetChildhoodViolence(Guid id);
+        void ClearChildhoodViolence(Guid id);
+        void SetOrphanageExperience(Guid id);
+        void ClearOrphanageExperience(Guid id);
+        void SetOther(Guid id, string details);
+        void ClearOther(Guid id);
     }
 }
