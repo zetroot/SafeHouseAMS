@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
+using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 using SafeHouseAMS.DataLayer.Models.LifeSituations;
 
 namespace SafeHouseAMS.DataLayer.Repositories
@@ -109,14 +110,70 @@ namespace SafeHouseAMS.DataLayer.Repositories
             foreach (var item in sortedList)
                 yield return item;
         }
-        public async Task SetWorkingExperience(Guid documentId, string workingExperience)
+        public async Task SetWorkingExperience(Guid inquiryId, string workingExperience)
         {
-            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == documentId);
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
             if (document is InquiryDAL inquiry)
             {
                 inquiry.WorkingExperience = workingExperience;
                 await _context.SaveChangesAsync();
             }
+        }
+        public Task SetAddiction(Guid inquiryId, string addictionKind)
+        {
+            throw new NotImplementedException();
+        }
+        public Task ClearAddiction(Guid inquiryId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task SetHomeless(Guid inquiryId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task ClearHomeless(Guid inquiryId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task SetMigration(Guid inquiryId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task ClearMigration(Guid inquiryId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task SetChildhoodViolence(Guid inquiryId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task ClearChildhoodViolence(Guid inquiryId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task SetOrphanageExperience(Guid inquiryId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task ClearOrphanageExperience(Guid inquiryId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task SetOther(Guid inquiryId, string details)
+        {
+            throw new NotImplementedException();
+        }
+        public Task ClearOther(Guid inquiryId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task SetHealthStatusVulnerability(Guid inquiryId, HealthStatus.HealthStatusVulnerabilityType healthStatus, string? details)
+        {
+            throw new NotImplementedException();
+        }
+        public Task ClearHealthStatusVulnerability(Guid inquiryId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

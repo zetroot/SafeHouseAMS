@@ -43,6 +43,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
         }
 
         [Fact, UnitTest]
+        public Task ApplyOn_WhenRepoIsNUll_Throws() =>
+            Assert.ThrowsAsync<ArgumentNullException>(() => 
+                new SetVulnerabilities(default, new Vulnerability[0]).ApplyOn(null!));
+
+        [Fact, UnitTest]
         public async Task ApplyOn_WhenHasAddiction_InvokesSetAddictionRepoMethod()
         {
             //arrange
@@ -112,7 +117,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
         {
             //arrange
             var id = Guid.NewGuid();
-            var sut = new SetVulnerabilities(id, new[] {new Homelessness()});
+            var sut = new SetVulnerabilities(id, new[] {new Migration()});
             var repoMock = new Mock<ILifeSituationDocumentsRepository>();
             repoMock.Setup(x => x.SetMigration(It.IsAny<Guid>()));
 
@@ -144,7 +149,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
         {
             //arrange
             var id = Guid.NewGuid();
-            var sut = new SetVulnerabilities(id, new[] {new Homelessness()});
+            var sut = new SetVulnerabilities(id, new[] {new ChildhoodViolence()});
             var repoMock = new Mock<ILifeSituationDocumentsRepository>();
             repoMock.Setup(x => x.SetChildhoodViolence(It.IsAny<Guid>()));
 
@@ -176,7 +181,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
         {
             //arrange
             var id = Guid.NewGuid();
-            var sut = new SetVulnerabilities(id, new[] {new Homelessness()});
+            var sut = new SetVulnerabilities(id, new[] {new OrphanageExperience()});
             var repoMock = new Mock<ILifeSituationDocumentsRepository>();
             repoMock.Setup(x => x.SetOrphanageExperience(It.IsAny<Guid>()));
 
@@ -234,6 +239,39 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
             
             //assert
             repoMock.Verify(x => x.ClearOther(id), Times.Once());
+        }
+        
+        [Fact, UnitTest]
+        public async Task ApplyOn_WhenHealthStatusVulnerability_InvokesSetHealthStatusVulnerabilityRepoMethod()
+        {
+            //arrange
+            var id = Guid.NewGuid();
+            const string details = "details";
+            var sut = new SetVulnerabilities(id, new[] {new HealthStatus(HealthStatus.HealthStatusVulnerabilityType.Other, details)});
+            var repoMock = new Mock<ILifeSituationDocumentsRepository>();
+            repoMock.Setup(x => x.SetHealthStatusVulnerability(It.IsAny<Guid>(), It.IsAny<HealthStatus.HealthStatusVulnerabilityType>(), It.IsAny<string?>()));
+
+            //act
+            await sut.ApplyOn(repoMock.Object);
+            
+            //assert
+            repoMock.Verify(x => x.SetHealthStatusVulnerability(id, HealthStatus.HealthStatusVulnerabilityType.Other, details), Times.Once());
+        }
+        
+        [Fact, UnitTest]
+        public async Task ApplyOn_WhenNotHealthStatusVulnerability_InvokesClearHealthStatusVulnerabilityRepoMethod()
+        {
+            //arrange
+            var id = Guid.NewGuid();
+            var sut = new SetVulnerabilities(id, new[] {new Homelessness()});
+            var repoMock = new Mock<ILifeSituationDocumentsRepository>();
+            repoMock.Setup(x => x.ClearHealthStatusVulnerability(It.IsAny<Guid>()));
+
+            //act
+            await sut.ApplyOn(repoMock.Object);
+            
+            //assert
+            repoMock.Verify(x => x.ClearHealthStatusVulnerability(id), Times.Once());
         }
     }
 }
