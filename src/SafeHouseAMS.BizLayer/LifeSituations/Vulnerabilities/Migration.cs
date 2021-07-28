@@ -1,4 +1,6 @@
-﻿namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
 {
     /// <summary>
     /// Мигрант_ка
@@ -6,6 +8,6 @@
     public class Migration : Vulnerability
     {
         /// <inheritdoc />
-        public override string ToString() => "Мигрант_ка";
+        [ExcludeFromCodeCoverage] public override string ToString() => "Мигрант_ка";
     }
 }

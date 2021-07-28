@@ -1,4 +1,6 @@
-﻿namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
 {
     /// <summary>
     /// Насилие в детстве
@@ -6,6 +8,6 @@
     public class ChildhoodViolence : Vulnerability
     {
         /// <inheritdoc />
-        public override string ToString() => "Насилие в детстве";
+        [ExcludeFromCodeCoverage] public override string ToString() => "Насилие в детстве";
     }
 }

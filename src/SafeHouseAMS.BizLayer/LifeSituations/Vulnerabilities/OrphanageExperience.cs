@@ -1,4 +1,6 @@
-﻿namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
 {
     /// <summary>
     /// Опыт интернатного учреждения
@@ -6,6 +8,6 @@
     public class OrphanageExperience : Vulnerability
     {
         /// <inheritdoc />
-        public override string ToString() => "Опыт интернатного учреждения";
+        [ExcludeFromCodeCoverage] public override string ToString() => "Опыт интернатного учреждения";
     }
 }

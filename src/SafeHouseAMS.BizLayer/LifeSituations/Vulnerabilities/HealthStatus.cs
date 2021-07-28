@@ -102,8 +102,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
                     HealthStatusVulnerabilityType.HepatitisB => "гепатит B",
                     HealthStatusVulnerabilityType.HepatitisC => "гепатит C",
                     HealthStatusVulnerabilityType.Other when !string.IsNullOrWhiteSpace(OtherDetailed) => $"другое ({OtherDetailed})",
-                    HealthStatusVulnerabilityType.Other => "другое",
-                    _ => string.Empty
+                    _ => "другое"
                 });
             }
 

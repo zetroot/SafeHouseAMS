@@ -1,4 +1,6 @@
-﻿namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
 {
     /// <summary>
     /// Бездомность
@@ -6,6 +8,6 @@
     public class Homelessness : Vulnerability
     {
         /// <inheritdoc />
-        public override string ToString() => "Бездомность";
+        [ExcludeFromCodeCoverage] public override string ToString() => "Бездомность";
     }
 }
