@@ -40,44 +40,47 @@
                 <RadzenCheckBox TValue="bool" @bind-Value="@healthStatusVulnerability"/>
                 <RadzenLabel Text="Состояние здоровья" />
             </div>
-            <div class="col-md-6">
-                <div class="row">
-                    <RadzenCheckBox TValue="bool" @bind-Value="@disability"/>
-                    <RadzenLabel Text="Инвалидность"/>
+            @if (healthStatusVulnerability)
+            {
+                <div class="col-md-6">
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@disability"/>
+                        <RadzenLabel Text="Инвалидность"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@specialNeeds"/>
+                        <RadzenLabel Text="ОВЗ"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@mentalDisorder"/>
+                        <RadzenLabel Text="Психическое расстройство"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@tuberculosis"/>
+                        <RadzenLabel Text="Туберкулёз"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@hiv"/>
+                        <RadzenLabel Text="ВИЧ"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@hepatitisB"/>
+                        <RadzenLabel Text="Гепатит B"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@hepatitisC"/>
+                        <RadzenLabel Text="Гепатит C"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@otherHealthStatus"/>
+                        <RadzenLabel Text="Другое"/>
+                        @if (otherHealthStatus)
+                        {
+                            <RadzenTextBox Placeholder="Уточните" Style="margin-left: 5px" @bind-Value="@otherHealthStatusDetails"/>
+                        }
+                    </div>
                 </div>
-                <div class="row">
-                    <RadzenCheckBox TValue="bool" @bind-Value="@specialNeeds"/>
-                    <RadzenLabel Text="ОВЗ"/>
-                </div>
-                <div class="row">
-                    <RadzenCheckBox TValue="bool" @bind-Value="@mentalDisorder"/>
-                    <RadzenLabel Text="Психическое расстройство"/>
-                </div>
-                <div class="row">
-                    <RadzenCheckBox TValue="bool" @bind-Value="@tuberculosis"/>
-                    <RadzenLabel Text="Туберкулёз"/>
-                </div>
-                <div class="row">
-                    <RadzenCheckBox TValue="bool" @bind-Value="@hiv"/>
-                    <RadzenLabel Text="ВИЧ"/>
-                </div>
-                <div class="row">
-                    <RadzenCheckBox TValue="bool" @bind-Value="@hepatitisB"/>
-                    <RadzenLabel Text="Гепатит B"/>
-                </div>
-                <div class="row">
-                    <RadzenCheckBox TValue="bool" @bind-Value="@hepatitisC"/>
-                    <RadzenLabel Text="Гепатит C"/>
-                </div>
-                <div class="row">
-                    <RadzenCheckBox TValue="bool" @bind-Value="@otherHealthStatus"/>
-                    <RadzenLabel Text="Другое"/>
-                    @if (otherHealthStatus)
-                    {
-                        <RadzenTextBox Placeholder="Уточните" Style="margin-left: 5px" @bind-Value="@otherHealthStatusDetails"/>
-                    }
-                </div>
-            </div>
+            }
         </div>    
         <div class="row">
             <div class="col-md-4">
