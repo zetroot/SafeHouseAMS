@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 
 namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
 {
@@ -78,5 +80,34 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
             Kind = kind;
             OtherDetailed = otherDetailed;
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            if (Kind == HealthStatusVulnerabilityType.None) return string.Empty;
+            var enumVals = Enum.GetValues<HealthStatusVulnerabilityType>()
+                .Where(x => x != HealthStatusVulnerabilityType.None)
+                .Where(x => Kind.HasFlag(x));
+            var sb = new StringBuilder();
+            foreach (var candidate in enumVals)
+            {
+                if (sb.Length != 0) sb.Append(", ");
+                sb.Append(candidate switch
+                {
+                    HealthStatusVulnerabilityType.Disability => "инвалидность",
+                    HealthStatusVulnerabilityType.SpecialNeeds => "ОВЗ",
+                    HealthStatusVulnerabilityType.MentalDisorder => "психическое раастройство",
+                    HealthStatusVulnerabilityType.Tuberculosis => "туберкулёз",
+                    HealthStatusVulnerabilityType.HIV => "ВИЧ",
+                    HealthStatusVulnerabilityType.HepatitisB => "гепатит B",
+                    HealthStatusVulnerabilityType.HepatitisC => "гепатит C",
+                    HealthStatusVulnerabilityType.Other when !string.IsNullOrWhiteSpace(OtherDetailed) => $"другое ({OtherDetailed})",
+                    _ => "другое"
+                });
+            }
+
+            return $"Уязвимости по здоровью: {sb}";
+        }
+        
     }
 }

@@ -7,10 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
+using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 using SafeHouseAMS.DataLayer.Models.LifeSituations;
 
 namespace SafeHouseAMS.DataLayer.Repositories
@@ -109,12 +109,147 @@ namespace SafeHouseAMS.DataLayer.Repositories
             foreach (var item in sortedList)
                 yield return item;
         }
-        public async Task SetWorkingExperience(Guid documentId, string workingExperience)
+        public async Task SetWorkingExperience(Guid inquiryId, string workingExperience)
         {
-            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == documentId);
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
             if (document is InquiryDAL inquiry)
             {
                 inquiry.WorkingExperience = workingExperience;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task SetAddiction(Guid inquiryId, string addictionKind)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.HasAddiction = true;
+                inquiry.AddictionKind = addictionKind;
+                await _context.SaveChangesAsync();
+            }
+        }
+        
+        public async Task ClearAddiction(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.HasAddiction = false;
+                inquiry.AddictionKind = null;
+                await _context.SaveChangesAsync();
+            }
+        }
+        
+        public async Task SetHomeless(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.Homelessness = true;
+                await _context.SaveChangesAsync();
+            }
+        }
+        
+        public async Task ClearHomeless(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.Homelessness = false;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task SetMigration(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.Migration = true;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task ClearMigration(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.Migration = false;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task SetChildhoodViolence(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.ChildhoodViolence = true;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task ClearChildhoodViolence(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.ChildhoodViolence = false;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task SetOrphanageExperience(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.OrphanageExperience = true;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task ClearOrphanageExperience(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.OrphanageExperience = false;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task SetOther(Guid inquiryId, string details)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.HasOtherVulnerability = true;
+                inquiry.OtherVulnerabilityDetails = details;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task ClearOther(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.HasOtherVulnerability = false;
+                inquiry.OtherVulnerabilityDetails = null;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task SetHealthStatusVulnerability(Guid inquiryId, HealthStatus.HealthStatusVulnerabilityType healthStatus, string? details)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.HealthStatusVulnerabilityMask = (int)healthStatus;
+                inquiry.OtherHealthStatusVulnerabilityDetail = details;
+                await _context.SaveChangesAsync();
+            }
+        }
+        public async Task ClearHealthStatusVulnerability(Guid inquiryId)
+        {
+            var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
+            if (document is InquiryDAL inquiry)
+            {
+                inquiry.HealthStatusVulnerabilityMask = 0;
+                inquiry.OtherHealthStatusVulnerabilityDetail = null;
                 await _context.SaveChangesAsync();
             }
         }

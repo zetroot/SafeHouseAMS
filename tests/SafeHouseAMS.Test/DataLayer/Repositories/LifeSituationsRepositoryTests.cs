@@ -13,6 +13,7 @@ using Moq;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
+using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 using SafeHouseAMS.DataLayer;
 using SafeHouseAMS.DataLayer.Models.LifeSituations;
 using SafeHouseAMS.DataLayer.Repositories;
@@ -317,6 +318,365 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
                 .OfType<InquiryDAL>()
                 .SingleAsync(x => x.ID == docId);
             document.WorkingExperience.Should().Be(workingExperience);
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task SetAddiction_WhenCalled_SetsAddictionInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            const string addictionKind = "details";
+            //act
+            
+            await sut.SetAddiction(docId, addictionKind);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.HasAddiction.Should().BeTrue();
+            document.AddictionKind.Should().Be(addictionKind);
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task ClearAddiction_WhenCalled_ClearsAddictionInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1, AddictionKind = "addiction", HasAddiction = true});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.ClearAddiction(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.HasAddiction.Should().BeFalse();
+            document.AddictionKind.Should().BeNull();
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task SetHomeless_WhenCalled_SetsHomelessInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.SetHomeless(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.Homelessness.Should().BeTrue();
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task ClearHomeless_WhenCalled_ClearsHomelessInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1, Homelessness = true});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.ClearHomeless(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.Homelessness.Should().BeFalse();
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task SetMigration_WhenCalled_SetsMigrationInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.SetMigration(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.Migration.Should().BeTrue();
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task ClearMigration_WhenCalled_ClearsMigrationInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1, Migration = true});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.ClearMigration(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.Migration.Should().BeFalse();
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task SetChildhoodViolence_WhenCalled_SetsChildhoodViolenceInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.SetChildhoodViolence(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.ChildhoodViolence.Should().BeTrue();
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task ClearChildhoodViolence_WhenCalled_ClearsChildhoodViolenceInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1, ChildhoodViolence = true});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.ClearChildhoodViolence(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.ChildhoodViolence.Should().BeFalse();
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task SetOrphanageExperience_WhenCalled_SetsOrphanageExperienceInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.SetOrphanageExperience(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.OrphanageExperience.Should().BeTrue();
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task ClearOrphanageExperience_WhenCalled_ClearsOrphanageExperienceInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1, OrphanageExperience = true});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.ClearOrphanageExperience(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.OrphanageExperience.Should().BeFalse();
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task SetOther_WhenCalled_SetsOtherInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            const string otherDetails = "other details";
+            
+            //act
+            await sut.SetOther(docId, otherDetails);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.HasOtherVulnerability.Should().BeTrue();
+            document.OtherVulnerabilityDetails.Should().Be(otherDetails);
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task ClearOther_WhenCalled_ClearsOtherInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1, HasOtherVulnerability = true, OtherVulnerabilityDetails = "other details"});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.ClearOther(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.HasOtherVulnerability.Should().BeFalse();
+            document.OtherVulnerabilityDetails.Should().BeNull();
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task SetHealthStatus_WhenCalled_SetsHealthStatusInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            const string HealthStatusDetails = "HealthStatus details";
+            
+            //act
+            await sut.SetHealthStatusVulnerability(docId, HealthStatus.HealthStatusVulnerabilityType.Other, HealthStatusDetails);
+
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.HealthStatusVulnerabilityMask.Should().Be(128);
+            document.OtherHealthStatusVulnerabilityDetail.Should().Be(HealthStatusDetails);
+        }
+        
+        [Fact,IntegrationTest]
+        public async Task ClearHealthStatus_WhenCalled_ClearsHealthStatusInInquiry()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+
+            var docId = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = docId, SurvivorID = surId1, HealthStatusVulnerabilityMask = 128, OtherHealthStatusVulnerabilityDetail = "HealthStatus details"});
+            await ctx.SaveChangesAsync();
+            
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+            //act
+            
+            await sut.ClearHealthStatusVulnerability(docId);
+            
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<InquiryDAL>()
+                .SingleAsync(x => x.ID == docId);
+            document.HealthStatusVulnerabilityMask.Should().Be(0);
+            document.OtherHealthStatusVulnerabilityDetail.Should().BeNull();
         }
     }
 }

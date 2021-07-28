@@ -87,7 +87,7 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
         /// <summary>
         /// мигрант_ка
         /// </summary>
-        public bool Mirgation { get; set; }
+        public bool Migration { get; set; }
 
         /// <summary>
         /// опыт интернатного учреждения

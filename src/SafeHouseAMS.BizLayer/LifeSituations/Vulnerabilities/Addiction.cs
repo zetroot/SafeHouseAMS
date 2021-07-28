@@ -21,5 +21,8 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
         {
             AddictionKind = addictionKind ?? throw new ArgumentNullException(nameof(addictionKind));
         }
+
+        /// <inheritdoc />
+        public override string ToString() => string.IsNullOrEmpty(AddictionKind) ? "Зависимость" : $"Зависимость ({AddictionKind})";
     }
 }

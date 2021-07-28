@@ -1,0 +1,147 @@
+﻿@using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
+@using SafeHouseAMS.BizLayer.LifeSituations.Commands
+<div class="container-fluid">
+    <RadzenFieldset Text="Факторы уязвимости">
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenCheckBox TValue="bool" @bind-Value="@hasAddiction"/>
+                <RadzenLabel Text="Заивисмость" />
+                @if (hasAddiction)
+                {
+                    <RadzenTextBox @bind-Value="@addictionKind" Placeholder="Уточните тип" Style="margin-left: 5px" />
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenCheckBox TValue="bool" @bind-Value="@childhoodViolence"/>
+                <RadzenLabel Text="Насилие в детстве" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenCheckBox TValue="bool" @bind-Value="@orphanageExperience"/>
+                <RadzenLabel Text="Опыт интернатного учреждения" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenCheckBox TValue="bool" @bind-Value="@homelessness"/>
+                <RadzenLabel Text="Бездомность" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenCheckBox TValue="bool" @bind-Value="@migration"/>
+                <RadzenLabel Text="Мигрант_ка" />
+            </div>
+        </div>        
+        <div class="row">
+            <div class="col-md-2">
+                <RadzenCheckBox TValue="bool" @bind-Value="@healthStatusVulnerability"/>
+                <RadzenLabel Text="Состояние здоровья" />
+            </div>
+            @if (healthStatusVulnerability)
+            {
+                <div class="col-md-6">
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@disability"/>
+                        <RadzenLabel Text="Инвалидность"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@specialNeeds"/>
+                        <RadzenLabel Text="ОВЗ"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@mentalDisorder"/>
+                        <RadzenLabel Text="Психическое расстройство"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@tuberculosis"/>
+                        <RadzenLabel Text="Туберкулёз"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@hiv"/>
+                        <RadzenLabel Text="ВИЧ"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@hepatitisB"/>
+                        <RadzenLabel Text="Гепатит B"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@hepatitisC"/>
+                        <RadzenLabel Text="Гепатит C"/>
+                    </div>
+                    <div class="row">
+                        <RadzenCheckBox TValue="bool" @bind-Value="@otherHealthStatus"/>
+                        <RadzenLabel Text="Другое"/>
+                        @if (otherHealthStatus)
+                        {
+                            <RadzenTextBox Placeholder="Уточните" Style="margin-left: 5px" @bind-Value="@otherHealthStatusDetails"/>
+                        }
+                    </div>
+                </div>
+            }
+        </div>    
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenCheckBox TValue="bool" @bind-Value="@otherVulnerability"/>
+                <RadzenLabel Text="Другое" />
+                @if (otherVulnerability)
+                {
+                    <RadzenTextBox Placeholder="Уточните.." Style="margin-left: 5px" @bind-Value="@otherVulnerabilityDetails"/>
+                }
+            </div>
+        </div>
+    </RadzenFieldset>
+</div>
+@code {
+    private bool hasAddiction;
+    private string? addictionKind;
+    private bool childhoodViolence;
+    private bool orphanageExperience;
+    private bool homelessness;
+    private bool migration;
+    private bool otherVulnerability;
+    private string? otherVulnerabilityDetails;
+    
+    private bool healthStatusVulnerability;
+    private bool disability;
+    private bool specialNeeds;
+    private bool mentalDisorder;
+    private bool tuberculosis;
+    private bool hiv;
+    private bool hepatitisB;
+    private bool hepatitisC;
+    private bool otherHealthStatus;
+    private string? otherHealthStatusDetails;
+
+    private HealthStatus.HealthStatusVulnerabilityType BuildHealthStatus()
+    {
+        var result = HealthStatus.HealthStatusVulnerabilityType.None;
+        if (disability) result |= HealthStatus.HealthStatusVulnerabilityType.Disability;
+        if (specialNeeds) result |= HealthStatus.HealthStatusVulnerabilityType.SpecialNeeds;
+        if (mentalDisorder) result |= HealthStatus.HealthStatusVulnerabilityType.MentalDisorder;
+        if (tuberculosis) result |= HealthStatus.HealthStatusVulnerabilityType.Tuberculosis;
+        if (hiv) result |= HealthStatus.HealthStatusVulnerabilityType.HIV;
+        if (hepatitisB) result |= HealthStatus.HealthStatusVulnerabilityType.HepatitisB;
+        if (hepatitisC) result |= HealthStatus.HealthStatusVulnerabilityType.HepatitisC;
+        if (otherHealthStatus) result |= HealthStatus.HealthStatusVulnerabilityType.Other;
+        return result;
+    }
+
+    private List<Vulnerability> GetVulnerabilities()
+    {
+        var result = new List<Vulnerability>();
+        if(hasAddiction) result.Add(new Addiction(addictionKind ?? string.Empty));
+        if(childhoodViolence) result.Add(new ChildhoodViolence());
+        if(orphanageExperience) result.Add(new OrphanageExperience());
+        if(homelessness) result.Add(new Homelessness());
+        if(migration) result.Add(new Migration());
+        if(otherVulnerability) result.Add(new Other(otherVulnerabilityDetails ?? string.Empty));
+        if(healthStatusVulnerability) result.Add(new HealthStatus(BuildHealthStatus(), otherHealthStatusDetails));
+        return result;
+    }
+
+    public SetVulnerabilities BuildCommand(Guid docId) => new(docId, GetVulnerabilities());
+}

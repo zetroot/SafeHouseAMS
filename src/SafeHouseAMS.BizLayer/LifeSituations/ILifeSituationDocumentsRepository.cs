@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
+using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 
 namespace SafeHouseAMS.BizLayer.LifeSituations
 {
@@ -59,8 +60,97 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <summary>
         /// Заполнить "опыт работы"
         /// </summary>
-        /// <param name="documentId">идентификатор документа</param>
+        /// <param name="inquiryId">идентификатор документа</param>
         /// <param name="workingExperience">строка-описание опыта работы</param>
-        Task SetWorkingExperience(Guid documentId, string workingExperience);
+        Task SetWorkingExperience(Guid inquiryId, string workingExperience);
+
+        /// <summary>
+        /// Установить зависимость
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        /// <param name="addictionKind">тип зависимости</param>
+        Task SetAddiction(Guid inquiryId, string addictionKind);
+        
+        /// <summary>
+        /// Убрать зависимость
+        /// </summary>
+        /// <param name="inquiryId">идентификтаор обращения</param>
+        Task ClearAddiction(Guid inquiryId);
+        
+        /// <summary>
+        /// Установить признак бездомность
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        Task SetHomeless(Guid inquiryId);
+        
+        /// <summary>
+        /// Снять признак бездомности 
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        Task ClearHomeless(Guid inquiryId);
+        
+        /// <summary>
+        /// Установить признак мигрант_ка
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        Task SetMigration(Guid inquiryId);
+        
+        /// <summary>
+        /// Снять признак мигрант_ка
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        /// <returns></returns>
+        Task ClearMigration(Guid inquiryId);
+        
+        /// <summary>
+        /// Установить признак "насилие в детстве"
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        Task SetChildhoodViolence(Guid inquiryId);
+        
+        /// <summary>
+        /// Снять признак "насилие в детстве"
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        Task ClearChildhoodViolence(Guid inquiryId);
+        
+        /// <summary>
+        /// Установить признак "опыт интернатного учреждения
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        Task SetOrphanageExperience(Guid inquiryId);
+        
+        /// <summary>
+        /// Снять признак "опыт интернатного учреждения"
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        Task ClearOrphanageExperience(Guid inquiryId);
+        
+        /// <summary>
+        /// Установить признак "другие факторы уязвимости"
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        /// <param name="details">описание других факторов</param>
+        Task SetOther(Guid inquiryId, string details);
+        
+        /// <summary>
+        /// Снять признак "другие факторы уязвимости"
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        Task ClearOther(Guid inquiryId);
+        
+        /// <summary>
+        /// Установить признак "уявзимости связанные со здоровьем"
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        /// <param name="healthStatus">битовая маска факторов здоровья</param>
+        /// <param name="details">уточнение</param>
+        Task SetHealthStatusVulnerability(Guid inquiryId, HealthStatus.HealthStatusVulnerabilityType healthStatus, string? details);
+        
+        /// <summary>
+        /// Снять признак "уязвимости связанные со здоровьем"
+        /// </summary>
+        /// <param name="inquiryId">идентификатор обращения</param>
+        Task ClearHealthStatusVulnerability(Guid inquiryId);
     }
 }

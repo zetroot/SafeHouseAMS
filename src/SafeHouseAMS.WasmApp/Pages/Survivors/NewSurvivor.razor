@@ -86,15 +86,18 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <EducationLevelsComponent @ref="@_educationLevelRecords"/>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <SpecialityRecordsComponent @ref="@_specialityRecords"/>
                     </div>
+                    <div class="col-md-4">
+                        <WorkingExperienceEditorComponent @ref="@_workingExperienceEditor"/>
+                    </div>
                 </div>
-                <div>
-                    <WorkingExperienceEditorComponent @ref="@_workingExperienceEditor"/>
+                <div class="row">
+                    <VulnerabilitiesEditorComponent @ref="@_vulnerabilitiesEditor"/>
                 </div>
                 <div class="row justify-content-center">
                     <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
@@ -133,6 +136,7 @@
     private EducationLevelsComponent? _educationLevelRecords;
     private SpecialityRecordsComponent? _specialityRecords;
     private WorkingExperienceEditorComponent? _workingExperienceEditor;
+    private VulnerabilitiesEditorComponent? _vulnerabilitiesEditor;
     
     private void CancelClick()
     {
@@ -176,6 +180,9 @@
         if (_workingExperienceEditor?.BuildCommand(inquiryId) is {} workingExperienceCmd)
             await _documentsAggregate.ApplyCommand(workingExperienceCmd, CancellationToken.None);
         
+        if (_vulnerabilitiesEditor?.BuildCommand(inquiryId) is {} vulnerabilitiesCmd)
+            await _documentsAggregate.ApplyCommand(vulnerabilitiesCmd, CancellationToken.None);
+
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }

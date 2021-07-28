@@ -1,0 +1,32 @@
+﻿@using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
+
+@if(Vulnerabilities?.Any() == true)
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <RadzenLabel Text="Факторы уязвимости"/>
+                <ul>
+                    @foreach (var factor in Vulnerabilities)
+                    {
+                        <li>
+                            <RadzenLabel Text="@factor.ToString()"/>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="alert alert-info">
+            <RadzenLabel Text="Информация факторах уязвимости не заполнена"/>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public IReadOnlyCollection<Vulnerability>? Vulnerabilities { get; set; }
+}
