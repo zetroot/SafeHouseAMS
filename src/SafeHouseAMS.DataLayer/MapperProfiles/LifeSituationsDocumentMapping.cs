@@ -44,7 +44,7 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
                     if(src.HasAddiction) vulns.Add(new Addiction(src.AddictionKind ?? ""));
                     if(src.ChildhoodViolence) vulns.Add(new ChildhoodViolence());
                     if(src.Homelessness) vulns.Add(new Homelessness());
-                    if(src.Mirgation) vulns.Add(new Migration());
+                    if(src.Migration) vulns.Add(new Migration());
                     if(src.OrphanageExperience) vulns.Add(new OrphanageExperience());
                     if(src.HasOtherVulnerability) vulns.Add(new Other(src.OtherVulnerabilityDetails??""));
                     if(src.HealthStatusVulnerabilityMask != 0) 

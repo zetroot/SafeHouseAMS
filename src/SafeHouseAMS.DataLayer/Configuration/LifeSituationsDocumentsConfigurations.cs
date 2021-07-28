@@ -60,7 +60,7 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.Property(x => x.AddictionKind).HasComment("Тип зависимости");
             builder.Property(x => x.ChildhoodViolence).HasComment("Насилие в детстве");
             builder.Property(x => x.Homelessness).HasComment("Бездомность");
-            builder.Property(x => x.Mirgation).HasComment("Мигрант_ка");
+            builder.Property(x => x.Migration).HasComment("Мигрант_ка");
             builder.Property(x => x.OrphanageExperience).HasComment("Опыт интернатного учреждения");
             builder.Property(x => x.HasOtherVulnerability).HasComment("другие факторы уязвимости");
             builder.Property(x => x.OtherVulnerabilityDetails).HasComment("Описание других факторов уязвимости");

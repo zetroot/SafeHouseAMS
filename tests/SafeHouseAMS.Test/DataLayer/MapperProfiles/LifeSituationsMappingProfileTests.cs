@@ -92,7 +92,7 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
                 Specialities = new(){specRec1Dal, specRec2Dal},
                 WorkingExperience = workingExperience,
                 HasAddiction = true, AddictionKind = addictionKind,
-                ChildhoodViolence = true, Homelessness = true, Mirgation = true, OrphanageExperience = true,
+                ChildhoodViolence = true, Homelessness = true, Migration = true, OrphanageExperience = true,
                 HasOtherVulnerability = true, OtherVulnerabilityDetails = otherVulnerabilityDetails,
                 HealthStatusVulnerabilityMask = (int)healthStatusVulnerabilityType,
                 OtherHealthStatusVulnerabilityDetail = otherHealthStatusVulnerabilityDetail
