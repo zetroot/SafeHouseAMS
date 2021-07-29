@@ -17,25 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseAMS.Test", "tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseAMS.Backend.Server", "src\SafeHouseAMS.Backend.Server\SafeHouseAMS.Backend.Server.csproj", "{5FAF0013-2D3C-4697-BC11-B2DD82579040}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "proto", "proto", "{AF624D47-0E22-4391-99D8-9F44A8083930}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{DD5F0B0D-5F68-46FF-957A-3BE423452476}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{D12696C8-B223-42E4-9DA8-60D4843A7BBD}"
-ProjectSection(SolutionItems) = preProject
-	src\proto\Services\SurvivorCatalogue.proto = src\proto\Services\SurvivorCatalogue.proto
-EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{2F6E61A2-C947-43CF-9448-E03037B8388D}"
-ProjectSection(SolutionItems) = preProject
-	src\proto\Models\Common\UUID.proto = src\proto\Models\Common\UUID.proto
-EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Survivors", "Survivors", "{A2EE76D1-6C87-4362-91A6-FB10DE2BF480}"
-ProjectSection(SolutionItems) = preProject
-	src\proto\Models\Survivors\CreateSurvivorCommand.proto = src\proto\Models\Survivors\CreateSurvivorCommand.proto
-	src\proto\Models\Survivors\Survivor.proto = src\proto\Models\Survivors\Survivor.proto
-EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeHouseAMS.Transport", "src\SafeHouseAMS.Transport\SafeHouseAMS.Transport.csproj", "{AB733B3B-4C48-42D9-8B82-307116CD3D80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +45,10 @@ Global
 		{5FAF0013-2D3C-4697-BC11-B2DD82579040}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FAF0013-2D3C-4697-BC11-B2DD82579040}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FAF0013-2D3C-4697-BC11-B2DD82579040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB733B3B-4C48-42D9-8B82-307116CD3D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB733B3B-4C48-42D9-8B82-307116CD3D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB733B3B-4C48-42D9-8B82-307116CD3D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB733B3B-4C48-42D9-8B82-307116CD3D80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,10 +62,6 @@ Global
 		{B4A867D5-C24C-4551-B669-B10CED1BB89A} = {3D9A4064-4EF5-4AB2-8AAC-CD0812D95E1B}
 		{0D02E5A0-FBAA-469D-A557-CC88018E7534} = {CB1FC8EB-EA6B-4514-A870-2D7D99E4C0E5}
 		{5FAF0013-2D3C-4697-BC11-B2DD82579040} = {3D9A4064-4EF5-4AB2-8AAC-CD0812D95E1B}
-		{AF624D47-0E22-4391-99D8-9F44A8083930} = {3D9A4064-4EF5-4AB2-8AAC-CD0812D95E1B}
-		{DD5F0B0D-5F68-46FF-957A-3BE423452476} = {AF624D47-0E22-4391-99D8-9F44A8083930}
-		{D12696C8-B223-42E4-9DA8-60D4843A7BBD} = {AF624D47-0E22-4391-99D8-9F44A8083930}
-		{2F6E61A2-C947-43CF-9448-E03037B8388D} = {DD5F0B0D-5F68-46FF-957A-3BE423452476}
-		{A2EE76D1-6C87-4362-91A6-FB10DE2BF480} = {DD5F0B0D-5F68-46FF-957A-3BE423452476}
+		{AB733B3B-4C48-42D9-8B82-307116CD3D80} = {3D9A4064-4EF5-4AB2-8AAC-CD0812D95E1B}
 	EndGlobalSection
 EndGlobal

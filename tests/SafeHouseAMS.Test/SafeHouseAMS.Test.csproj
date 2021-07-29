@@ -10,6 +10,8 @@
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
+        <PackageReference Include="FsCheck" Version="2.15.3" />
+        <PackageReference Include="FsCheck.Xunit" Version="2.15.3" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.8" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
@@ -29,6 +31,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\SafeHouseAMS.BizLayer\SafeHouseAMS.BizLayer.csproj" />
       <ProjectReference Include="..\..\src\SafeHouseAMS.DataLayer\SafeHouseAMS.DataLayer.csproj" />
+      <ProjectReference Include="..\..\src\SafeHouseAMS.Transport\SafeHouseAMS.Transport.csproj" />
     </ItemGroup>
 
 </Project>
