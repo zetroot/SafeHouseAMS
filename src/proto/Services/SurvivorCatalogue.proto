@@ -1,0 +1,36 @@
+syntax = "proto3";
+package safehouse.ams.services;
+option csharp_namespace = "SafeHouseAMS.Backend.Protos.Services";
+
+import "Models/Common/UUID.proto";
+import "Models/Survivors/Survivor.proto";
+import "Models/Survivors/CreateSurvivorCommand.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
+service SurvivorCatalogue{
+  rpc GetSingle (UUID) returns (models.Survivor);
+  rpc ApplyCommand (CommandWrapper) returns (google.protobuf.Empty);
+  
+  rpc GetCollection (CollectionRequest) returns (SurvivorsCollection);
+  rpc GetTotalCount (google.protobuf.Empty) returns (TotalCountResponse); 
+}
+
+message CommandWrapper{
+  oneof command {
+    commands.CreateSurvivor CreateCommand = 1; 
+  }
+}
+
+message CollectionRequest {
+  int32 Skip = 1;
+  google.protobuf.Int32Value Take = 2;
+}
+
+message SurvivorsCollection {
+  repeated models.Survivor Items = 1;
+}
+
+message TotalCountResponse {
+  int32 Count = 1;
+}

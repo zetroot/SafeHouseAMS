@@ -5,11 +5,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Grpc.AspNetCore" Version="2.34.0" />
+        <PackageReference Include="Google.Protobuf" Version="3.17.3" />
+        <PackageReference Include="Grpc.AspNetCore" Version="2.38.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Protos" />
+        <Folder Include="Services" />
+        <Folder Include="Protos" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Protobuf Include="..\proto\**\*.proto" GrpcServices="Server"/>
     </ItemGroup>
 
 </Project>
