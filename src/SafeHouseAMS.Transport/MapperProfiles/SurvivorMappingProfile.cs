@@ -9,9 +9,11 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         {
             MapSurvivors();
         }
+        
         private void MapSurvivors()
         {
             CreateMap<Survivor, Backend.Protos.Models.Survivors.Survivor>();
+            CreateMap<Backend.Protos.Models.Survivors.Survivor, Survivor>();
         }
     }
 }
