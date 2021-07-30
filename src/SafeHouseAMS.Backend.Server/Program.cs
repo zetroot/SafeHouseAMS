@@ -25,7 +25,7 @@ namespace SafeHouseAMS.Backend.Server
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
-                .CreateLogger();
+                .CreateBootstrapLogger();
             try
             {
                 Log.Information("Starting web host");
@@ -45,7 +45,13 @@ namespace SafeHouseAMS.Backend.Server
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSerilog()
+                .UseSerilog((context, services, configuration) =>
+                    configuration
+                        .ReadFrom.Configuration(context.Configuration)
+                        // .ReadFrom.Services(services)
+                        // .Enrich.FromLogContext()
+                        // .WriteTo.Console()
+                    )
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder
