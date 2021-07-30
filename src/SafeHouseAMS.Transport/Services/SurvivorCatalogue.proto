@@ -12,7 +12,7 @@ service SurvivorCatalogue{
   rpc GetSingle (UUID) returns (models.Survivor);
   rpc ApplyCommand (CommandWrapper) returns (google.protobuf.Empty);
   
-  rpc GetCollection (CollectionRequest) returns (SurvivorsCollection);
+  rpc GetCollection (CollectionRequest) returns (stream models.Survivor);
   rpc GetTotalCount (google.protobuf.Empty) returns (TotalCountResponse); 
 }
 
@@ -25,10 +25,6 @@ message CommandWrapper{
 message CollectionRequest {
   int32 Skip = 1;
   google.protobuf.Int32Value Take = 2;
-}
-
-message SurvivorsCollection {
-  repeated models.Survivor Items = 1;
 }
 
 message TotalCountResponse {

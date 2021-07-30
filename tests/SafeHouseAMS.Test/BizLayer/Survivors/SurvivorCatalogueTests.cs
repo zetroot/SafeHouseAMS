@@ -80,14 +80,14 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
             //arrange
             var asyncEnum = GetEmptyAsyncEnumerable<Survivor>();
             var repoMock = new Mock<ISurvivorRepository>();
-            repoMock.Setup(x => x.GetCollection(It.IsAny<int>(), It.IsAny<int?>())).Returns(asyncEnum);
+            repoMock.Setup(x => x.GetCollection(It.IsAny<int>(), It.IsAny<int?>(), It.IsAny<CancellationToken>())).Returns(asyncEnum);
             var sut = new SurvivorCatalogue(repoMock.Object);
 
             //act
-            var resultedEnum = sut.GetCollection(42, 54);
+            var resultedEnum = sut.GetCollection(42, 54, CancellationToken.None);
             
             //assert
-            repoMock.Verify(x => x.GetCollection(42, 54), Times.Once());
+            repoMock.Verify(x => x.GetCollection(42, 54, CancellationToken.None), Times.Once());
             resultedEnum.Should().BeSameAs(asyncEnum);
         }
         

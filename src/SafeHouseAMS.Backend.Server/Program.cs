@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,16 +9,22 @@ using Microsoft.Extensions.Hosting;
 
 namespace SafeHouseAMS.Backend.Server
 {
+    /// <summary>
+    /// Базовый клас приложения
+    /// </summary>
+    [ExcludeFromCodeCoverage]
     public class Program
     {
+        /// <summary>
+        /// точка входа в приложение
+        /// </summary>
+        /// <param name="args">Аргументы запуска</param>
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }
 
-        // Additional configuration is required to successfully run gRPC on macOS.
-        // For instructions on how to configure Kestrel and gRPC clients on macOS, visit https://go.microsoft.com/fwlink/?linkid=2099682
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

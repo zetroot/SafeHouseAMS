@@ -1,5 +1,6 @@
 ﻿@page "/SurvivorCatalogue"
 @using SafeHouseAMS.BizLayer.Survivors
+@using System.Threading
 @inject ISurvivorCatalogue _survivorCatalogue
 @inject NavigationManager _navigation
 @inject ILogger<SurvivorCatalogue> _logger
@@ -46,7 +47,7 @@
     {
         _logger.LogInformation("Initializing");
         var items = new List<Survivor>();
-        await foreach (var survivor in _survivorCatalogue.GetCollection(0, 20))
+        await foreach (var survivor in _survivorCatalogue.GetCollection(0, 20, CancellationToken.None))
         {
             items.Add(survivor);
         }
@@ -60,7 +61,7 @@
     {
         _logger.LogInformation("Loading data. Skip={Skip} take={Take}", loadArgs.Skip, loadArgs.Top);
         var items = new List<Survivor>();
-        await foreach (var survivor in _survivorCatalogue.GetCollection(loadArgs.Skip ?? 0, loadArgs.Top))
+        await foreach (var survivor in _survivorCatalogue.GetCollection(loadArgs.Skip ?? 0, loadArgs.Top, CancellationToken.None))
         {
             items.Add(survivor);
         }

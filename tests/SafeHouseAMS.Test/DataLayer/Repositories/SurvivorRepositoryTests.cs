@@ -191,7 +191,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             
             //act
             var result = new List<Survivor>();
-            await foreach (var s in sut.GetCollection(1, 3))
+            await foreach (var s in sut.GetCollection(1, 3, CancellationToken.None))
             {
                 result.Add(s);
             }
@@ -219,7 +219,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             
             //act
             var result = new List<Survivor>();
-            await foreach (var s in sut.GetCollection(1, null))
+            await foreach (var s in sut.GetCollection(1, null, CancellationToken.None))
             {
                 result.Add(s);
             }

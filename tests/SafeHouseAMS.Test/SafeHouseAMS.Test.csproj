@@ -29,9 +29,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\SafeHouseAMS.Backend.Server\SafeHouseAMS.Backend.Server.csproj" />
       <ProjectReference Include="..\..\src\SafeHouseAMS.BizLayer\SafeHouseAMS.BizLayer.csproj" />
       <ProjectReference Include="..\..\src\SafeHouseAMS.DataLayer\SafeHouseAMS.DataLayer.csproj" />
       <ProjectReference Include="..\..\src\SafeHouseAMS.Transport\SafeHouseAMS.Transport.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Backend.Server\Services" />
     </ItemGroup>
 
 </Project>
