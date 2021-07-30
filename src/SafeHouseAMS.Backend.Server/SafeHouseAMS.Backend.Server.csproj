@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\SafeHouseAMS.DataLayer\SafeHouseAMS.DataLayer.csproj" />
       <ProjectReference Include="..\SafeHouseAMS.Transport\SafeHouseAMS.Transport.csproj" />
     </ItemGroup>
     

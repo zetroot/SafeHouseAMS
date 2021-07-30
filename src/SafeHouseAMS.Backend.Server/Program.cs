@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using SafeHouseAMS.BizLayer;
+using SafeHouseAMS.DataLayer;
 
 namespace SafeHouseAMS.Backend.Server
 {
@@ -28,7 +30,14 @@ namespace SafeHouseAMS.Backend.Server
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                        .ConfigureServices((builder, services) =>
+                        {
+                            services
+                                .ConnectToDatabase(builder.Configuration)
+                                .AddBizLogic(builder.Configuration);
+                        })
+                        .UseStartup<Startup>();
                 });
     }
 }
