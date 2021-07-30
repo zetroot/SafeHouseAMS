@@ -22,6 +22,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         public void RoundMappig_ReturnsOriginalDateTime()
         {
             var mapper = BuildMapper();
+            Arb.Register<LocalDateTimeGenerators>();
             Prop.ForAll<DateTime>(d =>
                 {
                     var src = d.ToLocalTime();
