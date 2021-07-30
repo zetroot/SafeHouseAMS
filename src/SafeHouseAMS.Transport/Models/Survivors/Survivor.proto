@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 package safehouse.ams.models;
-option csharp_namespace = "SafeHouseAMS.Backend.Protos.Models.Survivors";
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.Survivors";
 
 import "Models/Common/UUID.proto";
 import "google/protobuf/timestamp.proto";

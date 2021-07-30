@@ -1,7 +1,8 @@
 ﻿using System;
 using AutoMapper;
 using Google.Protobuf;
-using SafeHouseAMS.Backend.Protos.Models.Common;
+using SafeHouseAMS.Transport.Protos.Models.Common;
+
 
 namespace SafeHouseAMS.Transport.MapperProfiles
 {

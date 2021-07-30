@@ -1,6 +1,6 @@
 syntax = "proto3";
 package safehouse.ams;
-option csharp_namespace = "SafeHouseAMS.Backend.Protos.Models.Common";
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.Common";
 
 // бинарное представление GUID
 message UUID {

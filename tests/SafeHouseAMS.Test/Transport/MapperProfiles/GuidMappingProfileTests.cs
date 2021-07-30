@@ -3,8 +3,8 @@ using AutoMapper;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using SafeHouseAMS.Backend.Protos.Models.Common;
 using SafeHouseAMS.Transport.MapperProfiles;
+using SafeHouseAMS.Transport.Protos.Models.Common;
 
 namespace SafeHouseAMS.Test.Transport.MapperProfiles
 {
