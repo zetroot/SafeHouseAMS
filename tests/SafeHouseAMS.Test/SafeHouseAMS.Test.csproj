@@ -36,7 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Backend.Server\Services" />
+      <Folder Include="Backend.Server" />
     </ItemGroup>
 
 </Project>

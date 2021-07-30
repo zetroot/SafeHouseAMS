@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +25,22 @@ namespace SafeHouseAMS.Backend.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGrpc();
+            services.AddResponseCompression(opts =>
+            {
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                new[] { "application/octet-stream" });
+            });
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");;
+                    });
+            });
         }
         
         /// <summary>
@@ -33,16 +50,20 @@ namespace SafeHouseAMS.Backend.Server
         /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseCors();
+            
             app.UseRouting();
-
+            // must be added after UseRouting and before UseEndpoints 
+            app.UseGrpcWeb(); 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGrpcService<SurvivorCatalogueService>();
+                endpoints.MapGrpcService<SurvivorCatalogueService>().EnableGrpcWeb();
 
                 endpoints.MapGet("/", async context =>
                 {

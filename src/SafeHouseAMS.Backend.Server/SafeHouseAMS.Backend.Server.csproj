@@ -9,8 +9,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Protobuf Include="..\SafeHouseAMS.Transport\Services\**\*.proto" GrpcServices="Server" ProtoRoot="..\SafeHouseAMS.Transport" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <PackageReference Include="Google.Protobuf" Version="3.17.3" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.38.0" />
+        <PackageReference Include="Grpc.AspNetCore.Web" Version="2.38.0" />
     </ItemGroup>
 
     <ItemGroup>

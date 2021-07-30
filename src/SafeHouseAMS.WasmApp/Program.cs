@@ -1,11 +1,13 @@
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Radzen;
-using SafeHouseAMS.BizLayer;
-using SafeHouseAMS.DataLayer;
+using SafeHouseAMS.BizLayer.Survivors;
+using SafeHouseAMS.WasmApp.Services;
 using Serilog;
 
 namespace SafeHouseAMS.WasmApp
@@ -40,11 +42,10 @@ namespace SafeHouseAMS.WasmApp
 
                     options.ProviderOptions.ResponseType = "code";
                 });
+
+            services.AddAutoMapper(config => config.AddMaps(Assembly.Load("SafeHouseAMS.Transport")));
             
-            services
-                .AddBizLogic(configuration)
-                .ConnectToDatabase(configuration);
-                
+            services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogueClient>();
             services.AddScoped<DialogService>()
                 .AddScoped<NotificationService>()
                 .AddScoped<TooltipService>()

@@ -10,6 +10,13 @@
 
   <ItemGroup>
     <PackageReference Include="Faker.Net" Version="1.5.138" />
+    <PackageReference Include="Google.Protobuf" Version="3.17.3" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.38.0" />
+    <PackageReference Include="Grpc.Net.Client.Web" Version="2.38.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.38.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.8" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.8" />
@@ -32,8 +39,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="..\SafeHouseAMS.Transport\Services\**\*.proto" GrpcServices="Client" ProtoRoot="..\SafeHouseAMS.Transport" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <ProjectReference Include="..\SafeHouseAMS.BizLayer\SafeHouseAMS.BizLayer.csproj" />
     <ProjectReference Include="..\SafeHouseAMS.DataLayer\SafeHouseAMS.DataLayer.csproj" />
+    <ProjectReference Include="..\SafeHouseAMS.Transport\SafeHouseAMS.Transport.csproj" />
   </ItemGroup>
 
   <ItemGroup>
