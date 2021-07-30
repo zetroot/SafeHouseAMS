@@ -4,7 +4,7 @@
     <DataCollectors>
       <DataCollector friendlyName="XPlat code coverage">
         <Configuration>                    
-          <Exclude>[coverlet.*.tests?]*,[*]Coverlet.Core*</Exclude> <!-- [Assembly-Filter]Type-Filter -->          
+          <Exclude>[SafeHouseAMS.Test]*</Exclude> <!-- [Assembly-Filter]Type-Filter -->          
           <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
           <ExcludeByFile>**/obj/**/*.cs</ExcludeByFile> <!-- Globbing filter -->
           <IncludeTestAssembly>true</IncludeTestAssembly>
