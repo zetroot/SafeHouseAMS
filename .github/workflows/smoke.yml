@@ -29,7 +29,7 @@ jobs:
 
     # тестирование со сборкой результатов покрытия по конфигурации в файле по умолчанию
     - name: Test
-      run: dotnet test --no-restore --verbosity normal --collect:"XPlat code coverage" /p:ExcludeByFile=\"**/obj/**/*.cs\"
+      run: dotnet test --no-restore --verbosity normal --collect:"XPlat code coverage"
 
     # публикация результатов покрытия тестами на code-cov
     - name: Upload coverage to Codecov
