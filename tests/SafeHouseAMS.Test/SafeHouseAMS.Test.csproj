@@ -34,10 +34,4 @@
       <ProjectReference Include="..\..\src\SafeHouseAMS.Transport\SafeHouseAMS.Transport.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Update="coverlet.runsettings">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
 </Project>
