@@ -26,8 +26,8 @@ message Inquiry {
   bool IsJuvenile = 7;
   repeated inquirySources.InquirySource InquirySources = 8;
   records.CitizenshipRecord Citizenship = 9;
-  records.ChildrenRecord HasChildren = 10;
-  records.DomicileRecord Domicile = 11;
+  records.DomicileRecord Domicile = 10;
+  records.ChildrenRecord HasChildren = 11;
   repeated records.EducationLevelRecord EducationLevel = 12;
   repeated records.SpecialityRecord Specialities = 13;
   google.protobuf.StringValue WorkingExperience = 14;

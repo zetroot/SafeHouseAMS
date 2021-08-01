@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 
@@ -12,7 +13,15 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         {
             MapInquirySources();
             MapVulnerabilityFactors();
+            MapInquiries();
         }
+        
+        private void MapInquiries()
+        {
+            CreateMap<Inquiry, Protos.Models.LifeSituations.Inquiry>();
+            CreateMap<Protos.Models.LifeSituations.Inquiry, Inquiry>();
+        }
+        
         private void MapVulnerabilityFactors()
         {
             CreateMap<IEnumerable<Vulnerability>, Protos.Models.LifeSituations.VulnerabilityFactors>()
