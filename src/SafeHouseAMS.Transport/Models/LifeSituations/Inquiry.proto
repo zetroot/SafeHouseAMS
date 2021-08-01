@@ -4,6 +4,7 @@ option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations";
 
 import "Models/Common/UUID.proto";
 import "Models/Survivors/Survivor.proto";
+import "Models/LifeSituations/InquirySources/InquirySource.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
@@ -17,11 +18,11 @@ message Inquiry {
   Survivor Survivor = 6;
   
   bool IsJuvenile = 7;
-//  repeated InquirySource InquirySources = 8;
-//  CitizenshipRecord Citizenship = 9;
-//  DomicileRecord Domicile = 10;
-//  repeated EducationLevelRecord EducationLevel = 11;
-//  repeated SpecialityRecord Specialities = 12;
-//  google.protobuf.StringValue WorkingExperience = 13;
-//  repeated Vulnerability VulnerabilityFactors = 14;
+  repeated inquirySources.InquirySource InquirySources = 8;
+  //CitizenshipRecord Citizenship = 9;
+  //DomicileRecord Domicile = 10;
+  //repeated EducationLevelRecord EducationLevel = 11;
+  //repeated SpecialityRecord Specialities = 12;
+  google.protobuf.StringValue WorkingExperience = 13;
+  //repeated Vulnerability VulnerabilityFactors = 14;
 }
