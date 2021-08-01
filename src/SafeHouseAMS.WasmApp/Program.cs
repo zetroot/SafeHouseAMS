@@ -1,6 +1,5 @@
 using System;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
 using Grpc.Net.Client;
 using Grpc.Net.Client.Web;
@@ -12,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Radzen;
 using SafeHouseAMS.BizLayer.Survivors;
+using SafeHouseAMS.Transport;
 using SafeHouseAMS.WasmApp.Services;
 using Serilog;
 
@@ -46,9 +46,7 @@ namespace SafeHouseAMS.WasmApp
 
                     options.ProviderOptions.ResponseType = "code";
                 });
-
-            services.AddAutoMapper(config => config.AddMaps(Assembly.Load("SafeHouseAMS.Transport")));
-
+            
             var backendUri = configuration.GetValue<string>("Backend");
             services.AddHttpClient("amsAPI", client => client.BaseAddress = new Uri(backendUri))
                 .AddHttpMessageHandler(_ => new GrpcWebHandler(GrpcWebMode.GrpcWebText))
@@ -62,6 +60,7 @@ namespace SafeHouseAMS.WasmApp
                     return channel;
                 });
             
+            services.AddDtoMapping();
             services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogueClient>();
             services.AddScoped<DialogService>()
                 .AddScoped<NotificationService>()

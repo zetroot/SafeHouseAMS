@@ -11,6 +11,7 @@ using Okta.AspNetCore;
 using SafeHouseAMS.Backend.Server.Services;
 using SafeHouseAMS.BizLayer;
 using SafeHouseAMS.DataLayer;
+using SafeHouseAMS.Transport;
 
 namespace SafeHouseAMS.Backend.Server
 {
@@ -55,7 +56,8 @@ namespace SafeHouseAMS.Backend.Server
 
             services
                 .ConnectToDatabase(Configuration)
-                .AddBizLogic(Configuration);
+                .AddBizLogic(Configuration)
+                .AddDtoMapping();
 
             services.AddGrpc();
             services.AddResponseCompression(opts =>
