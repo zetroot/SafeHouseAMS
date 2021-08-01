@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands";
+
+import "Models/Common/UUID.proto";
+import "google/protobuf/wrappers.proto";
+
+message SetDomicile{
+  UUID EntityID = 1;
+  string Place = 2;
+  google.protobuf.Int32Value Kind = 3;
+  bool LivesAlone = 4;
+  bool WithPartner = 5;
+  google.protobuf.StringValue ChildrenDetails = 6;
+  google.protobuf.StringValue ParentsDetails = 7;
+  google.protobuf.StringValue OtherRelativesDetails = 8;
+  google.protobuf.StringValue OtherPeopleDetails = 9;
+}

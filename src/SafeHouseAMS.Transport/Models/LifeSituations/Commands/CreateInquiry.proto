@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands";
+
+import "Models/Common/UUID.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "Models/LifeSituations/InquirySources/InquirySource.proto";
+
+message CreateInquiry{
+  UUID EntityID = 1;
+  google.protobuf.Timestamp DocumentDate = 2;
+  UUID SurvivorId = 3;
+  google.protobuf.BoolValue IsJuvenile = 4;
+  repeated inquirySources.InquirySource InquirySources = 5;
+  string Citizenship = 6;
+}
