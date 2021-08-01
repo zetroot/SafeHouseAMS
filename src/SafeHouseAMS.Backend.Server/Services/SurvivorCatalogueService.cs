@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using SafeHouseAMS.BizLayer.Survivors;
 using SafeHouseAMS.BizLayer.Survivors.Commands;
@@ -13,7 +14,7 @@ using Survivor=SafeHouseAMS.Transport.Protos.Models.Survivors.Survivor;
 
 namespace SafeHouseAMS.Backend.Server.Services
 {
-    [ExcludeFromCodeCoverage] 
+    [ExcludeFromCodeCoverage] [Authorize]
     internal class SurvivorCatalogueService : SurvivorCatalogue.SurvivorCatalogueBase
     {
         private readonly ILogger<SurvivorCatalogueService> _logger;

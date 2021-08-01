@@ -2,8 +2,6 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using SafeHouseAMS.BizLayer;
-using SafeHouseAMS.DataLayer;
 using Serilog;
 using Serilog.Events;
 
@@ -45,23 +43,10 @@ namespace SafeHouseAMS.Backend.Server
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .UseSerilog((context, services, configuration) =>
-                    configuration
-                        .ReadFrom.Configuration(context.Configuration)
-                        // .ReadFrom.Services(services)
-                        // .Enrich.FromLogContext()
-                        // .WriteTo.Console()
-                    )
+                .UseSerilog((context, services, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder
-                        .ConfigureServices((builder, services) =>
-                        {
-                            services
-                                .ConnectToDatabase(builder.Configuration)
-                                .AddBizLogic(builder.Configuration);
-                        })
-                        .UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }

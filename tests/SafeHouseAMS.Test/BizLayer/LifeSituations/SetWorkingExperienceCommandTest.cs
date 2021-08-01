@@ -4,7 +4,6 @@ using FluentAssertions;
 using Moq;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
-using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using Xunit;
 using Xunit.Categories;
 

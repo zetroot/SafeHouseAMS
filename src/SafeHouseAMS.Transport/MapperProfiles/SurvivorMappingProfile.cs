@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using SafeHouseAMS.BizLayer.Survivors;
 using SafeHouseAMS.BizLayer.Survivors.Commands;
 

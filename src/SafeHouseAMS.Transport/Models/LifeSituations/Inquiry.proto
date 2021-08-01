@@ -17,11 +17,11 @@ message Inquiry {
   Survivor Survivor = 6;
   
   bool IsJuvenile = 7;
-  repeated InquirySource InquirySources = 8;
-  CitizenshipRecord Citizenship = 9;
-  DomicileRecord Domicile = 10;
-  repeated EducationLevelRecord EducationLevel = 11;
-  repeated SpecialityRecord Specialities = 12;
-  google.protobuf.StringValue WorkingExperience = 13;
-  repeated Vulnerability VulnerabilityFactors = 14;
+//  repeated InquirySource InquirySources = 8;
+//  CitizenshipRecord Citizenship = 9;
+//  DomicileRecord Domicile = 10;
+//  repeated EducationLevelRecord EducationLevel = 11;
+//  repeated SpecialityRecord Specialities = 12;
+//  google.protobuf.StringValue WorkingExperience = 13;
+//  repeated Vulnerability VulnerabilityFactors = 14;
 }
