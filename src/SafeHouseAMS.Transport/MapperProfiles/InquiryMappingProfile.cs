@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
+using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 
 namespace SafeHouseAMS.Transport.MapperProfiles
 {
@@ -9,6 +11,63 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         public InquiryMappingProfile()
         {
             MapInquirySources();
+            MapVulnerabilityFactors();
+        }
+        private void MapVulnerabilityFactors()
+        {
+            CreateMap<IEnumerable<Vulnerability>, Protos.Models.LifeSituations.VulnerabilityFactors>()
+                .ConstructUsing((src, _) =>
+                {
+                    var result = new Protos.Models.LifeSituations.VulnerabilityFactors();
+                    foreach (var vulnerability in src)
+                    {
+                        switch (vulnerability)
+                        {
+                            case Addiction addiction:
+                                result.Addiction = true;
+                                result.AddictionKind = addiction.AddictionKind;
+                                break;
+                            case ChildhoodViolence:
+                                result.ChildhoodViolence = true;
+                                break;
+                            case Homelessness:
+                                result.Homelessness = true;
+                                break;
+                            case Migration:
+                                result.Migration = true;
+                                break;
+                            case OrphanageExperience:
+                                result.OrphanageExperience = true;
+                                break;
+                            case Other other:
+                                result.Other = true;
+                                result.OtherDetails = other.Details;
+                                break;
+                            case HealthStatus healthStatus:
+                                result.HealthStatus = true;
+                                result.HealthStatusKind = (int) healthStatus.Kind;
+                                result.HealthStatusDetails = healthStatus.OtherDetailed;
+                                break;
+                        }
+                    }    
+                    return result;
+                });
+            
+            CreateMap<Protos.Models.LifeSituations.VulnerabilityFactors, IEnumerable<Vulnerability>>()
+                .ConstructUsing((src, _) =>
+                {
+                    var result = new List<Vulnerability>();
+                    
+                    if(src.Addiction) result.Add(new Addiction(src.AddictionKind));
+                    if (src.ChildhoodViolence) result.Add(new ChildhoodViolence());
+                    if (src.Homelessness) result.Add(new Homelessness());
+                    if (src.Migration) result.Add(new Migration());
+                    if (src.OrphanageExperience) result.Add(new OrphanageExperience());
+                    if (src.Other) result.Add(new Other(src.OtherDetails));
+                    if (src.HealthStatus) result.Add(new HealthStatus((HealthStatus.HealthStatusVulnerabilityType) (src.HealthStatusKind ?? 0), src.HealthStatusDetails));
+                    
+                    return result;
+                });
         }
         private void MapInquirySources()
         {

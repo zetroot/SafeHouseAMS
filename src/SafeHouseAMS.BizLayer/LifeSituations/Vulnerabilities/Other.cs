@@ -5,7 +5,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
     /// <summary>
     /// Другое
     /// </summary>
-    public class Other : Vulnerability
+    public record Other : Vulnerability
     {
         /// <summary>
         /// Уточнение что другое

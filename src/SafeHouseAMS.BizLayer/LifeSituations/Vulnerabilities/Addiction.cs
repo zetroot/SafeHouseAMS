@@ -5,7 +5,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
     /// <summary>
     /// Зависимость
     /// </summary>
-    public class Addiction : Vulnerability
+    public record Addiction : Vulnerability
     {
         /// <summary>
         /// Тип зависимости

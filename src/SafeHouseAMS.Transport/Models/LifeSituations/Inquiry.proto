@@ -10,6 +10,7 @@ import "Models/LifeSituations/Records/CitizenshipRecord.proto";
 import "Models/LifeSituations/Records/DomicileRecord.proto";
 import "Models/LifeSituations/Records/EducationLevelRecord.proto";
 import "Models/LifeSituations/Records/SpecialityRecord.proto";
+import "Models/LifeSituations/VulnerabilityFactors.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
@@ -30,5 +31,5 @@ message Inquiry {
   repeated records.EducationLevelRecord EducationLevel = 12;
   repeated records.SpecialityRecord Specialities = 13;
   google.protobuf.StringValue WorkingExperience = 14;
-  //repeated Vulnerability VulnerabilityFactors = 14;
+  VulnerabilityFactors VulnerabilityFactors = 15;
 }
