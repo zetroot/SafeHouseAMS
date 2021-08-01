@@ -1,0 +1,26 @@
+﻿syntax = "proto3";
+package safehouse.ams.models.records;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records";
+
+import "google/protobuf/wrappers.proto";
+import "Models/Common/UUID.proto";
+
+message DomicileRecord {
+  UUID ID = 1;
+  string Place = 2;
+  google.protobuf.Int32Value Kind = 3;
+  bool LivesAlone = 4;
+  bool WithPartner = 5;
+  
+  bool WithChildren = 6;
+  google.protobuf.StringValue ChildrenDetails = 7; 
+  
+  bool WithParents = 8;
+  google.protobuf.StringValue ParentsDetails = 9; 
+  
+  bool WithOtherRelatives = 10;
+  google.protobuf.StringValue OtherRelativesDetails = 11; 
+  
+  bool WithOtherPeople = 12;
+  google.protobuf.StringValue OtherPeopleDetails = 13; 
+}

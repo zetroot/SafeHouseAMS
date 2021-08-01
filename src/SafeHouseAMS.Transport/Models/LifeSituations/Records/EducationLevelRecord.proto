@@ -1,0 +1,12 @@
+﻿syntax = "proto3";
+package safehouse.ams.models.records;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records";
+
+import "google/protobuf/wrappers.proto";
+import "Models/Common/UUID.proto";
+
+message EducationLevelRecord {
+  UUID ID = 1;
+  int32 Level = 2;
+  google.protobuf.StringValue Details = 3;
+}
