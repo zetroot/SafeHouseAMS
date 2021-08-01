@@ -1,5 +1,10 @@
+using System;
+using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Grpc.Net.Client;
+using Grpc.Net.Client.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +41,6 @@ namespace SafeHouseAMS.WasmApp
                 .AddAuthorizationCore()
                 .AddOidcAuthentication(options =>
                 {
-                    // Replace the Okta placeholders with your Okta values in the appsettings.json file.
                     options.ProviderOptions.Authority = configuration.GetValue<string>("Okta:Authority");
                     options.ProviderOptions.ClientId = configuration.GetValue<string>("Okta:ClientId");
 
@@ -44,6 +48,19 @@ namespace SafeHouseAMS.WasmApp
                 });
 
             services.AddAutoMapper(config => config.AddMaps(Assembly.Load("SafeHouseAMS.Transport")));
+
+            var backendUri = configuration.GetValue<string>("Backend");
+            services.AddHttpClient("amsAPI", client => client.BaseAddress = new Uri(backendUri))
+                .AddHttpMessageHandler(_ => new GrpcWebHandler(GrpcWebMode.GrpcWebText))
+                .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationMessageHandler>().ConfigureHandler(new[] {backendUri}));
+            
+            services.AddScoped(sp =>
+                {
+                    // Create a gRPC-Web channel pointing to the backend server
+                    var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("amsAPI");
+                    var channel = GrpcChannel.ForAddress(backendUri, new GrpcChannelOptions { HttpClient = httpClient });
+                    return channel;
+                });
             
             services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogueClient>();
             services.AddScoped<DialogService>()

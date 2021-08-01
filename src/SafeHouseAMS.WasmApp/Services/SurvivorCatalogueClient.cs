@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Grpc.Core;
 using Grpc.Net.Client;
-using Grpc.Net.Client.Web;
 using Microsoft.Extensions.Logging;
 using SafeHouseAMS.BizLayer.Survivors;
 using SafeHouseAMS.BizLayer.Survivors.Commands;
@@ -22,17 +20,10 @@ namespace SafeHouseAMS.WasmApp.Services
         private readonly IMapper _mapper;
         private readonly ILogger<SurvivorCatalogueClient> _logger;
         
-        public SurvivorCatalogueClient(IMapper mapper, ILogger<SurvivorCatalogueClient> logger)
+        public SurvivorCatalogueClient(IMapper mapper, ILogger<SurvivorCatalogueClient> logger, GrpcChannel channel)
         {
             _mapper = mapper;
             _logger = logger;
-            var baseUri = "https://localhost:4901/";
-            
-            //var httpClient = new HttpClient(new GrpcWebHandler(GrpcWebMode.GrpcWeb, new HttpClientHandler()));
-            
-            var httpHandler = new GrpcWebHandler(GrpcWebMode.GrpcWebText, new HttpClientHandler());
-            var channel = GrpcChannel.ForAddress(baseUri, new GrpcChannelOptions { HttpHandler = httpHandler });
-            
             client = new SurvivorCatalogue.SurvivorCatalogueClient(channel);
         }
         
