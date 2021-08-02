@@ -8,11 +8,30 @@ namespace SafeHouseAMS.BizLayer.Survivors.Commands
     /// </summary>
     public class CreateSurvivor : SurvivorCommand
     {
-        private readonly string name;
-        private readonly SexEnum sex;
-        private readonly string? otherSex;
-        private readonly DateTime? birthDateAccurate;
-        private readonly DateTime? birthDateCalculated;
+        /// <summary>
+        /// Имя создаваемого пострадавшего
+        /// </summary>
+        public string Name { get; }
+        
+        /// <summary>
+        /// Пол
+        /// </summary>
+        public SexEnum Sex{ get; }
+        
+        /// <summary>
+        /// Уточнение пола
+        /// </summary>
+        public string? OtherSex{ get; }
+        
+        /// <summary>
+        /// Точная дата рождения
+        /// </summary>
+        public DateTime? BirthDateAccurate{ get; }
+        
+        /// <summary>
+        /// Вычисленная дата рождения
+        /// </summary>
+        public DateTime? BirthDateCalculated{ get; }
 
         /// <summary>
         /// ctor
@@ -31,11 +50,11 @@ namespace SafeHouseAMS.BizLayer.Survivors.Commands
             DateTime? birthDateAccurate,
             DateTime? birthDateCalculated) : base(entityID)
         {
-            this.name = name ?? throw new ArgumentNullException(nameof(name));
-            this.sex = sex;
-            this.otherSex = otherSex;
-            this.birthDateAccurate = birthDateAccurate;
-            this.birthDateCalculated = birthDateCalculated;
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.Sex = sex;
+            this.OtherSex = otherSex;
+            this.BirthDateAccurate = birthDateAccurate;
+            this.BirthDateCalculated = birthDateCalculated;
         }
 
         /// <inheritdoc />
@@ -43,9 +62,9 @@ namespace SafeHouseAMS.BizLayer.Survivors.Commands
         {
             if (repository is null) throw new ArgumentNullException(nameof(repository));
             return repository.Create(EntityID, false, DateTime.Now, DateTime.Now, 
-                name, 
-                sex, otherSex, 
-                birthDateAccurate, birthDateCalculated);
+                Name, 
+                Sex, OtherSex, 
+                BirthDateAccurate, BirthDateCalculated);
         }
     }
 }

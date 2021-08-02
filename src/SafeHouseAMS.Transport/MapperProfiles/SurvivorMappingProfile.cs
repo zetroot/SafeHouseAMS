@@ -15,13 +15,6 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         {
             CreateMap<CreateSurvivor, Protos.Models.Survivors.CreateSurvivor>();
             CreateMap<Protos.Models.Survivors.CreateSurvivor, CreateSurvivor>();
-            // .ConstructUsing((src, ctx) =>
-            // {
-            //     var id = ctx.Mapper.Map<Guid>(src.ID);
-            //     var dobAcc = ctx.Mapper.Map<DateTime?>(src.BirthDateAccurate);
-            //     var dobCalc = ctx.Mapper.Map<DateTime?>(src.BirthDateCalculated);
-            //     return new CreateSurvivor(id, src.Name, (SexEnum)src.Sex, src.OtherSex, dobAcc, dobCalc);
-            // });
         }
 
         private void MapSurvivors()

@@ -42,7 +42,7 @@ namespace SafeHouseAMS.Backend.Server.Services
             switch (request.CommandCase)
             {
                 case CommandWrapper.CommandOneofCase.CreateCommand:
-                    await _catalogue.ApplyCommand(_mapper.Map<SurvivorCommand>(request.CreateCommand), context.CancellationToken);
+                    await _catalogue.ApplyCommand(_mapper.Map<CreateSurvivor>(request.CreateCommand), context.CancellationToken);
                     break;
                 default:
                     _logger.LogError("Получен запрос с неизвестным типом команды");
