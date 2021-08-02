@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -38,27 +39,27 @@ namespace SafeHouseAMS.DataLayer.Repositories
             return _mapper.Map<Survivor>(survivor);
         }
         
-        public IAsyncEnumerable<Survivor> GetCollection(int skip, int? take)
+        public IAsyncEnumerable<Survivor> GetCollection(int skip, int? take, CancellationToken cancellationToken)
         {
             if (take.HasValue)
-                return GetCollectionLimited(skip, take.Value);
+                return GetCollectionLimited(skip, take.Value, cancellationToken);
             else
-                return GetCollectionUnlimited(skip);
+                return GetCollectionUnlimited(skip, cancellationToken);
         }
-        private async IAsyncEnumerable<Survivor> GetCollectionUnlimited(int skip)
+        private async IAsyncEnumerable<Survivor> GetCollectionUnlimited(int skip, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var filteredRecortds = _dataContext.Survivors
                 .OrderByDescending(x => x.LastEdit)
                 .Where(x => !x.IsDeleted)
                 .Skip(skip)
                 .AsAsyncEnumerable();
-            await foreach (var survivor in filteredRecortds)
+            await foreach (var survivor in filteredRecortds.WithCancellation(cancellationToken))
             {
                 yield return _mapper.Map<Survivor>(survivor);
             }
         }
         
-        private async IAsyncEnumerable<Survivor> GetCollectionLimited(int skip, int take)
+        private async IAsyncEnumerable<Survivor> GetCollectionLimited(int skip, int take, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var filteredRecortds = _dataContext.Survivors
                 .OrderByDescending(x => x.LastEdit)
@@ -66,7 +67,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 .Skip(skip)
                 .Take(take)
                 .AsAsyncEnumerable();
-            await foreach (var survivor in filteredRecortds)
+            await foreach (var survivor in filteredRecortds.WithCancellation(cancellationToken))
             {
                 yield return _mapper.Map<Survivor>(survivor);
             }

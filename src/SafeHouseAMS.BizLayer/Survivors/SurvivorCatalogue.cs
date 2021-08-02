@@ -22,7 +22,7 @@ namespace SafeHouseAMS.BizLayer.Survivors
             return command.ApplyOn(_repository);
         }
 
-        public IAsyncEnumerable<Survivor> GetCollection(int skip, int? take) => _repository.GetCollection(skip, take);
+        public IAsyncEnumerable<Survivor> GetCollection(int skip, int? take, CancellationToken cancellationToken) => _repository.GetCollection(skip, take, cancellationToken);
 
         public Task<int> GetTotalCount() => _repository.GetTotalCount();
 

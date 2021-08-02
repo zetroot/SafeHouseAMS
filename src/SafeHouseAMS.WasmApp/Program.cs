@@ -1,11 +1,19 @@
+using System;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Grpc.Net.Client;
+using Grpc.Net.Client.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Radzen;
-using SafeHouseAMS.BizLayer;
-using SafeHouseAMS.DataLayer;
+using SafeHouseAMS.BizLayer.LifeSituations;
+using SafeHouseAMS.BizLayer.Survivors;
+using SafeHouseAMS.Transport;
+using SafeHouseAMS.WasmApp.Services;
 using Serilog;
 
 namespace SafeHouseAMS.WasmApp
@@ -34,17 +42,30 @@ namespace SafeHouseAMS.WasmApp
                 .AddAuthorizationCore()
                 .AddOidcAuthentication(options =>
                 {
-                    // Replace the Okta placeholders with your Okta values in the appsettings.json file.
                     options.ProviderOptions.Authority = configuration.GetValue<string>("Okta:Authority");
                     options.ProviderOptions.ClientId = configuration.GetValue<string>("Okta:ClientId");
 
                     options.ProviderOptions.ResponseType = "code";
                 });
             
-            services
-                .AddBizLogic(configuration)
-                .ConnectToDatabase(configuration);
-                
+            var backendUri = configuration.GetValue<string>("Backend");
+            services.AddHttpClient("amsAPI", client => client.BaseAddress = new Uri(backendUri))
+                .AddHttpMessageHandler(_ => new GrpcWebHandler(GrpcWebMode.GrpcWebText))
+                .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationMessageHandler>().ConfigureHandler(new[] {backendUri}));
+            
+            services.AddScoped(sp =>
+                {
+                    // Create a gRPC-Web channel pointing to the backend server
+                    var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("amsAPI");
+                    var channel = GrpcChannel.ForAddress(backendUri, new GrpcChannelOptions { HttpClient = httpClient });
+                    return channel;
+                });
+            
+            services.AddDtoMapping();
+            
+            services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogueClient>();
+            services.TryAddTransient<ILifeSituationDocumentsAggregate, LifeSituationDocumentsClient>();
+            
             services.AddScoped<DialogService>()
                 .AddScoped<NotificationService>()
                 .AddScoped<TooltipService>()

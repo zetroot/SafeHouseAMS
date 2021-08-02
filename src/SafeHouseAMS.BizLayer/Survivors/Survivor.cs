@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SafeHouseAMS.BizLayer.Survivors
 {
@@ -83,9 +84,9 @@ namespace SafeHouseAMS.BizLayer.Survivors
             bool isDeleted,
             DateTime created,
             DateTime lastEdit,
-            string name,
+            [NotNull] string name,
             int num,
-            SexEnum sex,
+            SexEnum sex, 
             string? otherSex,
             DateTime? birthDateAccurate,
             DateTime? birthDateCalculated) :

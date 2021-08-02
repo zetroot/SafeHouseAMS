@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+package safehouse.ams.models.inquirySources;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations";
+
+import "Models/LifeSituations/InquirySources/SelfInquiry.proto";
+import "Models/LifeSituations/InquirySources/ForwardedBySurvivor.proto";
+import "Models/LifeSituations/InquirySources/ForwardedByPerson.proto";
+import "Models/LifeSituations/InquirySources/ForwardedByOrganization.proto";
+
+message InquirySource{
+  oneof Kind{
+    SelfInquiry SelfInquiry = 1;
+    ForwardedBySurvivor ForwardedBySurvivor = 2;
+    ForwardedByPerson ForwardedByPerson = 3;
+    ForwardedByOrganization ForwardedByOrganization = 4;
+  }
+}

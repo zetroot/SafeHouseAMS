@@ -7,7 +7,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities
     /// <summary>
     /// Уязвимость по состоянию здоровья
     /// </summary>
-    public class HealthStatus : Vulnerability
+    public record HealthStatus : Vulnerability
     {
         /// <summary>
         /// Тип уязвимости по состоянию здоровья

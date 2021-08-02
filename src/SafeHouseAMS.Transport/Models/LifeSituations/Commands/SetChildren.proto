@@ -1,0 +1,12 @@
+﻿syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands";
+
+import "Models/Common/UUID.proto";
+import "google/protobuf/wrappers.proto";
+
+message SetChildren{
+  UUID EntityID = 1;
+  bool HasChildren = 2;
+  google.protobuf.StringValue Details = 3;
+}

@@ -1,0 +1,10 @@
+﻿syntax = "proto3";
+package safehouse.ams.models.records;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records";
+
+import "Models/Common/UUID.proto";
+
+message SpecialityRecord {
+  UUID ID = 1;
+  string Speciality = 2;
+}

@@ -1,0 +1,11 @@
+﻿syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands";
+
+import "Models/Common/UUID.proto";
+import "Models/LifeSituations/VulnerabilityFactors.proto";
+
+message SetVulnerabilities{
+  UUID EntityID = 1;
+  VulnerabilityFactors Vulnerabilities = 2;
+}

@@ -1,0 +1,7 @@
+﻿syntax = "proto3";
+package safehouse.ams.models.inquirySources;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations";
+
+message ForwardedByPerson {
+  string ForwardedBy = 1;
+}

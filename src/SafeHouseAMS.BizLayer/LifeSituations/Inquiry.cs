@@ -69,7 +69,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="survivor">пострадавший</param>
         /// <param name="isJuvenile">несовершеннолетний на момент обращения</param>
         /// <param name="inquirySources">источники обращения</param>
-        /// <param name="сitizenship">гразданство</param>
+        /// <param name="citizenship">гразданство</param>
         /// <param name="domicile">место жительства, если известно</param>
         /// <param name="hasChildren">статус по детям</param>
         /// <param name="educationLevel">статус образования</param>
@@ -80,7 +80,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         public Inquiry(Guid id, bool isDeleted, DateTime created, DateTime lastEdit,
             DateTime documentDate, Survivor survivor,
             bool isJuvenile, IEnumerable<IInquirySource> inquirySources, 
-            CitizenshipRecord сitizenship, 
+            CitizenshipRecord citizenship, 
             DomicileRecord? domicile,
             ChildrenRecord? hasChildren,
             IEnumerable<EducationLevelRecord>? educationLevel,
@@ -91,7 +91,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         {
             IsJuvenile = isJuvenile;
             InquirySources = inquirySources?.ToList() ?? throw new ArgumentNullException(nameof(inquirySources));
-            Citizenship = сitizenship ?? throw new ArgumentNullException(nameof(сitizenship));
+            Citizenship = citizenship ?? throw new ArgumentNullException(nameof(citizenship));
             Domicile = domicile;
             HasChildren = hasChildren;
             EducationLevel = educationLevel?.ToList();

@@ -1,0 +1,23 @@
+﻿syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands";
+
+import "Models/LifeSituations/Commands/AddEducationLevel.proto";
+import "Models/LifeSituations/Commands/AddSpeciality.proto";
+import "Models/LifeSituations/Commands/CreateInquiry.proto";
+import "Models/LifeSituations/Commands/SetChildren.proto";
+import "Models/LifeSituations/Commands/SetDomicile.proto";
+import "Models/LifeSituations/Commands/SetVulnerabilities.proto";
+import "Models/LifeSituations/Commands/SetWorkingExperience.proto";
+
+message LifeSituationDocumentCommand{
+  oneof Command {
+    AddEducationLevel AddEducationLevel = 1;
+    AddSpeciality AddSpeciality = 3;
+    CreateInquiry CreateInquiry = 4;
+    SetChildren SetChildren = 5;
+    SetDomicile SetDomicile = 6;
+    SetVulnerabilities SetVulnerabilities = 7;
+    SetWorkingExperience SetWorkingExperience = 8;
+  }
+}

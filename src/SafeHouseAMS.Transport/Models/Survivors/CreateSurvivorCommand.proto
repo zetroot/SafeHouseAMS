@@ -1,0 +1,16 @@
+syntax = "proto3";
+package safehouse.ams.commands;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.Survivors";
+
+import "Models/Common/UUID.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+message CreateSurvivor {
+  safehouse.ams.UUID EntityID = 1;
+  string Name = 2;
+  int32 Sex = 3;
+  google.protobuf.StringValue OtherSex = 4;
+  google.protobuf.Timestamp BirthDateAccurate = 5;
+  google.protobuf.Timestamp BirthDateCalculated = 6;
+}

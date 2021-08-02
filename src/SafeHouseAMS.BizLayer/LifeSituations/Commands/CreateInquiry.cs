@@ -46,7 +46,12 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         /// <param name="inquirySources">источники обращения</param>
         /// <param name="citizenship">гражданство</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public CreateInquiry(Guid entityID, DateTime documentDate, Guid survivorId, bool? isJuvenile, IEnumerable<IInquirySource> inquirySources, string citizenship) :
+        public CreateInquiry(Guid entityID,
+            DateTime documentDate,
+            Guid survivorId,
+            bool? isJuvenile,
+            IEnumerable<IInquirySource> inquirySources,
+            string citizenship) :
             base(entityID)
         {
             SurvivorID = survivorId;

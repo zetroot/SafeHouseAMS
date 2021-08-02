@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "SafeHouseAMS.Backend.Server": {
+      "commandName": "Project",
+      "dotnetRunMessages": "true",
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:4900;https://localhost:4901",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

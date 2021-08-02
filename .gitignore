@@ -6,3 +6,4 @@ riderModule.iml
 **\appsettings.Development.json
 .idea/
 *.DotSettings.user
+Logs/
