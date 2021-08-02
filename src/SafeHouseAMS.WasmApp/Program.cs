@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Radzen;
+using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
 using SafeHouseAMS.Transport;
 using SafeHouseAMS.WasmApp.Services;
@@ -61,7 +62,10 @@ namespace SafeHouseAMS.WasmApp
                 });
             
             services.AddDtoMapping();
+            
             services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogueClient>();
+            services.TryAddTransient<ILifeSituationDocumentsAggregate, LifeSituationDocumentsClient>();
+            
             services.AddScoped<DialogService>()
                 .AddScoped<NotificationService>()
                 .AddScoped<TooltipService>()
