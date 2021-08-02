@@ -10,6 +10,9 @@
 
     <ItemGroup>
         <Protobuf Include="..\SafeHouseAMS.Transport\Services\**\*.proto" GrpcServices="Server" ProtoRoot="..\SafeHouseAMS.Transport" />
+        <Protobuf Update="..\SafeHouseAMS.Transport\Services\LifeSituationDocumentsCatalogue.proto">
+          <Link>Services\LifeSituationDocumentsCatalogue.proto</Link>
+        </Protobuf>
     </ItemGroup>
     
     <ItemGroup>

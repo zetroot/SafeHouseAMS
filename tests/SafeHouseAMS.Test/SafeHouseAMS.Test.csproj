@@ -35,8 +35,4 @@
       <ProjectReference Include="..\..\src\SafeHouseAMS.Transport\SafeHouseAMS.Transport.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Backend.Server" />
-    </ItemGroup>
-
 </Project>

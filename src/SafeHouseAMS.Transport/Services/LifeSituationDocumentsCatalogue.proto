@@ -1,0 +1,20 @@
+syntax = "proto3";
+package safehouse.ams.services;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Services";
+
+import "Models/Common/UUID.proto";
+import "google/protobuf/empty.proto";
+import "Models/LifeSituations/LifeSituationDocument.proto";
+import "Models/LifeSituations/Commands/LifeSituationDocumentCommand.proto";
+
+service LifeSituationDocumentsCatalogue{
+  rpc GetSingle (UUID) returns (models.LifeSituationDocument);
+  rpc ApplyCommand (models.LifeSituationDocumentCommand) returns (google.protobuf.Empty);
+
+  rpc GetAllBySurvivor (UUID) returns (stream models.LifeSituationDocument);
+  rpc GetCitizenshipsCompletions (google.protobuf.Empty) returns (CitizenshipCompletionCollection);
+}
+
+message CitizenshipCompletionCollection{
+  repeated string Item = 1;
+}
