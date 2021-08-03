@@ -6,6 +6,7 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <Nullable>enable</Nullable>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -30,6 +31,16 @@
     <ItemGroup>
       <ProjectReference Include="..\SafeHouseAMS.DataLayer\SafeHouseAMS.DataLayer.csproj" />
       <ProjectReference Include="..\SafeHouseAMS.Transport\SafeHouseAMS.Transport.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+        <DependentUpon>Dockerfile</DependentUpon>
+      </Content>
+      <Content Include="..\..\Dockerfile">
+        <Link>Dockerfile</Link>
+      </Content>
     </ItemGroup>
     
 </Project>
