@@ -49,6 +49,9 @@ jobs:
         with:
           name: artifact
           
+      - name: Display structure of downloaded files
+        run: ls -R
+        
     # добавить файл .nojekyll чтобы отвязаться от правила Jekyll по игнорированию путей начинающихся с нижнего подчеркивания. Это критично важно для blazor
       - name: Add .nojekyll file
         run: touch artifact/wwwroot/.nojekyll
