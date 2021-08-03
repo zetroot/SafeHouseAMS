@@ -41,6 +41,9 @@ namespace SafeHouseAMS.Backend.Server
         /// <param name="services">коллекция служб DI</param>
         public void ConfigureServices(IServiceCollection services)
         {
+#if !DEBUG
+            services.AddLettuceEncrypt();
+#endif
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;

@@ -7,3 +7,4 @@ riderModule.iml
 .idea/
 *.DotSettings.user
 Logs/
+**\.env
