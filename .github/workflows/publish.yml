@@ -1,4 +1,4 @@
-name: Build and deploy wasm client
+name: Build and deploy wasm and backend
 on:
   push:
     branches: [ master ]
