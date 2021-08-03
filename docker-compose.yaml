@@ -2,9 +2,12 @@ version: '3'
 
 services:  
   app:
-    image: ghcr.io/zetroot/safehouseams:feature-dockerize
+    image: ghcr.io/zetroot/safehouseams:master
     env_file:
       - .env
     ports:
       - 80:80
       - 443:443
+    restart: always
+    volumes:
+    - ./ams_logs/:/logs/
