@@ -123,6 +123,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "docker-compose.yml"
           target: "./"
+          overwrite: true
 
       - name: restart docker
         uses: cross-the-world/ssh-pipeline@master
