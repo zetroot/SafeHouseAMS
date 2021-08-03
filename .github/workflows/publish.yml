@@ -121,7 +121,7 @@ jobs:
           host: ${{ secrets.SERVER_SSH_HOST }}
           username: ${{ secrets.SERVER_SSH_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "docker-compose.yml"
+          source: "docker-compose.yaml"
           target: "./"
           overwrite: true
 
