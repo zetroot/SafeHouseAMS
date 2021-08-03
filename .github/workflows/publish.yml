@@ -134,5 +134,6 @@ jobs:
           connect_timeout: 10s
           script: |
             docker-compose stop &&
+            docker-compose pull &&
             docker-compose up -d
       
