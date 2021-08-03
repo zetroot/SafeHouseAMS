@@ -50,19 +50,19 @@ jobs:
           name: artifact
           
     # добавить файл .nojekyll чтобы отвязаться от правила Jekyll по игнорированию путей начинающихся с нижнего подчеркивания. Это критично важно для blazor
-    - name: Add .nojekyll file
-      run: touch artifact/wwwroot/.nojekyll
-    
-    # copy index.html to 404.html to serve the same file when a file is not found
-    - name: copy index.html to 404.html
-      run: cp artifact/wwwroot/index.html artifact/wwwroot/404.html
-
-    # наконец, закоммитить результаты в ветку gh-pages
-    - name: Commit wwwroot to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@4.1.4
-      with:
-        BRANCH: gh-pages
-        FOLDER: artifact/wwwroot
+      - name: Add .nojekyll file
+        run: touch artifact/wwwroot/.nojekyll
+      
+      # copy index.html to 404.html to serve the same file when a file is not found
+      - name: copy index.html to 404.html
+        run: cp artifact/wwwroot/index.html artifact/wwwroot/404.html
+  
+      # наконец, закоммитить результаты в ветку gh-pages
+      - name: Commit wwwroot to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          BRANCH: gh-pages
+          FOLDER: artifact/wwwroot
 
   build-and-publish-image:
     runs-on: ubuntu-latest
