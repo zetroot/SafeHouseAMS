@@ -12,3 +12,4 @@ services:
     volumes:
     - ./ams_logs/:/logs/
     - ./letucce-accounts/:/app/accounts/
+    - ./ssl-certs/:/certs/

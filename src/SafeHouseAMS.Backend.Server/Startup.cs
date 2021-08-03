@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using LettuceEncrypt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -41,8 +43,15 @@ namespace SafeHouseAMS.Backend.Server
         /// <param name="services">коллекция служб DI</param>
         public void ConfigureServices(IServiceCollection services)
         {
+            
 #if !DEBUG
-            services.AddLettuceEncrypt();
+            var certPath = Configuration.GetValue<string>("CertPersist:Path");
+            var certPass = Configuration.GetValue<string>("CertPersist:Password");
+            if (!Directory.Exists(certPath))
+                Directory.CreateDirectory(certPath);
+            services
+                .AddLettuceEncrypt()
+                .PersistDataToDirectory(new DirectoryInfo(certPath), certPass);
 #endif
             services.AddAuthentication(options =>
                 {
