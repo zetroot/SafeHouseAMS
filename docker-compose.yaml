@@ -11,4 +11,4 @@ services:
     restart: always
     volumes:
     - ./ams_logs/:/logs/
-    - ./letucce-accounts/:/app/accounts
+    - ./letucce-accounts/:/app/accounts/
