@@ -2,16 +2,33 @@ version: '3'
 
 services:  
   app:
+    container_name: ams-app
     image: safehouseams:local
-    
+    depends_on:
+      - postgres
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     restart: always
     volumes:
       - ~/.aspnet/https:/https:ro
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    env_file:
+      - .env
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Development
+#      - ASPNETCORE_URLS=https://+:443;http://+:80
+#      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+#      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+#      - ConnectionStrings:postgres=server=postgres;port=5432;user id=postgres;password=password;database=AMSdb
+  
+  postgres:
+    container_name: ams-pgsql
+    image: postgres:latest
+    restart: always
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/
+    env_file:
+      - .env.postgres
+#    environment:
+#      - POSTGRES_USER=postgres # The PostgreSQL user (useful to connect to the database)
+#      - POSTGRES_PASSWORD=password # The PostgreSQL password (useful to connect to the database)
