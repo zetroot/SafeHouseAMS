@@ -1,0 +1,17 @@
+version: '3'
+
+services:  
+  app:
+    image: safehouseams:local
+    
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      - ~/.aspnet/https:/https:ro
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
