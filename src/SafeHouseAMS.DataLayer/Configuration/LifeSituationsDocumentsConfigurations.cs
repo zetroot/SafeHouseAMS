@@ -68,37 +68,6 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.Property(x => x.OtherHealthStatusVulnerabilityDetail).HasComment("Детали уязвимости по здоровью");
             
             builder.HasIndex(x => x.ForwardedByOrgannization).IsUnique(false);
-
-            builder
-                .HasOne(x => x.Citizenship!)
-                .WithOne()
-                .HasForeignKey<CitizenshipRecordDAL>(x => x.DocumentID)
-                .OnDelete(DeleteBehavior.Cascade)
-                .IsRequired();
-
-            builder
-                .HasOne(x => x.Domicile!)
-                .WithOne()
-                .HasForeignKey<DomicileRecordDAL>(x => x.DocumentID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder
-                .HasOne(x => x.HasChildren!)
-                .WithOne()
-                .HasForeignKey<ChildrenRecordDAL>(x => x.DocumentID)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder
-                .HasMany(x => x.EducationLevel)
-                .WithOne()
-                .HasForeignKey(x => x.DocumentID)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            builder
-                .HasMany(x => x.Specialities)
-                .WithOne()
-                .HasForeignKey(x => x.DocumentID)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

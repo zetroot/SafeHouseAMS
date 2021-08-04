@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SafeHouseAMS.DataLayer.Models.LifeSituations
@@ -50,13 +51,6 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
 
         #endregion
         
-        public virtual CitizenshipRecordDAL? Citizenship { get; set; }
-        public virtual DomicileRecordDAL? Domicile { get; set; }
-        public virtual ChildrenRecordDAL? HasChildren { get; set; }
-
-        public virtual List<EducationLevelRecordDAL>? EducationLevel { get; set; }
-        public virtual List<SpecialityRecordDAL>? Specialities { get; set; }
-
         /// <summary>
         /// Опыт работы
         /// </summary>

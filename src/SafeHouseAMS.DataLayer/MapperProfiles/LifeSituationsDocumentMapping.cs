@@ -34,11 +34,11 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
                     if (src.IsForwardedByOrganization)
                         inqSrcs.Add(new ForwardedByOrganization(src.ForwardedByOrgannization ?? ""));
 
-                    var citizenship = ctx.Mapper.Map<CitizenshipRecord>(src.Citizenship);
-                    var domicile = ctx.Mapper.Map<DomicileRecord>(src.Domicile);
-                    var hasChildren = ctx.Mapper.Map<ChildrenRecord>(src.HasChildren);
-                    var educations = src.EducationLevel?.Select(ctx.Mapper.Map<EducationLevelRecord>);
-                    var specialities = src.Specialities?.Select(ctx.Mapper.Map<SpecialityRecord>);
+                    var citizenship = ctx.Mapper.Map<CitizenshipRecord>(src.Records?.OfType<CitizenshipRecordDAL>().SingleOrDefault());
+                    var domicile = ctx.Mapper.Map<DomicileRecord>(src.Records?.OfType<DomicileRecordDAL>().SingleOrDefault());
+                    var hasChildren = ctx.Mapper.Map<ChildrenRecord>(src.Records?.OfType<ChildrenRecordDAL>().SingleOrDefault());
+                    var educations = src.Records?.OfType<EducationLevelRecordDAL>().Select(ctx.Mapper.Map<EducationLevelRecord>);
+                    var specialities = src.Records?.OfType<SpecialityRecordDAL>().Select(ctx.Mapper.Map<SpecialityRecord>);
 
                     var vulns = new List<Vulnerability>();
                     if(src.HasAddiction) vulns.Add(new Addiction(src.AddictionKind ?? ""));
