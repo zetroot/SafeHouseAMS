@@ -8,4 +8,4 @@ riderModule.iml
 *.DotSettings.user
 Logs/
 **\.env
-**\Dockerfile.*
+Dockerfile.*
