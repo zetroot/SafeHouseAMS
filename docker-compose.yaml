@@ -2,14 +2,26 @@ version: '3'
 
 services:  
   app:
+    container_name: ams-app
     image: ghcr.io/zetroot/safehouseams:master
+    depends_on:
+      - postgres
     env_file:
       - .env
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     restart: always
     volumes:
     - ./ams_logs/:/logs/
     - ./letucce-accounts/:/app/accounts/
     - ./ssl-certs/:/certs/
+  
+  postgres:
+    container_name: ams-pgsql
+    image: postgres:latest
+    restart: always
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/
+    env_file:
+      - .env.postgres

@@ -25,5 +25,9 @@
     <ItemGroup>
       <ProjectReference Include="..\SafeHouseAMS.BizLayer\SafeHouseAMS.BizLayer.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations" />
+    </ItemGroup>
     
 </Project>

@@ -47,6 +47,18 @@ namespace SafeHouseAMS.DataLayer
                 });
             }
             
+            var postgresConnectionString = configuration.GetConnectionString("postgres");
+            if (!string.IsNullOrWhiteSpace(postgresConnectionString))
+            {
+                services.AddDbContextPool<DataContext>(opt => opt.UseLazyLoadingProxies().UseNpgsql(postgresConnectionString));
+                services.AddScoped<IDatabaseMigrator, DataContext>(_ =>
+                {
+                    var optionsBuilder = new DbContextOptionsBuilder();
+                    optionsBuilder.UseNpgsql(postgresConnectionString);
+                    return new DataContext(optionsBuilder.Options);
+                });
+            }
+            
             services.AddAutoMapper(typeof(DataLayerInjector).Assembly);
             
             services.TryAddScoped<ISurvivorRepository, SurvivorsRepository>();

@@ -1,7 +1,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SafeHouseAMS.DataLayer;
 using Serilog;
 using Serilog.Events;
 
@@ -17,7 +20,7 @@ namespace SafeHouseAMS.Backend.Server
         /// точка входа в приложение
         /// </summary>
         /// <param name="args">Аргументы запуска</param>
-        public static int Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
@@ -26,8 +29,16 @@ namespace SafeHouseAMS.Backend.Server
                 .CreateBootstrapLogger();
             try
             {
+                Log.Information("Building web host");
+                var host = CreateHostBuilder(args).Build();
+                
+                Log.Information("Applying migrations");
+                using var scope = host.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<IDatabaseMigrator>();
+                await db.MigrateAsync();
+                
                 Log.Information("Starting web host");
-                CreateHostBuilder(args).Build().Run();
+                await host.RunAsync();
                 return 0;
             }
             catch (Exception ex)

@@ -16,6 +16,12 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.Property(x => x.Content).HasColumnType("jsonb").HasComment("Содержимое записи в виде json");
 
             builder.HasKey(x => x.ID);
+            builder
+                .HasOne(x => x.Document)
+                .WithMany(x => x.Records)
+                .HasForeignKey(x => x.DocumentID)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
 
             builder
                 .HasDiscriminator<string>("RecordType")

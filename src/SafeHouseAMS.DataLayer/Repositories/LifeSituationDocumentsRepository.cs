@@ -28,15 +28,17 @@ namespace SafeHouseAMS.DataLayer.Repositories
         public async Task<LifeSituationDocument> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             var doc = await _context.LifeSituationDocuments
-                .Include(x => (x as InquiryDAL)!.Citizenship)
+                .Include(x => x.Records)
                 .SingleAsync(x => !x.IsDeleted && x.ID == id, cancellationToken);
             return _mapper.Map<LifeSituationDocument>(doc);
         }
         public async IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var documents = _context.LifeSituationDocuments
-                .Include(x => (x as InquiryDAL)!.Citizenship)
-                .Where(x => !x.IsDeleted && x.SurvivorID == survivorId).AsAsyncEnumerable();
+                .Include(x => x.Records)
+                .Where(x => !x.IsDeleted && x.SurvivorID == survivorId)
+                .AsSplitQuery()
+                .AsAsyncEnumerable();
             await foreach (var doc in documents.WithCancellation(cancellationToken))
                 yield return _mapper.Map<LifeSituationDocument>(doc);
         }

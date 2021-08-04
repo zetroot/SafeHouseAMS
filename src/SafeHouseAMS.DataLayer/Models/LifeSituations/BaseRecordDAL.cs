@@ -11,7 +11,8 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
         /// идентификатор записи
         /// </summary>
         public Guid ID { get; set; }
-        
+
+        public virtual LifeSituationDocumentDAL Document { get; set; } = null!;
         /// <summary>
         /// Идентификатор документа породившего запись
         /// </summary>
