@@ -28,7 +28,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         internal override Task ApplyOn(ILifeSituationDocumentsRepository repository)
         {
             if (repository is null) throw new ArgumentNullException(nameof(repository));
-            return repository.AddRecord(EntityID, new MigrationStatusRecord(Guid.NewGuid(), Details));
+            return repository.AddRecord(EntityID, new RegistrationStatusRecord(Guid.NewGuid(), Details));
         }
     }
 }
