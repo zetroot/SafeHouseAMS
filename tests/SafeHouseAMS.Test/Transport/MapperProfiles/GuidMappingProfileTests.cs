@@ -25,7 +25,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
                 var uuid = mapper.Map<UUID>(g);
                 var roundGuid = mapper.Map<Guid>(g);
                 roundGuid.Should().Be(g);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
     }
 }

@@ -59,6 +59,16 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         public IReadOnlyCollection<Vulnerability>? VulnerabilityFactors { get; }
 
         /// <summary>
+        /// Запись о миграционном статусе
+        /// </summary>
+        public MigrationStatusRecord? MigrationStatus { get; }
+
+        /// <summary>
+        /// Запись о статусе регистрации
+        /// </summary>
+        public RegistrationStatusRecord? RegistrationStatus { get; }
+
+        /// <summary>
         /// ctor
         /// </summary>
         /// <param name="id">идентификатор</param>
@@ -76,17 +86,21 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="specialities">специальности</param>
         /// <param name="workingExperience">опыт работы</param>
         /// <param name="vulnerabilityFactors">факторы уязвимости</param>
+        /// <param name="migrationStatus">запись о миграционном статусе</param>
+        /// <param name="registrationStatus">запись о статусе регистрации</param>
         /// <exception cref="ArgumentNullException">если нет гражданства или источников обращения</exception>
         public Inquiry(Guid id, bool isDeleted, DateTime created, DateTime lastEdit,
             DateTime documentDate, Survivor survivor,
-            bool isJuvenile, IEnumerable<IInquirySource> inquirySources, 
-            CitizenshipRecord citizenship, 
+            bool isJuvenile, IEnumerable<IInquirySource> inquirySources,
+            CitizenshipRecord citizenship,
             DomicileRecord? domicile,
             ChildrenRecord? hasChildren,
             IEnumerable<EducationLevelRecord>? educationLevel,
             IEnumerable<SpecialityRecord>? specialities,
-            string? workingExperience, 
-            IEnumerable<Vulnerability>? vulnerabilityFactors) : 
+            string? workingExperience,
+            IEnumerable<Vulnerability>? vulnerabilityFactors,
+            MigrationStatusRecord? migrationStatus,
+            RegistrationStatusRecord? registrationStatus) :
             base(id, isDeleted, created, lastEdit, documentDate, survivor)
         {
             IsJuvenile = isJuvenile;
@@ -97,6 +111,8 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
             EducationLevel = educationLevel?.ToList();
             Specialities = specialities?.ToList();
             WorkingExperience = workingExperience;
+            MigrationStatus = migrationStatus;
+            RegistrationStatus = registrationStatus;
             VulnerabilityFactors = vulnerabilityFactors?.ToList();
         }
     }

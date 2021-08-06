@@ -29,7 +29,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
                 var result = mapper.Map<Inquiry>(dto);
 
                 result.Should().BeEquivalentTo(src, opt => opt.RespectingRuntimeTypes());
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
     }
 

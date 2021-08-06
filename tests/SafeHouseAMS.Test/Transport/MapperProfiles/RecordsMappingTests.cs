@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.Transport.MapperProfiles;
 
@@ -26,11 +24,11 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records.ChildrenRecord>(src);
                 var result = mapper.Map<ChildrenRecord>(dto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
-        
+
         [Property]
         public void CitizenshipRecord_RoundTrip_DoesNotChanges()
         {
@@ -40,11 +38,11 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records.CitizenshipRecord>(src);
                 var result = mapper.Map<CitizenshipRecord>(dto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
-        
+
         [Property]
         public void DomicileRecord_RoundTrip_DoesNotChanges()
         {
@@ -54,11 +52,11 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records.DomicileRecord>(src);
                 var result = mapper.Map<DomicileRecord>(dto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
-        
+
         [Property]
         public void EducationLevelRecord_RoundTrip_DoesNotChanges()
         {
@@ -68,9 +66,9 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records.EducationLevelRecord>(src);
                 var result = mapper.Map<EducationLevelRecord>(dto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
 
         [Property]
@@ -82,9 +80,37 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records.SpecialityRecord>(src);
                 var result = mapper.Map<SpecialityRecord>(dto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
+        }
+
+        [Property]
+        public void MigrationRecord_RoundTrip_DoesNotChanges()
+        {
+            var mapper = BuildMapper();
+            Arb.Register<NotNullStringsGenerators>();
+            Prop.ForAll<MigrationStatusRecord>(src =>
+            {
+                var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records.MigrationStatusRecord>(src);
+                var result = mapper.Map<MigrationStatusRecord>(dto);
+
+                result.Should().BeEquivalentTo(src);
+            }).QuickCheckThrowOnFailure();
+        }
+
+        [Property]
+        public void RegistrationRecord_RoundTrip_DoesNotChanges()
+        {
+            var mapper = BuildMapper();
+            Arb.Register<NotNullStringsGenerators>();
+            Prop.ForAll<RegistrationStatusRecord>(src =>
+            {
+                var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records.RegistrationStatusRecord>(src);
+                var result = mapper.Map<RegistrationStatusRecord>(dto);
+
+                result.Should().BeEquivalentTo(src);
+            }).QuickCheckThrowOnFailure();
         }
     }
 }

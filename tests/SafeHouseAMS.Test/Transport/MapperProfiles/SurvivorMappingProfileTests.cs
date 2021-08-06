@@ -26,11 +26,11 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var survivorDto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.Survivors.Survivor>(src);
                 var result = mapper.Map<Survivor>(survivorDto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
-        
+
         [Property]
         public void RoundMapping_ReturnsSameCreateSurvivorCommand()
         {
@@ -41,11 +41,11 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var commandDto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.Survivors.CreateSurvivor>(src);
                 var result = mapper.Map<CreateSurvivor>(commandDto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
-        
+
     }
 
 }

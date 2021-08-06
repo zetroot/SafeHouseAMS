@@ -6,7 +6,6 @@ namespace SafeHouseAMS.DataLayer.Configuration
 {
     internal class RecordsConfiguration : IEntityTypeConfiguration<BaseRecordDAL>
     {
-
         public void Configure(EntityTypeBuilder<BaseRecordDAL> builder)
         {
             builder.ToTable("Records").HasComment("Записи изменения жизненных ситуаций");
@@ -29,8 +28,9 @@ namespace SafeHouseAMS.DataLayer.Configuration
                 .HasValue<CitizenshipRecordDAL>("Citizenship")
                 .HasValue<DomicileRecordDAL>("Domicile")
                 .HasValue<EducationLevelRecordDAL>("EducationLevel")
-                .HasValue<SpecialityRecordDAL>("Speciality");
-                
+                .HasValue<SpecialityRecordDAL>("Speciality")
+                .HasValue<MigrationStatusRecordDAL>("MigrationStatus")
+                .HasValue<RegistrationStatusRecordDAL>("RegistrationStatus");
         }
     }
 }

@@ -1,0 +1,17 @@
+﻿@using SafeHouseAMS.BizLayer.LifeSituations.Commands
+<div class="container-fluid">
+    <RadzenFieldset Text="Миграционный статус">
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenTextBox @bind-Value="@_details" Placeholder="Опишите миграционный статус" />
+            </div>
+        </div>
+    </RadzenFieldset>
+</div>
+
+@code {
+    private string? _details;
+
+    public AddMigrationStatus? BuildCommand(Guid docId) =>
+        string.IsNullOrWhiteSpace(_details) ? null : new(docId, _details);
+}

@@ -24,11 +24,11 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.SelfInquiry>(src);
                 var result = mapper.Map<SelfInquiry>(dto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
-        
+
         [Property]
         public void ForwardedBySurvivor_RoundTrip_DoesNotChanges()
         {
@@ -38,11 +38,11 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.ForwardedBySurvivor>(src);
                 var result = mapper.Map<ForwardedBySurvivor>(dto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
-        
+
         [Property]
         public void ForwardedByPerson_RoundTrip_DoesNotChanges()
         {
@@ -52,11 +52,11 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.ForwardedByPerson>(src);
                 var result = mapper.Map<ForwardedByPerson>(dto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
-        
+
         [Property]
         public void ForwardedByOrganization_RoundTrip_DoesNotChanges()
         {
@@ -66,9 +66,9 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.ForwardedByOrganization>(src);
                 var result = mapper.Map<ForwardedByOrganization>(dto);
-                
+
                 result.Should().BeEquivalentTo(src);
-            }).VerboseCheckThrowOnFailure();
+            }).QuickCheckThrowOnFailure();
         }
 
         [Property]
@@ -81,9 +81,9 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             var forwardOrganizationGen = Arb.From<ForwardedByOrganization>().Generator.Select(x => x as IInquirySource);
 
             var inquirySourcesArb = Gen.OneOf(selfInquriyGen, forwardSurvivorGen, forwardPersonGen, forwardOrganizationGen).ListOf().ToArbitrary();
-            
+
             var mapper = BuildMapper();
-            
+
 
             Prop.ForAll(inquirySourcesArb, src =>
             {
@@ -91,7 +91,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
                 var result = dto.Select(mapper.Map<IInquirySource>);
 
                 result.Should().BeEquivalentTo(src, opt => opt.RespectingRuntimeTypes());
-            }).VerboseCheckThrowOnFailure();
-        } 
+            }).QuickCheckThrowOnFailure();
+        }
     }
 }

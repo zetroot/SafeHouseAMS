@@ -34,11 +34,14 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
                     if (src.IsForwardedByOrganization)
                         inqSrcs.Add(new ForwardedByOrganization(src.ForwardedByOrgannization ?? ""));
 
-                    var citizenship = ctx.Mapper.Map<CitizenshipRecord>(src.Records?.OfType<CitizenshipRecordDAL>().SingleOrDefault());
-                    var domicile = ctx.Mapper.Map<DomicileRecord>(src.Records?.OfType<DomicileRecordDAL>().SingleOrDefault());
-                    var hasChildren = ctx.Mapper.Map<ChildrenRecord>(src.Records?.OfType<ChildrenRecordDAL>().SingleOrDefault());
-                    var educations = src.Records?.OfType<EducationLevelRecordDAL>().Select(ctx.Mapper.Map<EducationLevelRecord>);
-                    var specialities = src.Records?.OfType<SpecialityRecordDAL>().Select(ctx.Mapper.Map<SpecialityRecord>);
+                    var citizenship = ctx.Mapper.Map<CitizenshipRecord>(src.Citizenship);
+                    var domicile = ctx.Mapper.Map<DomicileRecord>(src.Domicile);
+                    var hasChildren = ctx.Mapper.Map<ChildrenRecord>(src.HasChildren);
+                    var educations = src.EducationLevel.Select(ctx.Mapper.Map<EducationLevelRecord>);
+                    var specialities = src.Specialities.Select(ctx.Mapper.Map<SpecialityRecord>);
+
+                    var migrationStatus = ctx.Mapper.Map<MigrationStatusRecord>(src.MigrationStatus);
+                    var registrationStatus = ctx.Mapper.Map<RegistrationStatusRecord>(src.RegistrationStatus);
 
                     var vulns = new List<Vulnerability>();
                     if(src.HasAddiction) vulns.Add(new Addiction(src.AddictionKind ?? ""));
@@ -47,13 +50,13 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
                     if(src.Migration) vulns.Add(new Migration());
                     if(src.OrphanageExperience) vulns.Add(new OrphanageExperience());
                     if(src.HasOtherVulnerability) vulns.Add(new Other(src.OtherVulnerabilityDetails??""));
-                    if(src.HealthStatusVulnerabilityMask != 0) 
+                    if(src.HealthStatusVulnerabilityMask != 0)
                         vulns.Add(new HealthStatus((HealthStatus.HealthStatusVulnerabilityType)src.HealthStatusVulnerabilityMask, src.OtherHealthStatusVulnerabilityDetail));
 
                     return new Inquiry(src.ID, src.IsDeleted, src.Created, src.LastEdit,
                     src.DocumentDate, survivor,
                     src.IsJuvenile, inqSrcs, citizenship, domicile, hasChildren,
-                    educations, specialities, src.WorkingExperience, vulns);
+                    educations, specialities, src.WorkingExperience, vulns, migrationStatus, registrationStatus);
                 });
         }
         private void MapBase()

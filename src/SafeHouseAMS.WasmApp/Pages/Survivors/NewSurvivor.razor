@@ -78,11 +78,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <DomicileRecordComponent @ref="@_domicileRecord"/>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <ChildrenRecordComponent @ref="@_childrenRecord"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <MigrationStatusEditorComponent @ref="@_migrationStatusEditor"/>
+                    </div>
+                    <div class="col-md-6">
+                        <RegistrationStatusEditorComponent @ref="@_registrationStatusEditor"/>
                     </div>
                 </div>
                 <div class="row">
@@ -137,7 +145,9 @@
     private SpecialityRecordsComponent? _specialityRecords;
     private WorkingExperienceEditorComponent? _workingExperienceEditor;
     private VulnerabilitiesEditorComponent? _vulnerabilitiesEditor;
-    
+    private MigrationStatusEditorComponent? _migrationStatusEditor;
+    private RegistrationStatusEditorComponent? _registrationStatusEditor;
+
     private void CancelClick()
     {
         _notificationService.Notify(new(){Severity = NotificationSeverity.Info, Summary = "Операция отменена"});
@@ -153,14 +163,14 @@
         }
         var survivorId = Guid.NewGuid();
         var inquiryId = Guid.NewGuid();
-        
+
         await _survivorCatalogue.ApplyCommand(
             new CreateSurvivor(survivorId, _survivor.Name,
                 _survivor.Sex, _survivor.OtherSex,
                 _survivor.AccurateDob, _survivor.AccurateDob.HasValue ? default : _survivor.CalcDob), CancellationToken.None);
 
         await _documentsAggregate.ApplyCommand(new CreateInquiry(
-            inquiryId, _createInquiry.DocumentDate, survivorId, 
+            inquiryId, _createInquiry.DocumentDate, survivorId,
             _createInquiry.IsJuvenile, _createInquiry.InquirySources, _createInquiry.Citizenship ?? string.Empty), CancellationToken.None);
 
         if(_domicileRecord is not null)
@@ -172,16 +182,22 @@
         if (_educationLevelRecords is not null)
             foreach (var cmd in _educationLevelRecords.BuildCommands(inquiryId))
                 await _documentsAggregate.ApplyCommand(cmd, CancellationToken.None);
-        
+
         if (_specialityRecords is not null)
             foreach (var cmd in _specialityRecords.BuildCommands(inquiryId))
                 await _documentsAggregate.ApplyCommand(cmd, CancellationToken.None);
 
         if (_workingExperienceEditor?.BuildCommand(inquiryId) is {} workingExperienceCmd)
             await _documentsAggregate.ApplyCommand(workingExperienceCmd, CancellationToken.None);
-        
+
         if (_vulnerabilitiesEditor?.BuildCommand(inquiryId) is {} vulnerabilitiesCmd)
             await _documentsAggregate.ApplyCommand(vulnerabilitiesCmd, CancellationToken.None);
+
+        if (_migrationStatusEditor?.BuildCommand(inquiryId) is {} migrationCmd)
+            await _documentsAggregate.ApplyCommand(migrationCmd, CancellationToken.None);
+
+        if (_registrationStatusEditor?.BuildCommand(inquiryId) is {} registrationCmd)
+            await _documentsAggregate.ApplyCommand(registrationCmd, CancellationToken.None);
 
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
@@ -194,7 +210,7 @@
             _survivor.CalcDob = null;
             return;
         }
-        
+
         if (int.TryParse(ageString, out var age) && age > 0)
             _survivor.CalcDob = DateTime.Today.AddYears(age * -1).AddDays(-180);
     }

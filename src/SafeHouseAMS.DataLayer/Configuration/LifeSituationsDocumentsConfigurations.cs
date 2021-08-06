@@ -44,7 +44,7 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.HasBaseType<LifeSituationDocumentDAL>();
 
             builder.Property(x => x.IsJuvenile).HasComment("Несовершеннолетний в момент обращения");
-            
+
             builder.Property(x => x.IsSelfInquiry).HasComment("Самообращение");
             builder.Property(x => x.SelfInquirySourcesMask).HasComment("Битовая маска каналов самообращения");
             builder.Property(x => x.IsForwardedBySurvivor).HasComment("Перенаправлен другим пострадавшим");
@@ -53,9 +53,16 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.Property(x => x.ForwardedByPerson).HasComment("Детали направления другим человеком");
             builder.Property(x => x.IsForwardedByOrganization).HasComment("Направлен организацией");
             builder.Property(x => x.ForwardedByOrgannization).HasComment("Какая организация направила");
-            
+
             builder.Property(x => x.WorkingExperience).HasComment("Описание опыта работы");
-            
+            builder.Ignore(x => x.Citizenship);
+            builder.Ignore(x => x.Domicile);
+            builder.Ignore(x => x.HasChildren);
+            builder.Ignore(x => x.EducationLevel);
+            builder.Ignore(x => x.Specialities);
+            builder.Ignore(x => x.MigrationStatus);
+            builder.Ignore(x => x.RegistrationStatus);
+
             builder.Property(x => x.HasAddiction).HasComment("Наличие зависимости");
             builder.Property(x => x.AddictionKind).HasComment("Тип зависимости");
             builder.Property(x => x.ChildhoodViolence).HasComment("Насилие в детстве");
@@ -66,7 +73,7 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.Property(x => x.OtherVulnerabilityDetails).HasComment("Описание других факторов уязвимости");
             builder.Property(x => x.HealthStatusVulnerabilityMask).HasComment("битовая маска уязвимости по здоровью");
             builder.Property(x => x.OtherHealthStatusVulnerabilityDetail).HasComment("Детали уязвимости по здоровью");
-            
+
             builder.HasIndex(x => x.ForwardedByOrgannization).IsUnique(false);
         }
     }

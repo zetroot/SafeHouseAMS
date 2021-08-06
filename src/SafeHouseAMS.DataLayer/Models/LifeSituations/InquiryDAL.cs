@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SafeHouseAMS.DataLayer.Models.LifeSituations
 {
@@ -25,7 +26,7 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
         public bool IsForwardedBySurvivor { get; set; }
 
         /// <summary>
-        /// Уточнение - каким 
+        /// Уточнение - каким
         /// </summary>
         public string? ForwardedBySurvivor { get; set; }
 
@@ -50,11 +51,32 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
         public string? ForwardedByOrgannization { get; set; }
 
         #endregion
-        
+
         /// <summary>
         /// Опыт работы
         /// </summary>
         public string? WorkingExperience { get; set; }
+
+        public CitizenshipRecordDAL Citizenship =>
+            Records.OfType<CitizenshipRecordDAL>().Single();
+
+        public DomicileRecordDAL? Domicile =>
+            Records.OfType<DomicileRecordDAL>().SingleOrDefault();
+
+        public ChildrenRecordDAL? HasChildren =>
+            Records.OfType<ChildrenRecordDAL>().SingleOrDefault();
+
+        public IReadOnlyCollection<EducationLevelRecordDAL> EducationLevel =>
+            Records.OfType<EducationLevelRecordDAL>().ToList();
+
+        public IReadOnlyCollection<SpecialityRecordDAL> Specialities =>
+            Records.OfType<SpecialityRecordDAL>().ToList();
+
+        public MigrationStatusRecordDAL? MigrationStatus =>
+            Records.OfType<MigrationStatusRecordDAL>().SingleOrDefault();
+
+        public RegistrationStatusRecordDAL? RegistrationStatus =>
+            Records.OfType<RegistrationStatusRecordDAL>().SingleOrDefault();
 
         #region vulnerabilities
 

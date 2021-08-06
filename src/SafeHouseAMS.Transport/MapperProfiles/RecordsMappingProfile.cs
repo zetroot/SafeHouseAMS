@@ -12,6 +12,18 @@ namespace SafeHouseAMS.Transport.MapperProfiles
             MapDomicileRecord();
             MapEducationLevelRecord();
             MapSpecialityRecord();
+            MapMigrationStatusRecord();
+            MapRegistrationStatusRecord();
+        }
+        private void MapRegistrationStatusRecord()
+        {
+            CreateMap<RegistrationStatusRecord, Protos.Models.LifeSituations.Records.RegistrationStatusRecord>();
+            CreateMap<Protos.Models.LifeSituations.Records.RegistrationStatusRecord, RegistrationStatusRecord>();
+        }
+        private void MapMigrationStatusRecord()
+        {
+            CreateMap<MigrationStatusRecord, Protos.Models.LifeSituations.Records.MigrationStatusRecord>();
+            CreateMap<Protos.Models.LifeSituations.Records.MigrationStatusRecord, MigrationStatusRecord>();
         }
         private void MapSpecialityRecord()
         {
