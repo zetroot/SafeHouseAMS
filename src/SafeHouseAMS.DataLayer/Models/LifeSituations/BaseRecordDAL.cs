@@ -3,7 +3,7 @@
 namespace SafeHouseAMS.DataLayer.Models.LifeSituations
 {
     /// <summary>
-    /// Класс-заголовок 
+    /// Класс-заголовок
     /// </summary>
     internal abstract class BaseRecordDAL
     {
@@ -17,7 +17,7 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
         /// Идентификатор документа породившего запись
         /// </summary>
         public Guid DocumentID { get; set; }
-        
+
         /// <summary>
         /// Сериализованное в JSON содержимое записи
         /// </summary>
@@ -29,5 +29,5 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
     internal class DomicileRecordDAL : BaseRecordDAL { }
     internal class EducationLevelRecordDAL : BaseRecordDAL { }
     internal class SpecialityRecordDAL : BaseRecordDAL { }
-    
+    internal class MigrationStatusRecordDAL : BaseRecordDAL { }
 }
