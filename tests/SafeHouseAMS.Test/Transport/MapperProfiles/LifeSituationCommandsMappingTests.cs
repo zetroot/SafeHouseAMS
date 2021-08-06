@@ -12,7 +12,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
     {
         private Mapper BuildMapper()
         {
-            var cfg = new MapperConfiguration(c => c.AddMaps(typeof(InquiryCommandsMappingProfile).Assembly));
+            var cfg = new MapperConfiguration(c => c.AddMaps(typeof(LifeSituationsCommandsMappingProfile).Assembly));
             return new(cfg);
         }
 

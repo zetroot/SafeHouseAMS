@@ -4,9 +4,9 @@ using SafeHouseAMS.BizLayer.LifeSituations.Commands;
 
 namespace SafeHouseAMS.Transport.MapperProfiles
 {
-    internal class InquiryCommandsMappingProfile : Profile
+    internal class LifeSituationsCommandsMappingProfile : Profile
     {
-        public InquiryCommandsMappingProfile()
+        public LifeSituationsCommandsMappingProfile()
         {
             MapAddEducationLevelCommand();
             MapAddSpeciality();
