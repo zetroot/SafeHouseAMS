@@ -23,4 +23,5 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Records
             Details = details ?? throw new ArgumentNullException(nameof(details));
         }
     }
+
 }

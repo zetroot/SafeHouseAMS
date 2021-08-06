@@ -86,5 +86,19 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
                 result.Should().BeEquivalentTo(src);
             }).QuickCheckThrowOnFailure();
         }
+
+        [Property]
+        public void MigrationRecord_RoundTrip_DoesNotChanges()
+        {
+            var mapper = BuildMapper();
+            Arb.Register<NotNullStringsGenerators>();
+            Prop.ForAll<MigrationStatusRecord>(src =>
+            {
+                var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records.MigrationStatusRecord>(src);
+                var result = mapper.Map<MigrationStatusRecord>(dto);
+
+                result.Should().BeEquivalentTo(src);
+            }).QuickCheckThrowOnFailure();
+        }
     }
 }
