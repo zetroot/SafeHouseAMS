@@ -17,7 +17,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             var cfg = new MapperConfiguration(c => c.AddMaps(typeof(TimestampMappingProfile)));
             return new(cfg);
         }
-        
+
         [Property]
         public void RoundMappig_ReturnsOriginalDateTime()
         {
@@ -29,9 +29,9 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
                     var timestamp = mapper.Map<Timestamp>(src);
                     var resultedDt = mapper.Map<DateTime>(timestamp);
                     resultedDt.Should().Be(src);
-                    
+
                 })
-                .VerboseCheckThrowOnFailure();
+                .QuickCheckThrowOnFailure();
         }
 
         [Fact, UnitTest]
@@ -44,7 +44,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             //assert
             result.Should().BeNull();
         }
-        
+
         [Fact, UnitTest]
         public void Mapper_WhenDateTimeIsNull_MapsNullToTimestamp()
         {
