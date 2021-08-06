@@ -42,7 +42,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
             await foreach (var doc in documents.WithCancellation(cancellationToken))
                 yield return _mapper.Map<LifeSituationDocument>(doc);
         }
-        
+
         public async Task CreateInquiry(Guid documentId, bool isDeleted, DateTime created, DateTime lastEdit,
             Guid survivorID, DateTime documentDate,
             bool isJuvenile, IEnumerable<IInquirySource> inquirySources)
@@ -78,7 +78,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
             await _context.LifeSituationDocuments.AddAsync(creatingDocument);
             await _context.SaveChangesAsync();
         }
-        
+
         public async Task AddRecord(Guid documentId, BaseRecord record)
         {
             BaseRecordDAL addingRecord = record switch
@@ -88,13 +88,15 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 DomicileRecord x => new DomicileRecordDAL{ID = record.ID, DocumentID = documentId, Content = JsonSerializer.Serialize(x)},
                 EducationLevelRecord x => new EducationLevelRecordDAL{ID = record.ID, DocumentID = documentId, Content = JsonSerializer.Serialize(x)},
                 SpecialityRecord x => new SpecialityRecordDAL{ID = record.ID, DocumentID = documentId, Content = JsonSerializer.Serialize(x)},
+                RegistrationStatusRecord x => new RegistrationStatusRecordDAL{ID = record.ID, DocumentID = documentId, Content = JsonSerializer.Serialize(x)},
+                MigrationStatusRecord x => new MigrationStatusRecordDAL{ID = record.ID, DocumentID = documentId, Content = JsonSerializer.Serialize(x)},
                 _ => throw new ArgumentException("Не реализовано сохранение записи такого типа")
             };
-            
+
             await _context.Records.AddAsync(addingRecord);
             await _context.SaveChangesAsync();
         }
-        
+
         public async IAsyncEnumerable<string> GetCitizenshipsCompletions([EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var sourceRecords = _context.Records.OfType<CitizenshipRecordDAL>().AsAsyncEnumerable();
@@ -130,7 +132,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 await _context.SaveChangesAsync();
             }
         }
-        
+
         public async Task ClearAddiction(Guid inquiryId)
         {
             var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
@@ -141,7 +143,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 await _context.SaveChangesAsync();
             }
         }
-        
+
         public async Task SetHomeless(Guid inquiryId)
         {
             var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
@@ -151,7 +153,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 await _context.SaveChangesAsync();
             }
         }
-        
+
         public async Task ClearHomeless(Guid inquiryId)
         {
             var document = await _context.LifeSituationDocuments.SingleAsync(x => x.ID == inquiryId);
