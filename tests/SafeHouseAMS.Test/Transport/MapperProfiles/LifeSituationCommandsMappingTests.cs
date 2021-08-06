@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
@@ -7,7 +8,7 @@ using SafeHouseAMS.Transport.MapperProfiles;
 
 namespace SafeHouseAMS.Test.Transport.MapperProfiles
 {
-    public class InquiryCommandsMappingTests
+    public class LifeSituationCommandsMappingTests
     {
         private Mapper BuildMapper()
         {
@@ -113,7 +114,6 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         public void SetWorkingExperience_RoundTrip_DoesNotChanges()
         {
             Arb.Register<NotNullStringsGenerators>();
-            Arb.Register<InquiryGenerators>();
 
             var mapper = BuildMapper();
             Prop.ForAll<SetWorkingExperience>(src =>
@@ -124,5 +124,68 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
                 result.Should().BeEquivalentTo(src);
             }).QuickCheckThrowOnFailure();
         }
+
+        [Property]
+        public void AddMigrationStatus_RoundTrip_DoesNotChanges()
+        {
+            Arb.Register<NotNullStringsGenerators>();
+
+            var mapper = BuildMapper();
+            Prop.ForAll<AddMigrationStatus>(src =>
+            {
+                var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands.AddMigrationStatus>(src);
+                var result = mapper.Map<AddMigrationStatus>(dto);
+
+                result.Should().BeEquivalentTo(src);
+            }).QuickCheckThrowOnFailure();
+        }
+
+        [Property]
+        public void AddRegistrationStatus_RoundTrip_DoesNotChanges()
+        {
+            Arb.Register<NotNullStringsGenerators>();
+
+            var mapper = BuildMapper();
+            Prop.ForAll<AddRegistrationStatus>(src =>
+            {
+                var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands.AddRegistrationStatus>(src);
+                var result = mapper.Map<AddRegistrationStatus>(dto);
+
+                result.Should().BeEquivalentTo(src);
+            }).QuickCheckThrowOnFailure();
+        }
+
+        [Property]
+        public void LifeSituationDocumentCommand_RoundTrip_DoesNotChanges()
+        {
+            Arb.Register<NotNullStringsGenerators>();
+            Arb.Register<InquiryGenerators>();
+
+            var genList = new List<Gen<LifeSituationDocumentCommand>>
+            {
+                Arb.From<AddEducationLevel>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<AddMigrationStatus>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<AddRegistrationStatus>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<AddSpeciality>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<CreateInquiry>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<SetChildren>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<SetDomicile>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<SetVulnerabilities>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<SetWorkingExperience>().Generator.Select(x => x as LifeSituationDocumentCommand)
+            };
+
+
+            var mapper = BuildMapper();
+            Prop.ForAll(Gen.OneOf(genList).ToArbitrary(),
+            src =>
+                {
+                    var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand>(src);
+                    var result = mapper.Map<LifeSituationDocumentCommand>(dto);
+
+                    result.Should().BeEquivalentTo(src);
+                })
+                .QuickCheckThrowOnFailure();
+        }
+
     }
 }
