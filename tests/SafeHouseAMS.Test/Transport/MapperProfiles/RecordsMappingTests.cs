@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.Transport.MapperProfiles;
 
@@ -96,6 +94,20 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records.MigrationStatusRecord>(src);
                 var result = mapper.Map<MigrationStatusRecord>(dto);
+
+                result.Should().BeEquivalentTo(src);
+            }).QuickCheckThrowOnFailure();
+        }
+
+        [Property]
+        public void RegistrationRecord_RoundTrip_DoesNotChanges()
+        {
+            var mapper = BuildMapper();
+            Arb.Register<NotNullStringsGenerators>();
+            Prop.ForAll<RegistrationStatusRecord>(src =>
+            {
+                var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Records.RegistrationStatusRecord>(src);
+                var result = mapper.Map<RegistrationStatusRecord>(dto);
 
                 result.Should().BeEquivalentTo(src);
             }).QuickCheckThrowOnFailure();

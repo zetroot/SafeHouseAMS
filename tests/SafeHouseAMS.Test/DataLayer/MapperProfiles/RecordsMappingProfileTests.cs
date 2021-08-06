@@ -171,5 +171,26 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
 
             }).QuickCheckThrowOnFailure();
         }
+
+        [Property]
+        public void Mapper_MapsRegistrationStatusRecord_Dal2Bl()
+        {
+            var sut = BuildMapper();
+            Arb.Register<NotNullStringsGenerators>();
+            Prop.ForAll<Guid, string>((id, details) =>
+            {
+                var srcRec = new RegistrationStatusRecord(id, details);
+                var recordDal = new RegistrationStatusRecordDAL
+                {
+                    ID = id,
+                    Content = JsonSerializer.Serialize(srcRec)
+                };
+
+                var mappedRec = sut.Map<BaseRecord>(recordDal);
+
+                mappedRec.Should().BeOfType<RegistrationStatusRecord>().And.BeEquivalentTo(srcRec);
+
+            }).QuickCheckThrowOnFailure();
+        }
     }
 }

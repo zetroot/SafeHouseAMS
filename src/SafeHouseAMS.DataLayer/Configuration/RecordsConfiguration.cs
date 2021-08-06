@@ -29,8 +29,8 @@ namespace SafeHouseAMS.DataLayer.Configuration
                 .HasValue<DomicileRecordDAL>("Domicile")
                 .HasValue<EducationLevelRecordDAL>("EducationLevel")
                 .HasValue<SpecialityRecordDAL>("Speciality")
-                .HasValue<MigrationStatusRecordDAL>("MigrationStatus");
-
+                .HasValue<MigrationStatusRecordDAL>("MigrationStatus")
+                .HasValue<RegistrationStatusRecordDAL>("RegistrationStatus");
         }
     }
 }
