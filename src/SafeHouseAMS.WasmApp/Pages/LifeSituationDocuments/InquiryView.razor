@@ -64,13 +64,21 @@
             }
         </div>
         <div class="row" style="margin-top: 5px">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <RadzenLabel Text="Гражданство:"/>
                 <RadzenLabel Text="@Inquiry?.Citizenship.Citizenship"/>
             </div>
+            <div class="col-md-6">
+                <MigrationStatusRecordView Record="Inquiry?.MigrationStatus"/>
+            </div>
         </div>
         <div class="row" style="margin-top: 5px">
-            <DomicileRecordView Domicile="@Inquiry?.Domicile"/>
+            <div class="col-md-6">
+                <DomicileRecordView Domicile="@Inquiry?.Domicile"/>
+            </div>
+            <div class="col-md-6">
+                <RegistrationStatusRecordView Record="@Inquiry?.RegistrationStatus"/>
+            </div>
         </div>
         <div class="row" style="margin-top: 5px">
             <ChildrenRecordView Record="@Inquiry?.HasChildren"/>
@@ -141,8 +149,8 @@
         }
         return result.Distinct().ToList();
     }
-    
-    private static string MapSelfInqurySources(SelfInquiry.InquiryChannel chan) => 
+
+    private static string MapSelfInqurySources(SelfInquiry.InquiryChannel chan) =>
         chan switch
         {
             SelfInquiry.InquiryChannel.Vk => "Вконтакте",
