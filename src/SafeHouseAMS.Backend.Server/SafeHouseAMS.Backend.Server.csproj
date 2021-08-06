@@ -42,6 +42,9 @@
       <Content Include="..\..\Dockerfile">
         <Link>Dockerfile</Link>
       </Content>
+      <Content Include="..\..\Dockerfile.dev">
+        <Link>Dockerfile.dev</Link>
+      </Content>
     </ItemGroup>
     
 </Project>
