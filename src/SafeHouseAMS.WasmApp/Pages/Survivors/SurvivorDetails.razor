@@ -70,34 +70,34 @@
     }
     else
     {
-        <RadzenDataGrid TItem="LifeSituationDocument" Data="@_documents" Count="@_documents.Count" AllowColumnResize="true">
-            <Columns>
-                <RadzenDataGridColumn TItem="LifeSituationDocument" Property="DocumentDate" Title="Дата" TextAlign="TextAlign.Center"/>
-                <RadzenDataGridColumn TItem="LifeSituationDocument" Title="Тип">
-                    <Template Context="item">
-                        @switch (item)
-                        {
-                            case Inquiry:
-                                <RadzenLabel Text="Обращение за помощью"/>
-                                break;
-                            case CitizenshipChange:
-                                <RadzenLabel Text="Смена гражданства"/>
-                                break;
-                            default:
-                                <RadzenLabel Text="Иной тип документа"/>
-                                break;
-                        }
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="LifeSituationDocument" Title="Подробнее" Width="100px" TextAlign="TextAlign.Center">
-                    <Template Context="item">
-                        <button type="button" class="btn btn-outline-primary" @onclick="@(() => _navigationManager.NavigateTo($"Document/{item.ID}"))">
-                            <span class="oi oi-list-rich"></span>
-                        </button>
-                    </Template>
-                </RadzenDataGridColumn>
-            </Columns>
-        </RadzenDataGrid>
+        <RadzenFieldset Text="Записи по пострадавшему">
+            @foreach (var doc in _documents)
+            {
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-2">
+                        <NavLink href="Document/@doc.ID">
+                            <RadzenLabel Text="@doc.DocumentDate.ToString("G")"/>
+                        </NavLink>
+                    </div>
+                    <div class="col-md-4">
+                        <NavLink href="Document/@doc.ID">
+                            @switch (doc)
+                            {
+                                case Inquiry:
+                                    <RadzenLabel Text="Обращение за помощью"/>
+                                    break;
+                                case CitizenshipChange:
+                                    <RadzenLabel Text="Смена гражданства"/>
+                                    break;
+                                default:
+                                    <RadzenLabel Text="Иной тип документа"/>
+                                    break;
+                            }
+                        </NavLink>
+                    </div>
+                </div>
+            }
+        </RadzenFieldset>
     }
 </div>
 
