@@ -13,6 +13,7 @@
     <div class="row">
         <div class="col-12-md">
             <button type="button" class="btn btn-primary" @onclick="() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue))">В каталог</button>
+            <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"CreateCitizenshipChange/{SurvivorID}"))">Смена гражданства</button>
         </div>
     </div>
     @if (_survivor is null)
