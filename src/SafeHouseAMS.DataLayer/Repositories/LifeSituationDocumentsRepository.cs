@@ -257,5 +257,11 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public Task CreateCitizenshipChange(Guid docId, bool isDeleted, DateTime created, DateTime lastEdit,
+            Guid survivorID, DateTime documentDate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
