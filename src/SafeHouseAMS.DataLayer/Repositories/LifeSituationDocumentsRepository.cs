@@ -39,6 +39,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 .Include(x => x.Records)
                 .Include(x => x.Survivor)
                 .Where(x => !x.IsDeleted && x.SurvivorID == survivorId)
+                .OrderByDescending(x => x.DocumentDate)
                 .AsSplitQuery()
                 .AsAsyncEnumerable();
             await foreach (var doc in documents.WithCancellation(cancellationToken))
