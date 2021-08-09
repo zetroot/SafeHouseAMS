@@ -1,6 +1,6 @@
 ﻿using FsCheck;
 
-namespace SafeHouseAMS.Test.Transport.MapperProfiles
+namespace SafeHouseAMS.Test
 {
     public class NotNullStringsGenerators
     {

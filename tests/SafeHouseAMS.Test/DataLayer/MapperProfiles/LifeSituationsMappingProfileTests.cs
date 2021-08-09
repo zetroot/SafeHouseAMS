@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using AutoMapper;
 using FluentAssertions;
+using FsCheck;
+using FsCheck.Xunit;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
@@ -9,6 +12,7 @@ using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 using SafeHouseAMS.DataLayer.MapperProfiles;
 using SafeHouseAMS.DataLayer.Models.LifeSituations;
 using SafeHouseAMS.DataLayer.Models.Survivors;
+using SafeHouseAMS.Test.Transport.MapperProfiles;
 using Xunit;
 using Xunit.Categories;
 
@@ -34,7 +38,7 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
             };
 
             var domicile = new DomicileRecord(Guid.NewGuid(), "place", DomicileRecord.PlaceKind.OwnHome,
-            false, true, false, null, false, null, 
+            false, true, false, null, false, null,
             false, null, true, "other");
             var domicileRecordDAL = new DomicileRecordDAL
             {
@@ -50,7 +54,7 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
             var eduRec2 = new EducationLevelRecord(Guid.NewGuid(), EducationLevelRecord.EduLevel.Courses, "course");
             var eduRec1Dal = new EducationLevelRecordDAL {ID = eduRec1.ID, Content = JsonSerializer.Serialize(eduRec1)};
             var eduRec2Dal = new EducationLevelRecordDAL {ID = eduRec2.ID, Content = JsonSerializer.Serialize(eduRec2)};
-            
+
             var specRec1 = new SpecialityRecord(Guid.NewGuid(),"spec1");
             var specRec2 = new SpecialityRecord(Guid.NewGuid(), "spec2");
             var specRec1Dal = new SpecialityRecordDAL() {ID = specRec1.ID, Content = JsonSerializer.Serialize(specRec1)};
@@ -69,7 +73,7 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
             const string otherVulnerabilityDetails = "other vulnerability";
             const string addictionKind = "addiction";
             const string otherHealthStatusVulnerabilityDetail = "other health";
-            
+
             var inquiryDal = new InquiryDAL
             {
                 ID = Guid.NewGuid(),
@@ -94,17 +98,17 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
                 OtherHealthStatusVulnerabilityDetail = otherHealthStatusVulnerabilityDetail
             };
             var sut = BuildMapper();
-            
+
             //act
             var result = sut.Map<Inquiry>(inquiryDal);
-            
+
             //assert
             result.ID.Should().Be(inquiryDal.ID);
             result.IsDeleted.Should().BeTrue();
             result.Created.Should().Be(created);
             result.LastEdit.Should().Be(lastEdit);
             result.DocumentDate.Should().Be(documentDate);
-            
+
             result.Survivor.Should().NotBeNull();
             result.Survivor.ID.Should().Be(survivorDal.ID);
 
@@ -114,7 +118,7 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
                 .And.ContainEquivalentOf(new ForwardedBySurvivor(forwardedBySurvivor))
                 .And.ContainEquivalentOf(new ForwardedByPerson(forwardedByPerson))
                 .And.ContainEquivalentOf(new ForwardedByOrganization(forwardedByOrgannization));
-            
+
             result.Citizenship.Should().BeEquivalentTo(citizenshipRecord);
             result.Domicile.Should().BeEquivalentTo(domicile);
             result.HasChildren.Should().BeEquivalentTo(childrenRecord);
@@ -136,6 +140,53 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
                 .And.ContainEquivalentOf(new Other(otherVulnerabilityDetails))
                 .And.ContainEquivalentOf(new HealthStatus(healthStatusVulnerabilityType, otherHealthStatusVulnerabilityDetail));
 
+        }
+
+
+        [Fact, UnitTest]
+        public void Mapper_MapsCitizenshipChange_Dal2Bl()
+        {
+            //arrange
+            var survivorDal = new SurvivorDAL{ID = Guid.NewGuid(), IsDeleted = true, Name = "name", Sex = 0};
+            const string citizenship = "citizenship";
+            var citizenshipRec = new CitizenshipRecord(Guid.NewGuid(), citizenship);
+            var citizenshipRecDal = new CitizenshipRecordDAL
+            {
+                ID = citizenshipRec.ID,
+                Content = JsonSerializer.Serialize(citizenshipRec)
+            };
+
+            var src = new CitizenshipChangeDAL
+            {
+                ID = Guid.NewGuid(),
+                Created = DateTime.Now - TimeSpan.FromDays(7),
+                LastEdit = DateTime.Now - TimeSpan.FromDays(3),
+                DocumentDate = DateTime.Now - TimeSpan.FromDays(5),
+                IsDeleted = false,
+                Survivor = survivorDal,
+                SurvivorID = survivorDal.ID,
+                Records = new List<BaseRecordDAL> { citizenshipRecDal }
+            };
+
+            var sut = BuildMapper();
+
+            //act
+            var result = sut.Map<LifeSituationDocument>(src);
+
+            //assert
+            result.Should().BeOfType<CitizenshipChange>();
+            var document = (result as CitizenshipChange)!;
+
+            document.ID.Should().Be(src.ID);
+            document.Created.Should().Be(src.Created);
+            document.LastEdit.Should().Be(src.LastEdit);
+            document.DocumentDate.Should().Be(src.DocumentDate);
+            document.IsDeleted.Should().Be(src.IsDeleted);
+            document.Survivor.Should().NotBeNull();
+            document.Survivor.ID.Should().Be(survivorDal.ID);
+            document.Citizenship.Should().NotBeNull();
+            document.Citizenship.ID.Should().Be(citizenshipRec.ID);
+            document.Citizenship.Citizenship.Should().Be(citizenship);
         }
     }
 }

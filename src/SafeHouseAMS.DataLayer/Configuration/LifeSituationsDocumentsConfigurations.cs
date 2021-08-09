@@ -32,7 +32,8 @@ namespace SafeHouseAMS.DataLayer.Configuration
 
             builder
                 .HasDiscriminator<string>("DocumentType")
-                .HasValue<InquiryDAL>("Inquiry");
+                .HasValue<InquiryDAL>("Inquiry")
+                .HasValue<CitizenshipChangeDAL>("CitizenshipChange");
         }
     }
 
@@ -75,6 +76,16 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.Property(x => x.OtherHealthStatusVulnerabilityDetail).HasComment("Детали уязвимости по здоровью");
 
             builder.HasIndex(x => x.ForwardedByOrgannization).IsUnique(false);
+        }
+    }
+
+    internal class CitizenshipChangeConfiguration : IEntityTypeConfiguration<CitizenshipChangeDAL>
+    {
+        public void Configure(EntityTypeBuilder<CitizenshipChangeDAL> builder)
+        {
+            builder.HasBaseType<LifeSituationDocumentDAL>();
+
+            builder.Ignore(x => x.Citizenship);
         }
     }
 }

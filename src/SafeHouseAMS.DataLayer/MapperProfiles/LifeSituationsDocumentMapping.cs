@@ -16,7 +16,15 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
         {
             MapBase();
             MapInquiries();
+            MapCitizenshipChange();
         }
+
+        private void MapCitizenshipChange()
+        {
+            CreateMap<CitizenshipChangeDAL, CitizenshipChange>()
+                .IncludeBase<LifeSituationDocumentDAL, LifeSituationDocument>();
+        }
+
         private void MapInquiries()
         {
             CreateMap<InquiryDAL, Inquiry>()
