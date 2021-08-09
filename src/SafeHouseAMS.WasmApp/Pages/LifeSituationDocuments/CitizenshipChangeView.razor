@@ -1,0 +1,34 @@
+@using SafeHouseAMS.BizLayer.LifeSituations
+<h3>Смена гражданства</h3>
+
+<div class="container-fluid">
+    @if (CitizenshipChange is null)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger">
+                    Нет записи для отображения
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenLabel Text="Дата документа: "/>
+                <RadzenLabel Text="@CitizenshipChange.DocumentDate"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenLabel Text="Гражданство: "/>
+                <RadzenLabel Text="@CitizenshipChange.Citizenship.Citizenship"/>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public CitizenshipChange? CitizenshipChange { get; set; }
+}
