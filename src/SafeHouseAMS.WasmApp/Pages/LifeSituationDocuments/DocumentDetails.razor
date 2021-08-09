@@ -1,0 +1,47 @@
+@page "/Document/{DocumentID}"
+@using SafeHouseAMS.BizLayer.LifeSituations
+@using System.Threading
+@inject ILifeSituationDocumentsAggregate _documentsCatalogue;
+
+<div class="container-fluid">
+    @switch (@_document)
+    {
+        case null:
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-info">
+                        Документ загружается...
+                    </div>
+                </div>
+            </div>
+            break;
+        case Inquiry inquiry:
+            <InquiryView Inquiry="@inquiry" />
+            break;
+        case CitizenshipChange citizenshipChange:
+            break;
+        default:
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-danger">
+                        Тип документа @_document.GetType().Name не поддерживается
+                    </div>
+                </div>
+            </div>
+            break;
+    }
+</div>
+
+@code {
+    [Parameter] public string? DocumentID { get; set; }
+    private LifeSituationDocument? _document;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Guid.TryParse(DocumentID, out var docId))
+        {
+            _document = await _documentsCatalogue.GetSingleAsync(docId, CancellationToken.None);
+        }
+        await base.OnParametersSetAsync();
+    }
+}

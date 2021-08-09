@@ -70,28 +70,40 @@
     }
     else
     {
-        @foreach (var doc in _documents)
-        {
-            switch (doc)
-            {
-                case Inquiry inquiry:
-                    <div class="row">
-                        <InquiryView Inquiry="@inquiry"/>
-                    </div>
-                    break;
-                default:
-                    <div class="row">
-                        Неизвестный тип документа. Дата - @doc.DocumentDate
-                    </div>
-                    break;
-            }
-        }
+        <RadzenDataGrid TItem="LifeSituationDocument" Data="@_documents" Count="@_documents.Count" AllowColumnResize="true">
+            <Columns>
+                <RadzenDataGridColumn TItem="LifeSituationDocument" Property="DocumentDate" Title="Дата" TextAlign="TextAlign.Center"/>
+                <RadzenDataGridColumn TItem="LifeSituationDocument" Title="Тип">
+                    <Template Context="item">
+                        @switch (item)
+                        {
+                            case Inquiry:
+                                <RadzenLabel Text="Обращение за помощью"/>
+                                break;
+                            case CitizenshipChange:
+                                <RadzenLabel Text="Смена гражданства"/>
+                                break;
+                            default:
+                                <RadzenLabel Text="Иной тип документа"/>
+                                break;
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="LifeSituationDocument" Title="Подробнее" Width="100px" TextAlign="TextAlign.Center">
+                    <Template Context="item">
+                        <button type="button" class="btn btn-outline-primary" @onclick="@(() => _navigationManager.NavigateTo($"Document/{item.ID}"))">
+                            <span class="oi oi-list-rich"></span>
+                        </button>
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
     }
 </div>
 
 @code {
     private Survivor? _survivor;
-    
+
     [Parameter] public string? SurvivorID { get; set; }
 
     private List<LifeSituationDocument> _documents = new();
