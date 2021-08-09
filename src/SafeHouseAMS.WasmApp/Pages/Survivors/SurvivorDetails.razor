@@ -75,12 +75,12 @@
             {
                 <div class="row" style="margin-top: 5px">
                     <div class="col-md-2">
-                        <NavLink href="Document/@doc.ID">
+                        <a href="Document/@doc.ID">
                             <RadzenLabel Text="@doc.DocumentDate.ToString("G")"/>
-                        </NavLink>
+                        </a>
                     </div>
                     <div class="col-md-4">
-                        <NavLink href="Document/@doc.ID">
+                        <a href="Document/@doc.ID">
                             @switch (doc)
                             {
                                 case Inquiry:
@@ -93,7 +93,7 @@
                                     <RadzenLabel Text="Иной тип документа"/>
                                     break;
                             }
-                        </NavLink>
+                        </a>
                     </div>
                 </div>
             }
