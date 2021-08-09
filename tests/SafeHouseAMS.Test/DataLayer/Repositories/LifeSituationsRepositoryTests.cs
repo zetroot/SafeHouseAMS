@@ -685,5 +685,38 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             document.HealthStatusVulnerabilityMask.Should().Be(0);
             document.OtherHealthStatusVulnerabilityDetail.Should().BeNull();
         }
+
+        [Fact,IntegrationTest]
+        public async Task CreateCitizenshipChange_WhenCalled_AddsNewDocument()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+
+            var surId1 = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            var docId = Guid.NewGuid();
+            var created = DateTime.Now - TimeSpan.FromDays(5);
+            var lastedit = DateTime.Now - TimeSpan.FromDays(4);
+            var docdate = DateTime.Now - TimeSpan.FromDays(6);
+
+            //act
+            await sut.CreateCitizenshipChange(docId, false, created, lastedit, surId1, docdate);
+
+            //assert
+            var document = await ctx.LifeSituationDocuments
+                .OfType<CitizenshipChangeDAL>()
+                .SingleAsync(x => x.ID == docId);
+
+            document.ID.Should().Be(docId);
+            document.IsDeleted.Should().BeFalse();
+            document.Created.Should().Be(created);
+            document.LastEdit.Should().Be(lastedit);
+            document.DocumentDate.Should().Be(docdate);
+            document.SurvivorID.Should().Be(surId1);
+        }
     }
 }

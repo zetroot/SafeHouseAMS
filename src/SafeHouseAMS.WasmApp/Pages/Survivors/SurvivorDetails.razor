@@ -13,6 +13,7 @@
     <div class="row">
         <div class="col-12-md">
             <button type="button" class="btn btn-primary" @onclick="() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue))">В каталог</button>
+            <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"CreateCitizenshipChange/{SurvivorID}"))">Смена гражданства</button>
         </div>
     </div>
     @if (_survivor is null)
@@ -70,28 +71,40 @@
     }
     else
     {
-        @foreach (var doc in _documents)
-        {
-            switch (doc)
+        <RadzenFieldset Text="Записи по пострадавшему">
+            @foreach (var doc in _documents)
             {
-                case Inquiry inquiry:
-                    <div class="row">
-                        <InquiryView Inquiry="@inquiry"/>
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-2">
+                        <a href="Document/@doc.ID">
+                            <RadzenLabel Text="@doc.DocumentDate.ToString("G")"/>
+                        </a>
                     </div>
-                    break;
-                default:
-                    <div class="row">
-                        Неизвестный тип документа. Дата - @doc.DocumentDate
+                    <div class="col-md-4">
+                        <a href="Document/@doc.ID">
+                            @switch (doc)
+                            {
+                                case Inquiry:
+                                    <RadzenLabel Text="Обращение за помощью"/>
+                                    break;
+                                case CitizenshipChange:
+                                    <RadzenLabel Text="Смена гражданства"/>
+                                    break;
+                                default:
+                                    <RadzenLabel Text="Иной тип документа"/>
+                                    break;
+                            }
+                        </a>
                     </div>
-                    break;
+                </div>
             }
-        }
+        </RadzenFieldset>
     }
 </div>
 
 @code {
     private Survivor? _survivor;
-    
+
     [Parameter] public string? SurvivorID { get; set; }
 
     private List<LifeSituationDocument> _documents = new();

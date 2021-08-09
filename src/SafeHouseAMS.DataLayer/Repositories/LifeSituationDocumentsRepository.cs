@@ -29,6 +29,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
         {
             var doc = await _context.LifeSituationDocuments
                 .Include(x => x.Records)
+                .Include(x => x.Survivor)
                 .SingleAsync(x => !x.IsDeleted && x.ID == id, cancellationToken);
             return _mapper.Map<LifeSituationDocument>(doc);
         }
@@ -36,7 +37,9 @@ namespace SafeHouseAMS.DataLayer.Repositories
         {
             var documents = _context.LifeSituationDocuments
                 .Include(x => x.Records)
+                .Include(x => x.Survivor)
                 .Where(x => !x.IsDeleted && x.SurvivorID == survivorId)
+                .OrderByDescending(x => x.DocumentDate)
                 .AsSplitQuery()
                 .AsAsyncEnumerable();
             await foreach (var doc in documents.WithCancellation(cancellationToken))
@@ -256,6 +259,22 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 inquiry.OtherHealthStatusVulnerabilityDetail = null;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task CreateCitizenshipChange(Guid docId, bool isDeleted, DateTime created, DateTime lastEdit,
+            Guid survivorID, DateTime documentDate)
+        {
+            var document = new CitizenshipChangeDAL
+            {
+                ID = docId,
+                IsDeleted = isDeleted,
+                Created = created,
+                LastEdit = lastEdit,
+                DocumentDate = documentDate,
+                SurvivorID = survivorID
+            };
+            await _context.LifeSituationDocuments.AddAsync(document);
+            await _context.SaveChangesAsync();
         }
     }
 }

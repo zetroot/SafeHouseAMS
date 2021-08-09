@@ -3,9 +3,11 @@ package safehouse.ams.models;
 option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations";
 
 import "Models/LifeSituations/Inquiry.proto";
+import "Models/LifeSituations/CitizenshipChange.proto";
 
 message LifeSituationDocument {
   oneof Document{
     Inquiry Inquiry = 1;
+    CitizenshipChange CitizenshipChange = 2;
   }
 }

@@ -171,7 +171,8 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
                 Arb.From<SetChildren>().Generator.Select(x => x as LifeSituationDocumentCommand),
                 Arb.From<SetDomicile>().Generator.Select(x => x as LifeSituationDocumentCommand),
                 Arb.From<SetVulnerabilities>().Generator.Select(x => x as LifeSituationDocumentCommand),
-                Arb.From<SetWorkingExperience>().Generator.Select(x => x as LifeSituationDocumentCommand)
+                Arb.From<SetWorkingExperience>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<CreateCitizenshipChange>().Generator.Select(x => x as LifeSituationDocumentCommand)
             };
 
 

@@ -1,0 +1,37 @@
+﻿@using SafeHouseAMS.BizLayer.LifeSituations.Commands
+@using SafeHouseAMS.BizLayer.LifeSituations
+@using System.Threading
+@inject ILifeSituationDocumentsAggregate _documentsAggregate;
+
+<div class="container-fluid">
+    <RadzenFieldset Text="Гражданство">
+        <div class="row">
+            <div class="col-md-12">
+                <RadzenAutoComplete Data="@_citizenshipAutoCompletions" TextProperty="Value" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    Style="display: block" Name="CitizenshipTextBox" Placeholder="Укажите гражданство" @bind-Value="@Citizenship"/>
+                <RadzenRequiredValidator Style="position: absolute" Component="CitizenshipTextBox" Text="Гражданство обязательно для заполнения"/>
+            </div>
+        </div>
+    </RadzenFieldset>
+</div>
+
+@code {
+    public string Citizenship { get; private set; } = string.Empty;
+
+    private record CitizenshipAutoComplete(string Value)
+    {
+        public static implicit operator string(CitizenshipAutoComplete record) => record.Value;
+        public static implicit operator CitizenshipAutoComplete(string value) => new(value);
+    }
+    private IReadOnlyCollection<CitizenshipAutoComplete> _citizenshipAutoCompletions = Array.Empty<CitizenshipAutoComplete>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var completions = new List<CitizenshipAutoComplete>();
+        await foreach (var r in _documentsAggregate.GetCitizenshipsCompletions(CancellationToken.None))
+            completions.Add(r);
+        _citizenshipAutoCompletions = completions;
+
+        await base.OnInitializedAsync();
+    }
+}

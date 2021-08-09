@@ -17,8 +17,15 @@ namespace SafeHouseAMS.Transport.MapperProfiles
             MapSetWorkingExperience();
             MapAddMigrationStatus();
             MapAddRegistrationStatus();
+            MapCreateCitizenshipChange();
             MapCommandsWrapper();
         }
+        private void MapCreateCitizenshipChange()
+        {
+            CreateMap<CreateCitizenshipChange, Protos.Models.LifeSituations.Commands.CreateCitizenshipChange>();
+            CreateMap<Protos.Models.LifeSituations.Commands.CreateCitizenshipChange, CreateCitizenshipChange>();
+        }
+
         private void MapAddRegistrationStatus()
         {
             CreateMap<AddRegistrationStatus, Protos.Models.LifeSituations.Commands.AddRegistrationStatus>();
@@ -67,6 +74,10 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                             result.AddRegistrationStatus =
                                 ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.AddRegistrationStatus>(addRegistrationStatus);
                             break;
+                        case CreateCitizenshipChange createCitizenshipChange:
+                            result.CreateCitizenshipChange =
+                                ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.CreateCitizenshipChange>(createCitizenshipChange);
+                             break;
                     }
                     return result;
                 });
@@ -83,6 +94,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetWorkingExperience => ctx.Mapper.Map<SetWorkingExperience>(src.SetWorkingExperience),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddMigrationStatus => ctx.Mapper.Map<AddMigrationStatus>(src.AddMigrationStatus),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddRegistrationStatus => ctx.Mapper.Map<AddRegistrationStatus>(src.AddRegistrationStatus),
+                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.CreateCitizenshipChange => ctx.Mapper.Map<CreateCitizenshipChange>(src.CreateCitizenshipChange),
                     _ => throw new InvalidOperationException()
                 });
         }

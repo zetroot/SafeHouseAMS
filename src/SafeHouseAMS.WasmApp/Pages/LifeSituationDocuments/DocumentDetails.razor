@@ -1,0 +1,60 @@
+@page "/Document/{DocumentID}"
+@using SafeHouseAMS.BizLayer.LifeSituations
+@using System.Threading
+@using SafeHouseAMS.WasmApp.Pages.Survivors
+@inject ILifeSituationDocumentsAggregate _documentsCatalogue;
+@inject NavigationManager _navigationManager;
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary" @onclick="@(() => _navigationManager.NavigateTo($"{nameof(SurvivorDetails)}/{_document?.Survivor.ID}"))">
+                <span class="oi oi-arrow-left"></span>
+                Назад в карточку
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        @switch (@_document)
+        {
+            case null:
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-info">
+                            Документ загружается...
+                        </div>
+                    </div>
+                </div>
+                break;
+            case Inquiry inquiry:
+                <InquiryView Inquiry="@inquiry"/>
+                break;
+            case CitizenshipChange citizenshipChange:
+                <CitizenshipChangeView CitizenshipChange="citizenshipChange"/>
+                break;
+            default:
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-danger">
+                            Тип документа @_document.GetType().Name не поддерживается
+                        </div>
+                    </div>
+                </div>
+                break;
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? DocumentID { get; set; }
+    private LifeSituationDocument? _document;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Guid.TryParse(DocumentID, out var docId))
+        {
+            _document = await _documentsCatalogue.GetSingleAsync(docId, CancellationToken.None);
+        }
+        await base.OnParametersSetAsync();
+    }
+}

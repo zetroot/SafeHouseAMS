@@ -1,0 +1,91 @@
+@page "/CreateCitizenshipChange/{SurvivorID}"
+@using SafeHouseAMS.BizLayer.LifeSituations
+@using SafeHouseAMS.BizLayer.LifeSituations.Commands
+@using SafeHouseAMS.WasmApp.Pages.Survivors
+@using System.Threading
+@inject NavigationManager _navigationManager;
+@inject ILifeSituationDocumentsAggregate _documentsAggregate;
+@inject NotificationService _notificationService;
+
+<h3>Смена гражданства</h3>
+
+<div class="container-fluid">
+    <RadzenTemplateForm TItem="CreateCitizenshipChangeModel" Data="@pageModel" Submit="@SubmitForm" >
+        <div class="row">
+            <div class="col-md-2">
+                <RadzenLabel Text="Дата документа"/>
+            </div>
+            <div class="col-md-10">
+                <RadzenDatePicker @bind-Value="@pageModel.DocDate" ShowTime="true"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <RadzenLabel Text="Новое гражданство: "/>
+            </div>
+            <div class="col-md-10">
+                <RadzenAutoComplete Data="@_citizenshipAutoCompletions" TextProperty="Value" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    Style="display: block" Name="CitizenshipTextBox" Placeholder="Укажите гражданство" @bind-Value="@pageModel.Citizenship"/>
+                <RadzenRequiredValidator Style="position: absolute" Component="CitizenshipTextBox" Text="Гражданство обязательно для заполнения"/>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
+                <button type="reset" style="margin-left: 8px" class="btn btn-warning" @onclick="@CancelClick">Отмена</button>
+            </div>
+        </div>
+    </RadzenTemplateForm>
+</div>
+
+@code {
+    private class CreateCitizenshipChangeModel
+    {
+        public Guid DocId { get; } = Guid.NewGuid();
+        public DateTime DocDate { get; set; } = DateTime.Now;
+        public Guid SurvivorId { get; set; }
+        public string Citizenship { get; set; } = string.Empty;
+        public CreateCitizenshipChange Command => new(DocId, SurvivorId, DocDate, Citizenship);
+    }
+
+    private record CitizenshipAutoComplete(string Value)
+    {
+        public static implicit operator string(CitizenshipAutoComplete record) => record.Value;
+        public static implicit operator CitizenshipAutoComplete(string value) => new(value);
+    }
+
+    [Parameter] public string? SurvivorID { get; set; }
+    private readonly CreateCitizenshipChangeModel pageModel = new();
+    private IReadOnlyCollection<CitizenshipAutoComplete> _citizenshipAutoCompletions = Array.Empty<CitizenshipAutoComplete>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var completions = new List<CitizenshipAutoComplete>();
+        await foreach (var r in _documentsAggregate.GetCitizenshipsCompletions(CancellationToken.None))
+            completions.Add(r);
+        _citizenshipAutoCompletions = completions;
+
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Guid.TryParse(SurvivorID, out var id))
+            pageModel.SurvivorId = id;
+
+        await base.OnParametersSetAsync();
+    }
+
+    private void CancelClick()
+    {
+        _notificationService.Notify(summary: "Операция отменена", severity:NotificationSeverity.Warning);
+        _navigationManager.NavigateTo($"{nameof(SurvivorDetails)}/{SurvivorID}");
+    }
+
+    private async Task SubmitForm()
+    {
+        await _documentsAggregate.ApplyCommand(pageModel.Command, CancellationToken.None);
+        _notificationService.Notify(summary: "Успешно сохранено", severity:NotificationSeverity.Success);
+        _navigationManager.NavigateTo($"{nameof(SurvivorDetails)}/{SurvivorID}");
+    }
+}
