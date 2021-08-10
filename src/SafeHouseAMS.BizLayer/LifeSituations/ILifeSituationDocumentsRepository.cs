@@ -162,7 +162,8 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="lastEdit">дата последнего редактирования</param>
         /// <param name="survivorID">идентификтаор пострадавшего, к которому относится документ</param>
         /// <param name="documentDate">дата документа</param>
-        Task CreateCitizenshipChange(Guid docId, bool isDeleted, DateTime created, DateTime lastEdit,
-            Guid survivorID, DateTime documentDate);
+        /// <param name="recordType">тип записи, которую изменяет документ</param>
+        Task CreateRecordUpdateDocument(Guid docId, bool isDeleted, DateTime created, DateTime lastEdit,
+            Guid survivorID, DateTime documentDate, Type recordType);
     }
 }

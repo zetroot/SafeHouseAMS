@@ -15,37 +15,31 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 {
     public class CreateCitizenshipChangeCommandTests
     {
-        [Fact, UnitTest]
-        public void Ctor_WhenCitizenshipIsNull_Throws() =>
-            Assert.Throws<ArgumentNullException>(() =>
-                new CreateCitizenshipChange(default, default, default, null!));
-
         [Property]
         public void Ctor_Always_SetsProperties()
         {
             Arb.Register<NotNullStringsGenerators>();
 
-            Prop.ForAll<DateTime, string>((docDate, citizenship) =>
+            Prop.ForAll<DateTime>((docDate) =>
             {
                 //arrange
                 var docId = Guid.NewGuid();
                 var survuvorId = Guid.NewGuid();
 
                 //act
-                var cmd = new CreateCitizenshipChange(docId, survuvorId, docDate, citizenship);
+                var cmd = new CreateRecordUpdateDocument<BaseRecord>(docId, survuvorId, docDate);
 
                 //assert
                 cmd.EntityID.Should().Be(docId);
                 cmd.SurvivorID.Should().Be(survuvorId);
                 cmd.DocumentDate.Should().Be(docDate);
-                cmd.Citizenship.Should().Be(citizenship);
             }).QuickCheckThrowOnFailure();
         }
 
         [Fact, UnitTest]
         public Task ApplyOn_WhenRepoIsNull_Throws() =>
             Assert.ThrowsAsync<ArgumentNullException>(() =>
-                new CreateCitizenshipChange(default, default, default, "details")
+                new CreateRecordUpdateDocument<BaseRecord>(default, default, default)
                     .ApplyOn(null!));
 
         [Fact, UnitTest]
@@ -54,86 +48,28 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
             //arrange
             var docId = Guid.NewGuid();
             var surId = Guid.NewGuid();
-            var docDate = DateTime.Now;
-            const string citizenship = "citizenship";
+            var docDate = DateTime.Now - TimeSpan.FromDays(5);
 
             var repoMock = new Mock<ILifeSituationDocumentsRepository>();
             repoMock
-                .Setup(x => x.CreateCitizenshipChange(
+                .Setup(x => x.CreateRecordUpdateDocument(
                 It.IsAny<Guid>(),
                 It.IsAny<bool>(),
                 It.IsAny<DateTime>(),
                 It.IsAny<DateTime>(),
                 It.IsAny<Guid>(),
-            It.IsAny<DateTime>()));
+            It.IsAny<DateTime>(),
+                It.IsAny<Type>()));
 
-            var sut = new CreateCitizenshipChange(docId, surId, docDate, citizenship);
+            var sut = new CreateRecordUpdateDocument<BaseRecord>(docId, surId, docDate);
 
             //act
             await sut.ApplyOn(repoMock.Object);
 
             //assert
             repoMock.Verify(x =>
-                x.CreateCitizenshipChange(docId, false, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
-                surId, docDate), Times.Once());
-        }
-
-        [Fact, UnitTest]
-        public async Task ApplyOn_WhenCalled_InvokesRepoAddRecord()
-        {
-            //arrange
-            var docId = Guid.NewGuid();
-            var surId = Guid.NewGuid();
-            var docDate = DateTime.Now;
-            const string citizenship = "citizenship";
-
-            var repoMock = new Mock<ILifeSituationDocumentsRepository>();
-            repoMock
-                .Setup(x => x.AddRecord(docId, It.IsAny<CitizenshipRecord>()));
-
-            var sut = new CreateCitizenshipChange(docId, surId, docDate, citizenship);
-
-            //act
-            await sut.ApplyOn(repoMock.Object);
-
-            //assert
-            repoMock.Verify(x => x.AddRecord(docId,
-                It.Is<CitizenshipRecord>(r => r.Citizenship == citizenship)), Times.Once());
-        }
-
-        [Fact, UnitTest]
-        public async Task ApplyOn_WhenCreateDocumentFails_DoesNotAddsRecord()
-        {
-            //arrange
-            var docId = Guid.NewGuid();
-            var surId = Guid.NewGuid();
-            var docDate = DateTime.Now;
-            const string citizenship = "citizenship";
-
-            var repoMock = new Mock<ILifeSituationDocumentsRepository>();
-            repoMock
-                .Setup(x => x.CreateCitizenshipChange(
-                It.IsAny<Guid>(),
-                It.IsAny<bool>(),
-                It.IsAny<DateTime>(),
-                It.IsAny<DateTime>(),
-                It.IsAny<Guid>(),
-                It.IsAny<DateTime>())).ThrowsAsync(new Exception());
-            repoMock
-                .Setup(x => x.AddRecord(It.IsAny<Guid>(), It.IsAny<CitizenshipRecord>()));
-
-            var sut = new CreateCitizenshipChange(docId, surId, docDate, citizenship);
-
-            //act
-            try
-            {
-                await sut.ApplyOn(repoMock.Object);
-            }
-            catch (Exception) {}
-
-            //assert
-            repoMock.Verify(x => x.AddRecord(It.IsAny<Guid>(),
-            It.IsAny<BaseRecord>()), Times.Never());
+                x.CreateRecordUpdateDocument(docId, false, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
+                surId, docDate, typeof(BaseRecord)), Times.Once());
         }
     }
 }

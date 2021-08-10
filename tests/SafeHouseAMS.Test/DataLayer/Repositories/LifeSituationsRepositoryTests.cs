@@ -704,7 +704,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             var docdate = DateTime.Now - TimeSpan.FromDays(6);
 
             //act
-            await sut.CreateCitizenshipChange(docId, false, created, lastedit, surId1, docdate);
+            await sut.CreateRecordUpdateDocument(docId, false, created, lastedit, surId1, docdate);
 
             //assert
             var document = await ctx.LifeSituationDocuments

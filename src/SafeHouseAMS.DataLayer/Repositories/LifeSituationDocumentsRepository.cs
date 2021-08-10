@@ -261,7 +261,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
             }
         }
 
-        public async Task CreateCitizenshipChange(Guid docId, bool isDeleted, DateTime created, DateTime lastEdit,
+        public async Task CreateRecordUpdateDocument(Guid docId, bool isDeleted, DateTime created, DateTime lastEdit,
             Guid survivorID, DateTime documentDate)
         {
             var document = new CitizenshipChangeDAL

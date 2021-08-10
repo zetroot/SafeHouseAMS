@@ -9,18 +9,8 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
     /// <summary>
     /// Создать новы документ обращения
     /// </summary>
-    public class CreateInquiry : LifeSituationDocumentCommand
+    public class CreateInquiry : CreateDocument
     {
-        /// <summary>
-        /// пострадавший
-        /// </summary>
-        public Guid SurvivorID { get; }
-
-        /// <summary>
-        /// Дата документа
-        /// </summary>
-        public DateTime DocumentDate { get; }
-
         /// <summary>
         /// несовершеннолетний на момент обращения
         /// </summary>
@@ -52,22 +42,19 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
             bool? isJuvenile,
             IEnumerable<IInquirySource> inquirySources,
             string citizenship) :
-            base(entityID)
+            base(entityID, survivorId, documentDate)
         {
-            SurvivorID = survivorId;
-            DocumentDate = documentDate;
-            
             InquirySources = inquirySources ?? throw new ArgumentNullException(nameof(inquirySources));
             Citizenship = citizenship ?? throw new ArgumentNullException(nameof(citizenship));
             IsJuvenile = isJuvenile ?? false;
         }
-        
-        
+
+
         internal override async Task ApplyOn(ILifeSituationDocumentsRepository repository)
         {
             var now = DateTime.Now;
             await repository.CreateInquiry(EntityID, false, now, now,
-            SurvivorID, DocumentDate, 
+            SurvivorID, DocumentDate,
             IsJuvenile, InquirySources);
 
             await repository.AddRecord(EntityID, new CitizenshipRecord(Guid.NewGuid(), Citizenship));
