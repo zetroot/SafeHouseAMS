@@ -85,7 +85,7 @@ namespace SafeHouseAMS.DataLayer.Configuration
         {
             builder.HasBaseType<LifeSituationDocumentDAL>();
 
-            builder.Ignore(x => x.Citizenship);
+            builder.Ignore(x => x.Record);
         }
     }
 }

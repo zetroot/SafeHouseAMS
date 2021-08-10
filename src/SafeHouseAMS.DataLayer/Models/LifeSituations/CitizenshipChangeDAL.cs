@@ -4,6 +4,6 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
 {
     internal class CitizenshipChangeDAL : LifeSituationDocumentDAL
     {
-        public CitizenshipRecordDAL Citizenship => Records.OfType<CitizenshipRecordDAL>().Single();
+        public CitizenshipRecordDAL Record => Records.OfType<CitizenshipRecordDAL>().Single();
     }
 }

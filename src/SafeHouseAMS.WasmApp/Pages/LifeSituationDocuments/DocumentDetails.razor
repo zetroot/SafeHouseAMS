@@ -1,6 +1,8 @@
 @page "/Document/{DocumentID}"
 @using SafeHouseAMS.BizLayer.LifeSituations
 @using System.Threading
+@using SafeHouseAMS.BizLayer.LifeSituations.Documents
+@using SafeHouseAMS.BizLayer.LifeSituations.Records
 @using SafeHouseAMS.WasmApp.Pages.Survivors
 @inject ILifeSituationDocumentsAggregate _documentsCatalogue;
 @inject NavigationManager _navigationManager;
@@ -29,7 +31,7 @@
             case Inquiry inquiry:
                 <InquiryView Inquiry="@inquiry"/>
                 break;
-            case CitizenshipChange citizenshipChange:
+            case SingleRecordUpdate<CitizenshipRecord> citizenshipChange:
                 <CitizenshipChangeView CitizenshipChange="citizenshipChange"/>
                 break;
             default:

@@ -6,7 +6,7 @@ using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 using SafeHouseAMS.BizLayer.Survivors;
 
-namespace SafeHouseAMS.BizLayer.LifeSituations
+namespace SafeHouseAMS.BizLayer.LifeSituations.Documents
 {
     /// <summary>
     /// Обращение за помощью

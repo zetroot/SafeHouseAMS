@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using SafeHouseAMS.BizLayer.LifeSituations;
+using SafeHouseAMS.BizLayer.LifeSituations.Documents;
+using SafeHouseAMS.BizLayer.LifeSituations.Records;
+
 namespace SafeHouseAMS.Transport.MapperProfiles
 {
     internal class CitizenshipChangeMappingProfile : Profile
@@ -10,8 +12,8 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         }
         private void MapCitizenshipChange()
         {
-            CreateMap<CitizenshipChange, Protos.Models.LifeSituations.CitizenshipChange>();
-            CreateMap<Protos.Models.LifeSituations.CitizenshipChange, CitizenshipChange>();
+            CreateMap<SingleRecordUpdate<CitizenshipRecord>, Protos.Models.LifeSituations.CitizenshipChange>();
+            CreateMap<Protos.Models.LifeSituations.CitizenshipChange, SingleRecordUpdate<CitizenshipRecord>>();
         }
     }
 }

@@ -1,18 +1,20 @@
 using System;
-using SafeHouseAMS.BizLayer.LifeSituations.Records;
+using System.Collections.Generic;
+using System.Linq;
 using SafeHouseAMS.BizLayer.Survivors;
 
-namespace SafeHouseAMS.BizLayer.LifeSituations
+namespace SafeHouseAMS.BizLayer.LifeSituations.Documents
 {
     /// <summary>
-    /// документ о изменении ситуации с жильём
+    /// Документ обновляющий сразу коллекцию записей
     /// </summary>
-    public class DomicileChange : LifeSituationDocument
+    /// <typeparam name="T">тип записи</typeparam>
+    public class MultiRecordsUpdate<T> : LifeSituationDocument
     {
         /// <summary>
-        /// Собственно запись о ситуации с жильём
+        /// добавленные записи
         /// </summary>
-        public DomicileRecord DomicileRecord { get; }
+        public IReadOnlyCollection<T> Records { get; }
 
         /// <summary>
         /// ctor
@@ -23,18 +25,18 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="lastEdit">дата последнего изменения записи</param>
         /// <param name="documentDate">дата документа</param>
         /// <param name="survivor">пострадавший, к которому относится этот документ</param>
-        /// <param name="domicileRecord">собственно запись о жилье</param>
+        /// <param name="records">собственно запись обновляемая в документе</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public DomicileChange(Guid id,
+        public MultiRecordsUpdate(Guid id,
             bool isDeleted,
             DateTime created,
             DateTime lastEdit,
             DateTime documentDate,
             Survivor survivor,
-            DomicileRecord domicileRecord) :
+            IEnumerable<T> records) :
             base(id, isDeleted, created, lastEdit, documentDate, survivor)
         {
-            DomicileRecord = domicileRecord ?? throw new ArgumentNullException(nameof(domicileRecord));
+            Records = records?.ToList() ?? throw new ArgumentNullException(nameof(records));
         }
     }
 }

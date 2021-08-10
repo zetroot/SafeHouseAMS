@@ -1,6 +1,8 @@
 ﻿@page "/SurvivorDetails/{SurvivorID}"
 @using System.Threading
 @using SafeHouseAMS.BizLayer.LifeSituations
+@using SafeHouseAMS.BizLayer.LifeSituations.Documents
+@using SafeHouseAMS.BizLayer.LifeSituations.Records
 @using SafeHouseAMS.BizLayer.Survivors
 @using SafeHouseAMS.WasmApp.Pages.LifeSituationDocuments
 @inject ISurvivorCatalogue _survivorCatalogue;
@@ -87,7 +89,7 @@
                                 case Inquiry:
                                     <RadzenLabel Text="Обращение за помощью"/>
                                     break;
-                                case CitizenshipChange:
+                                case SingleRecordUpdate<CitizenshipRecord>:
                                     <RadzenLabel Text="Смена гражданства"/>
                                     break;
                                 default:

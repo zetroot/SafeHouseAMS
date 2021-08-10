@@ -1,6 +1,8 @@
 ﻿using System;
 using AutoMapper;
 using SafeHouseAMS.BizLayer.LifeSituations;
+using SafeHouseAMS.BizLayer.LifeSituations.Documents;
+using SafeHouseAMS.BizLayer.LifeSituations.Records;
 
 namespace SafeHouseAMS.Transport.MapperProfiles
 {
@@ -17,7 +19,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                         case Inquiry inquiry:
                             result.Inquiry = ctx.Mapper.Map<Protos.Models.LifeSituations.Inquiry>(inquiry);
                             break;
-                        case CitizenshipChange citizenshipChange:
+                        case SingleRecordUpdate<CitizenshipRecord> citizenshipChange:
                             result.CitizenshipChange =
                                 ctx.Mapper.Map<Protos.Models.LifeSituations.CitizenshipChange>(citizenshipChange);
                             break;
@@ -31,7 +33,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     Protos.Models.LifeSituations.LifeSituationDocument.DocumentOneofCase.Inquiry =>
                         ctx.Mapper.Map<Inquiry>(src.Inquiry),
                     Protos.Models.LifeSituations.LifeSituationDocument.DocumentOneofCase.CitizenshipChange =>
-                        ctx.Mapper.Map<CitizenshipChange>(src.CitizenshipChange),
+                        ctx.Mapper.Map<SingleRecordUpdate<CitizenshipRecord>>(src.CitizenshipChange),
                     _ => throw new InvalidOperationException()
                 });
         }

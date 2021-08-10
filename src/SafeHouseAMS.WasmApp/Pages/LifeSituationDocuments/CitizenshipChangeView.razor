@@ -1,4 +1,6 @@
 @using SafeHouseAMS.BizLayer.LifeSituations
+@using SafeHouseAMS.BizLayer.LifeSituations.Documents
+@using SafeHouseAMS.BizLayer.LifeSituations.Records
 <h3>Смена гражданства</h3>
 
 <div class="container-fluid">
@@ -23,12 +25,12 @@
         <div class="row">
             <div class="col-md-12">
                 <RadzenLabel Text="Гражданство: "/>
-                <RadzenLabel Text="@CitizenshipChange.Citizenship.Citizenship"/>
+                <RadzenLabel Text="@CitizenshipChange.Record.Citizenship"/>
             </div>
         </div>
     }
 </div>
 
 @code {
-    [Parameter] public CitizenshipChange? CitizenshipChange { get; set; }
+    [Parameter] public SingleRecordUpdate<CitizenshipRecord>? CitizenshipChange { get; set; }
 }

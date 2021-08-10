@@ -1,19 +1,20 @@
 using System;
-using System.Collections.Generic;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.BizLayer.Survivors;
 
-namespace SafeHouseAMS.BizLayer.LifeSituations
+namespace SafeHouseAMS.BizLayer.LifeSituations.Documents
 {
     /// <summary>
-    /// документ об изменении специальностей
+    /// Документ обновления записи о пострадавшем
     /// </summary>
-    public class SpecialitiesChange : LifeSituationDocument
+    /// <typeparam name="T">Тип обновляемой записи</typeparam>
+    public class SingleRecordUpdate<T> : LifeSituationDocument
+        where T : BaseRecord
     {
         /// <summary>
-        /// новые записи о специальностях
+        /// Добавленная запись
         /// </summary>
-        public IReadOnlyCollection<SpecialityRecord> Specialities { get; }
+        public T Record { get; }
 
         /// <summary>
         /// ctor
@@ -24,18 +25,19 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="lastEdit">дата последнего изменения записи</param>
         /// <param name="documentDate">дата документа</param>
         /// <param name="survivor">пострадавший, к которому относится этот документ</param>
-        /// <param name="specialities">собственно новые записи о специальностях</param>
+        /// <param name="record">собственно запись обновляемая в документе</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public SpecialitiesChange(Guid id,
+        public SingleRecordUpdate(Guid id,
             bool isDeleted,
             DateTime created,
             DateTime lastEdit,
             DateTime documentDate,
             Survivor survivor,
-            IReadOnlyCollection<SpecialityRecord> specialities) :
+            T record) :
             base(id, isDeleted, created, lastEdit, documentDate, survivor)
         {
-            Specialities = specialities ?? throw new ArgumentNullException(nameof(specialities));
+            Record = record ?? throw new ArgumentNullException(nameof(record));
         }
     }
+
 }

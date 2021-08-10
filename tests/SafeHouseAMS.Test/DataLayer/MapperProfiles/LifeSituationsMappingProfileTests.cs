@@ -6,6 +6,7 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using SafeHouseAMS.BizLayer.LifeSituations;
+using SafeHouseAMS.BizLayer.LifeSituations.Documents;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
@@ -174,8 +175,8 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
             var result = sut.Map<LifeSituationDocument>(src);
 
             //assert
-            result.Should().BeOfType<CitizenshipChange>();
-            var document = (result as CitizenshipChange)!;
+            result.Should().BeOfType<SingleRecordUpdate<CitizenshipRecord>>();
+            var document = (result as SingleRecordUpdate<CitizenshipRecord>)!;
 
             document.ID.Should().Be(src.ID);
             document.Created.Should().Be(src.Created);
@@ -184,9 +185,9 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
             document.IsDeleted.Should().Be(src.IsDeleted);
             document.Survivor.Should().NotBeNull();
             document.Survivor.ID.Should().Be(survivorDal.ID);
-            document.Citizenship.Should().NotBeNull();
-            document.Citizenship.ID.Should().Be(citizenshipRec.ID);
-            document.Citizenship.Citizenship.Should().Be(citizenship);
+            document.Record.Should().NotBeNull();
+            document.Record.ID.Should().Be(citizenshipRec.ID);
+            document.Record.Citizenship.Should().Be(citizenship);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using SafeHouseAMS.BizLayer.LifeSituations;
+using SafeHouseAMS.BizLayer.LifeSituations.Documents;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
@@ -21,7 +22,7 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
 
         private void MapCitizenshipChange()
         {
-            CreateMap<CitizenshipChangeDAL, CitizenshipChange>()
+            CreateMap<CitizenshipChangeDAL, SingleRecordUpdate<CitizenshipRecord>>()
                 .IncludeBase<LifeSituationDocumentDAL, LifeSituationDocument>();
         }
 
