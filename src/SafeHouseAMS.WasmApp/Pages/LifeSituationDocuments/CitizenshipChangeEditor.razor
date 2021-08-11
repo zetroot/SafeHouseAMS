@@ -3,6 +3,7 @@
 @using SafeHouseAMS.BizLayer.LifeSituations.Commands
 @using SafeHouseAMS.WasmApp.Pages.Survivors
 @using System.Threading
+@using SafeHouseAMS.BizLayer.LifeSituations.Records
 @inject NavigationManager _navigationManager;
 @inject ILifeSituationDocumentsAggregate _documentsAggregate;
 @inject NotificationService _notificationService;
@@ -45,7 +46,8 @@
         public DateTime DocDate { get; set; } = DateTime.Now;
         public Guid SurvivorId { get; set; }
         public string Citizenship { get; set; } = string.Empty;
-        public CreateCitizenshipChange Command => new(DocId, SurvivorId, DocDate, Citizenship);
+        public CreateRecordUpdateDocument<CitizenshipRecord> Command => new(DocId, SurvivorId, DocDate);
+        public SetCitizenship SetCitizenshipCommand => new(DocId, Citizenship);
     }
 
     private record CitizenshipAutoComplete(string Value)
@@ -85,6 +87,7 @@
     private async Task SubmitForm()
     {
         await _documentsAggregate.ApplyCommand(pageModel.Command, CancellationToken.None);
+        await _documentsAggregate.ApplyCommand(pageModel.SetCitizenshipCommand, CancellationToken.None);
         _notificationService.Notify(summary: "Успешно сохранено", severity:NotificationSeverity.Success);
         _navigationManager.NavigateTo($"{nameof(SurvivorDetails)}/{SurvivorID}");
     }
