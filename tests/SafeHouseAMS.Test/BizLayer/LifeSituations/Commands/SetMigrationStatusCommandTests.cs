@@ -7,13 +7,12 @@ using Moq;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
-using SafeHouseAMS.Test.Transport.MapperProfiles;
 using Xunit;
 using Xunit.Categories;
 
-namespace SafeHouseAMS.Test.BizLayer.LifeSituations
+namespace SafeHouseAMS.Test.BizLayer.LifeSituations.Commands
 {
-    public class AddMigrationStatusCommandTests
+    public class SetMigrationStatusCommandTests
     {
         [Property, UnitTest]
         public void Ctor_Always_SetsProperties()
@@ -30,14 +29,14 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
         [Fact, UnitTest]
         public Task ApplyOn_WhenRepositoryIsNull_Throws() =>
             Assert.ThrowsAsync<ArgumentNullException>(() =>
-                new AddMigrationStatus(Guid.NewGuid(), "details").ApplyOn(null!));
+                new SetMigrationStatus(Guid.NewGuid(), "details").ApplyOn(null!));
 
         [Fact, UnitTest]
         public async Task ApplyOn_WhenCalled_InvokesRepoAddRecord()
         {
             //arrange
             var docId = Guid.NewGuid();
-            var sut = new AddMigrationStatus(docId, "details");
+            var sut = new SetMigrationStatus(docId, "details");
             var repoMock = new Mock<ILifeSituationDocumentsRepository>();
             repoMock.Setup(x => x.AddRecord(It.IsAny<Guid>(), It.IsAny<BaseRecord>()));
 

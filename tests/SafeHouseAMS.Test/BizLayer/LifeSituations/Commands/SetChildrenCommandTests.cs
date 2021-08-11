@@ -8,7 +8,7 @@ using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using Xunit;
 using Xunit.Categories;
 
-namespace SafeHouseAMS.Test.BizLayer.LifeSituations
+namespace SafeHouseAMS.Test.BizLayer.LifeSituations.Commands
 {
     public class SetChildrenCommandTests
     {
@@ -23,10 +23,10 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
         {
             //arrange
             var docId = Guid.NewGuid();
-            
+
             //act
             var result = new SetChildren(docId, hasChildren, childrenDetails);
-            
+
             //assert
             result.EntityID.Should().Be(docId);
             result.HasChildren.Should().Be(hasChildren);
@@ -35,7 +35,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
         [Fact, UnitTest]
         public Task ApplyOn_WhenRepositoryIsNull_Throws() =>
-            Assert.ThrowsAsync<ArgumentNullException>(() => 
+            Assert.ThrowsAsync<ArgumentNullException>(() =>
                 new SetChildren(Guid.NewGuid(), true, "").ApplyOn(null!));
 
         [Theory, UnitTest]
@@ -52,12 +52,12 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
             var sut = new SetChildren(docId, hasChildren, details);
             var repoMock = new Mock<ILifeSituationDocumentsRepository>();
             repoMock.Setup(x => x.AddRecord(It.IsAny<Guid>(), It.IsAny<BaseRecord>()));
-            
+
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
-            repoMock.Verify(x => 
+            repoMock.Verify(x =>
                 x.AddRecord(docId, It.Is<ChildrenRecord>(r => r.HasChildren == hasChildren && r.Details == details)));
         }
     }

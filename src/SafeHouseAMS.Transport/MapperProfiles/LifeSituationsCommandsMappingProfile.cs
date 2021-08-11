@@ -28,13 +28,13 @@ namespace SafeHouseAMS.Transport.MapperProfiles
 
         private void MapAddRegistrationStatus()
         {
-            CreateMap<AddRegistrationStatus, Protos.Models.LifeSituations.Commands.AddRegistrationStatus>();
-            CreateMap<Protos.Models.LifeSituations.Commands.AddRegistrationStatus, AddRegistrationStatus>();
+            CreateMap<SetRegistrationStatus, Protos.Models.LifeSituations.Commands.AddRegistrationStatus>();
+            CreateMap<Protos.Models.LifeSituations.Commands.AddRegistrationStatus, SetRegistrationStatus>();
         }
         private void MapAddMigrationStatus()
         {
-            CreateMap<AddMigrationStatus, Protos.Models.LifeSituations.Commands.AddMigrationStatus>();
-            CreateMap<Protos.Models.LifeSituations.Commands.AddMigrationStatus, AddMigrationStatus>();
+            CreateMap<SetMigrationStatus, Protos.Models.LifeSituations.Commands.AddMigrationStatus>();
+            CreateMap<Protos.Models.LifeSituations.Commands.AddMigrationStatus, SetMigrationStatus>();
         }
 
         private void MapCommandsWrapper()
@@ -66,11 +66,11 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                         case SetWorkingExperience setWorkingExperience:
                             result.SetWorkingExperience = ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.SetWorkingExperience>(setWorkingExperience);
                             break;
-                        case AddMigrationStatus addMigrationStatus:
+                        case SetMigrationStatus addMigrationStatus:
                             result.AddMigrationStatus =
                                 ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.AddMigrationStatus>(addMigrationStatus);
                             break;
-                        case AddRegistrationStatus addRegistrationStatus:
+                        case SetRegistrationStatus addRegistrationStatus:
                             result.AddRegistrationStatus =
                                 ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.AddRegistrationStatus>(addRegistrationStatus);
                             break;
@@ -92,8 +92,8 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetDomicile => ctx.Mapper.Map<SetDomicile>(src.SetDomicile),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetVulnerabilities => ctx.Mapper.Map<SetVulnerabilities>(src.SetVulnerabilities),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetWorkingExperience => ctx.Mapper.Map<SetWorkingExperience>(src.SetWorkingExperience),
-                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddMigrationStatus => ctx.Mapper.Map<AddMigrationStatus>(src.AddMigrationStatus),
-                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddRegistrationStatus => ctx.Mapper.Map<AddRegistrationStatus>(src.AddRegistrationStatus),
+                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddMigrationStatus => ctx.Mapper.Map<SetMigrationStatus>(src.AddMigrationStatus),
+                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddRegistrationStatus => ctx.Mapper.Map<SetRegistrationStatus>(src.AddRegistrationStatus),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.CreateCitizenshipChange => ctx.Mapper.Map<CreateCitizenshipChange>(src.CreateCitizenshipChange),
                     _ => throw new InvalidOperationException()
                 });

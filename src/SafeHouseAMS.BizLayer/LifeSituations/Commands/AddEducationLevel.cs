@@ -30,7 +30,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
             Level = level;
             Details = details;
         }
-        
+
         internal override Task ApplyOn(ILifeSituationDocumentsRepository repository)
         {
             if (repository is null) throw new ArgumentNullException(nameof(repository));

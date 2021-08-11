@@ -12,6 +12,6 @@
 @code {
     private string? _details;
 
-    public AddRegistrationStatus? BuildCommand(Guid docId) =>
+    public SetRegistrationStatus? BuildCommand(Guid docId) =>
         string.IsNullOrWhiteSpace(_details) ? null : new(docId, _details);
 }

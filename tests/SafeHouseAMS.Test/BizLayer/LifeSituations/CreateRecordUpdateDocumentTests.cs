@@ -13,7 +13,7 @@ using Xunit.Categories;
 
 namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 {
-    public class CreateCitizenshipChangeCommandTests
+    public class CreateRecordUpdateDocumentTests
     {
         [Property]
         public void Ctor_Always_SetsProperties()

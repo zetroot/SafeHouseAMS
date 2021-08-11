@@ -5,9 +5,9 @@ using SafeHouseAMS.BizLayer.LifeSituations.Records;
 namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
 {
     /// <summary>
-    /// Команда создания документа обновления статуса
+    /// Команда создания документа обновления статуса по определенному типу записи
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">тип записи, который обновляется</typeparam>
     public class CreateRecordUpdateDocument<T> : CreateDocument where T : BaseRecord
     {
         /// <summary>

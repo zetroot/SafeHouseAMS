@@ -9,7 +9,7 @@ using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 using Xunit;
 using Xunit.Categories;
 
-namespace SafeHouseAMS.Test.BizLayer.LifeSituations
+namespace SafeHouseAMS.Test.BizLayer.LifeSituations.Commands
 {
     public class SetVulnerabilitiesCommandTests
     {
@@ -30,21 +30,21 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
                 new ChildhoodViolence(),
                 new OrphanageExperience(),
                 new Other("other"),
-                new HealthStatus(HealthStatus.HealthStatusVulnerabilityType.Other | 
-                                 HealthStatus.HealthStatusVulnerabilityType.HepatitisB, 
+                new HealthStatus(HealthStatus.HealthStatusVulnerabilityType.Other |
+                                 HealthStatus.HealthStatusVulnerabilityType.HepatitisB,
                 "other")
             };
-            
+
             //act
             var sut = new SetVulnerabilities(default, collection);
-            
+
             //assert
             sut.Vulnerabilities.Should().Contain(collection);
         }
 
         [Fact, UnitTest]
         public Task ApplyOn_WhenRepoIsNUll_Throws() =>
-            Assert.ThrowsAsync<ArgumentNullException>(() => 
+            Assert.ThrowsAsync<ArgumentNullException>(() =>
                 new SetVulnerabilities(default, new Vulnerability[0]).ApplyOn(null!));
 
         [Fact, UnitTest]
@@ -59,11 +59,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.SetAddiction(id, addictionKind), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenHasNoAddiction_InvokesClearAddictionRepoMethod()
         {
@@ -75,11 +75,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.ClearAddiction(id), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenHomeless_InvokesSetHomelessRepoMethod()
         {
@@ -91,11 +91,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.SetHomeless(id), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenNotHomeless_InvokesClearHomelessRepoMethod()
         {
@@ -107,11 +107,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.ClearHomeless(id), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenMigration_InvokesSetMigrationRepoMethod()
         {
@@ -123,11 +123,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.SetMigration(id), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenNotMigration_InvokesClearMigrationRepoMethod()
         {
@@ -139,7 +139,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.ClearMigration(id), Times.Once());
         }
@@ -155,11 +155,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.SetChildhoodViolence(id), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenNotChildhoodViolence_InvokesClearChildhoodViolenceRepoMethod()
         {
@@ -171,11 +171,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.ClearChildhoodViolence(id), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenOrphanageExperience_InvokesSetOrphanageExperienceRepoMethod()
         {
@@ -187,11 +187,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.SetOrphanageExperience(id), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenNotOrphanageExperience_InvokesClearOrphanageExperienceRepoMethod()
         {
@@ -203,11 +203,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.ClearOrphanageExperience(id), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenOther_InvokesSetOtherRepoMethod()
         {
@@ -220,11 +220,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.SetOther(id, details), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenNotOther_InvokesClearOtherRepoMethod()
         {
@@ -236,11 +236,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.ClearOther(id), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenHealthStatusVulnerability_InvokesSetHealthStatusVulnerabilityRepoMethod()
         {
@@ -253,11 +253,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.SetHealthStatusVulnerability(id, HealthStatus.HealthStatusVulnerabilityType.Other, details), Times.Once());
         }
-        
+
         [Fact, UnitTest]
         public async Task ApplyOn_WhenNotHealthStatusVulnerability_InvokesClearHealthStatusVulnerabilityRepoMethod()
         {
@@ -269,7 +269,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
             repoMock.Verify(x => x.ClearHealthStatusVulnerability(id), Times.Once());
         }

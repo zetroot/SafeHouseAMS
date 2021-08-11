@@ -12,6 +12,6 @@
 @code {
     private string? _details;
 
-    public AddMigrationStatus? BuildCommand(Guid docId) =>
+    public SetMigrationStatus? BuildCommand(Guid docId) =>
         string.IsNullOrWhiteSpace(_details) ? null : new(docId, _details);
 }
