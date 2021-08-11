@@ -4,7 +4,7 @@ option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.C
 
 import "Models/Common/UUID.proto";
 
-message AddRegistrationStatus{
+message SetCitizenship{
   UUID EntityID = 1;
-  string Details = 2;
+  string Citizenship = 2;
 }
