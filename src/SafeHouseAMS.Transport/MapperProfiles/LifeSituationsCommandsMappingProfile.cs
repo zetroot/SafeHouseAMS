@@ -148,7 +148,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddSpeciality => ctx.Mapper.Map<AddSpeciality>(src.AddSpeciality),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.CreateInquiry => ctx.Mapper.Map<CreateInquiry>(src.CreateInquiry),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetChildren => ctx.Mapper.Map<SetChildren>(src.SetChildren),
-                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetCitizenship => ctx.Mapper.Map<SetChildren>(src.SetCitizenship),
+                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetCitizenship => ctx.Mapper.Map<SetCitizenship>(src.SetCitizenship),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetDomicile => ctx.Mapper.Map<SetDomicile>(src.SetDomicile),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetVulnerabilities => ctx.Mapper.Map<SetVulnerabilities>(src.SetVulnerabilities),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetWorkingExperience => ctx.Mapper.Map<SetWorkingExperience>(src.SetWorkingExperience),
