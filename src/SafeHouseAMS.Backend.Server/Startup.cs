@@ -12,6 +12,10 @@ using SafeHouseAMS.Backend.Server.Services;
 using SafeHouseAMS.BizLayer;
 using SafeHouseAMS.DataLayer;
 using SafeHouseAMS.Transport;
+#if !DEBUG
+using LettuceEncrypt;
+using System.IO;
+#endif
 
 namespace SafeHouseAMS.Backend.Server
 {
