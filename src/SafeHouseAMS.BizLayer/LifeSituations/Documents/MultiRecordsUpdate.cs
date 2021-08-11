@@ -36,7 +36,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Documents
             IEnumerable<T> records) :
             base(id, isDeleted, created, lastEdit, documentDate, survivor)
         {
-            Records = records?.ToList() ?? throw new ArgumentNullException(nameof(records));
+            Records = records.ToList() ?? throw new ArgumentNullException(nameof(records));
         }
     }
 }

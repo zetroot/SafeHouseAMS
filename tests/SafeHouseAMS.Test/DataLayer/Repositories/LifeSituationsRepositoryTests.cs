@@ -647,17 +647,17 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             await ctx.SaveChangesAsync();
 
             var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
-            const string HealthStatusDetails = "HealthStatus details";
+            const string healthStatusDetails = "HealthStatus details";
 
             //act
-            await sut.SetHealthStatusVulnerability(docId, HealthStatus.HealthStatusVulnerabilityType.Other, HealthStatusDetails);
+            await sut.SetHealthStatusVulnerability(docId, HealthStatus.HealthStatusVulnerabilityType.Other, healthStatusDetails);
 
             //assert
             var document = await ctx.LifeSituationDocuments
                 .OfType<InquiryDAL>()
                 .SingleAsync(x => x.ID == docId);
             document.HealthStatusVulnerabilityMask.Should().Be(128);
-            document.OtherHealthStatusVulnerabilityDetail.Should().Be(HealthStatusDetails);
+            document.OtherHealthStatusVulnerabilityDetail.Should().Be(healthStatusDetails);
         }
 
         [Fact,IntegrationTest]

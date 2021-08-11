@@ -7,7 +7,6 @@ using Moq;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
-using SafeHouseAMS.Test.Transport.MapperProfiles;
 using Xunit;
 using Xunit.Categories;
 

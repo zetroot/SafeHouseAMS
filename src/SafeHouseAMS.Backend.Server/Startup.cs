@@ -1,7 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using LettuceEncrypt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -43,7 +41,7 @@ namespace SafeHouseAMS.Backend.Server
         /// <param name="services">коллекция служб DI</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            
+
 #if !DEBUG
             var certPath = Configuration.GetValue<string>("CertPersist:Path");
             var certPass = Configuration.GetValue<string>("CertPersist:Password");
@@ -86,13 +84,12 @@ namespace SafeHouseAMS.Backend.Server
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
-                    ;
                 });
             });
         }
 
         /// <summary>
-        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline. 
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         /// </summary>
         /// <param name="app"></param>
         /// <param name="env"></param>
@@ -109,7 +106,7 @@ namespace SafeHouseAMS.Backend.Server
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            // must be added after UseRouting and before UseEndpoints 
+            // must be added after UseRouting and before UseEndpoints
             app.UseGrpcWeb();
             app.UseEndpoints(endpoints =>
             {

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text.Json;
 using AutoMapper;
 using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.Documents;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
@@ -13,7 +11,6 @@ using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 using SafeHouseAMS.DataLayer.MapperProfiles;
 using SafeHouseAMS.DataLayer.Models.LifeSituations;
 using SafeHouseAMS.DataLayer.Models.Survivors;
-using SafeHouseAMS.Test.Transport.MapperProfiles;
 using Xunit;
 using Xunit.Categories;
 

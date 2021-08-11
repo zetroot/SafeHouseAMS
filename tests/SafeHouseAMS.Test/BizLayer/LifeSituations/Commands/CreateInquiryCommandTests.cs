@@ -21,8 +21,8 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations.Commands
             var docId = Guid.NewGuid();
             var docDate = new DateTime(1999, 01, 30);
             var survivorID = Guid.NewGuid();
-            var inquirySources = new List<IInquirySource>();
             const string citizenship = "citizenship";
+            var inquirySources = new List<IInquirySource>{new ForwardedByOrganization("org")};
 
             //act
             var cmd = new CreateInquiry(docId, docDate, survivorID, true, inquirySources, citizenship);

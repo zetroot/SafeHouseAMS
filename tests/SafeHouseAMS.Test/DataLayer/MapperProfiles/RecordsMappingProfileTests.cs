@@ -7,7 +7,6 @@ using FsCheck.Xunit;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.DataLayer.MapperProfiles;
 using SafeHouseAMS.DataLayer.Models.LifeSituations;
-using SafeHouseAMS.Test.Transport.MapperProfiles;
 using Xunit;
 using Xunit.Categories;
 

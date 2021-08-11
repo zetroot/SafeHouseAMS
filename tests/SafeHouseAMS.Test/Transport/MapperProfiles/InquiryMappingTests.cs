@@ -2,7 +2,6 @@
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.Documents;
 using SafeHouseAMS.Transport.MapperProfiles;
 

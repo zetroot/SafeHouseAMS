@@ -104,7 +104,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Documents
             base(id, isDeleted, created, lastEdit, documentDate, survivor)
         {
             IsJuvenile = isJuvenile;
-            InquirySources = inquirySources?.ToList() ?? throw new ArgumentNullException(nameof(inquirySources));
+            InquirySources = inquirySources.ToList() ?? throw new ArgumentNullException(nameof(inquirySources));
             Citizenship = citizenship ?? throw new ArgumentNullException(nameof(citizenship));
             Domicile = domicile;
             HasChildren = hasChildren;

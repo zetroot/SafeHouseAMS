@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,8 +20,7 @@ namespace SafeHouseAMS.DataLayer
         /// <param name="services">Коллекция сервисов, в которую внедряются службы слоя доступа к данным</param>
         /// <param name="configuration">Конфигурация</param>
         /// <returns>Та же коллекция, для чейнинга</returns>
-        [return:NotNull]
-        public static IServiceCollection ConnectToDatabase([NotNull] this IServiceCollection services, [NotNull] IConfiguration configuration)
+        public static IServiceCollection ConnectToDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             if (services is null) throw new ArgumentNullException(nameof(services));
             if (configuration is null) throw new ArgumentNullException(nameof(configuration));
@@ -31,14 +29,14 @@ namespace SafeHouseAMS.DataLayer
 
             if (!string.IsNullOrWhiteSpace(inmemoryConncetionString))
             {
-                services.AddDbContext<DataContext>(opt => 
+                services.AddDbContext<DataContext>(opt =>
                     opt
                         .UseLazyLoadingProxies()
                         .EnableSensitiveDataLogging()
                         .UseInMemoryDatabase(inmemoryConncetionString),
                 ServiceLifetime.Singleton,
                 ServiceLifetime.Singleton);
-                
+
                 services.AddScoped<IDatabaseMigrator, DataContext>(_ =>
                 {
                     var optionsBuilder = new DbContextOptionsBuilder();
@@ -46,7 +44,7 @@ namespace SafeHouseAMS.DataLayer
                     return new DataContext(optionsBuilder.Options);
                 });
             }
-            
+
             var postgresConnectionString = configuration.GetConnectionString("postgres");
             if (!string.IsNullOrWhiteSpace(postgresConnectionString))
             {
@@ -58,9 +56,9 @@ namespace SafeHouseAMS.DataLayer
                     return new DataContext(optionsBuilder.Options);
                 });
             }
-            
+
             services.AddAutoMapper(typeof(DataLayerInjector).Assembly);
-            
+
             services.TryAddScoped<ISurvivorRepository, SurvivorsRepository>();
             services.TryAddScoped<ILifeSituationDocumentsRepository, LifeSituationDocumentsRepository>();
             return services;

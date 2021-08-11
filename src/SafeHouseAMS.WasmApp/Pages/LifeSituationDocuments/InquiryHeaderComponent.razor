@@ -28,55 +28,55 @@
                         <div class="col-10-md">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <RadzenCheckBox TValue="bool" @bind-Value="@Vk"/>
+                                    <RadzenCheckBox TValue="bool" @bind-Value="@_vk"/>
                                     Вконтакте
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <RadzenCheckBox TValue="bool" @bind-Value="@Facebook"/>
+                                    <RadzenCheckBox TValue="bool" @bind-Value="@_facebook"/>
                                     Facebook
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <RadzenCheckBox TValue="bool" @bind-Value="@Instagram"/>
+                                    <RadzenCheckBox TValue="bool" @bind-Value="@_instagram"/>
                                     Instagramm
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <RadzenCheckBox TValue="bool" @bind-Value="@Email"/>
+                                    <RadzenCheckBox TValue="bool" @bind-Value="@_email"/>
                                     Почта
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <RadzenCheckBox TValue="bool" @bind-Value="@Phone"/>
+                                    <RadzenCheckBox TValue="bool" @bind-Value="@_phone"/>
                                     Телефон
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <RadzenCheckBox TValue="bool" @bind-Value="@Whatsapp"/>
+                                    <RadzenCheckBox TValue="bool" @bind-Value="@_whatsapp"/>
                                     Whatsapp
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <RadzenCheckBox TValue="bool" @bind-Value="@Viber"/>
+                                    <RadzenCheckBox TValue="bool" @bind-Value="@_viber"/>
                                     Viber
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <RadzenCheckBox TValue="bool" @bind-Value="@Telegramm"/>
+                                    <RadzenCheckBox TValue="bool" @bind-Value="@_telegramm"/>
                                     Telegramm
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <RadzenCheckBox TValue="bool" @bind-Value="@Signal"/>
+                                    <RadzenCheckBox TValue="bool" @bind-Value="@_signal"/>
                                     Signal
                                 </div>
                             </div>
@@ -138,21 +138,21 @@
 </div>
 
 @code {
-    
+
     public DateTime DocumentDate { get; private set; } = DateTime.Now;
 
     public bool? IsJuvenile { get; private set; }
 
     private bool selfInquiry;
-    private bool Vk;
-    private bool Facebook;
-    private bool Instagram;
-    private bool Email;
-    private bool Phone;
-    private bool Whatsapp;
-    private bool Viber;
-    private bool Telegramm;
-    private bool Signal;
+    private bool _vk;
+    private bool _facebook;
+    private bool _instagram;
+    private bool _email;
+    private bool _phone;
+    private bool _whatsapp;
+    private bool _viber;
+    private bool _telegramm;
+    private bool _signal;
 
     private bool isForwardedBySurvivor;
     private string forwardedBySurvivor = string.Empty;
@@ -180,15 +180,15 @@
             if (selfInquiry)
             {
                 var channel = SelfInquiry.InquiryChannel.None;
-                if (Vk) channel |= SelfInquiry.InquiryChannel.Vk;
-                if (Facebook) channel |= SelfInquiry.InquiryChannel.Facebook;
-                if (Instagram) channel |= SelfInquiry.InquiryChannel.Instagramm;
-                if (Email) channel |= SelfInquiry.InquiryChannel.Email;
-                if (Phone) channel |= SelfInquiry.InquiryChannel.Phone;
-                if (Whatsapp) channel |= SelfInquiry.InquiryChannel.Whatsapp;
-                if (Viber) channel |= SelfInquiry.InquiryChannel.Viber;
-                if (Telegramm) channel |= SelfInquiry.InquiryChannel.Telegramm;
-                if (Signal) channel |= SelfInquiry.InquiryChannel.Signal;
+                if (_vk) channel |= SelfInquiry.InquiryChannel.Vk;
+                if (_facebook) channel |= SelfInquiry.InquiryChannel.Facebook;
+                if (_instagram) channel |= SelfInquiry.InquiryChannel.Instagramm;
+                if (_email) channel |= SelfInquiry.InquiryChannel.Email;
+                if (_phone) channel |= SelfInquiry.InquiryChannel.Phone;
+                if (_whatsapp) channel |= SelfInquiry.InquiryChannel.Whatsapp;
+                if (_viber) channel |= SelfInquiry.InquiryChannel.Viber;
+                if (_telegramm) channel |= SelfInquiry.InquiryChannel.Telegramm;
+                if (_signal) channel |= SelfInquiry.InquiryChannel.Signal;
                 result.Add(new SelfInquiry(channel));
             }
             if (isForwardedBySurvivor) result.Add(new ForwardedBySurvivor(forwardedBySurvivor));
@@ -204,7 +204,7 @@
         await foreach (var r in _documentsAggregate.GetCitizenshipsCompletions(CancellationToken.None))
             completions.Add(r);
         _citizenshipAutoCompletions = completions;
-        
+
         await base.OnInitializedAsync();
     }
 
