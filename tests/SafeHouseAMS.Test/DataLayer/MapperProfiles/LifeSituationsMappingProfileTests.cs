@@ -189,5 +189,57 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
             document.Record?.ID.Should().Be(citizenshipRec.ID);
             document.Record?.Citizenship.Should().Be(citizenship);
         }
+
+        [Fact, UnitTest]
+        public void Mapper_MapsEducationLevelUpdate_Dal2Bl()
+        {
+            //arrange
+            var survivorDal = new SurvivorDAL{ID = Guid.NewGuid(), IsDeleted = true, Name = "name", Sex = 0};
+            const string details = "details";
+            var eduRec1 = new EducationLevelRecord(Guid.NewGuid(), EducationLevelRecord.EduLevel.Courses, details);
+            var eduRec2 = new EducationLevelRecord(Guid.NewGuid(), EducationLevelRecord.EduLevel.Courses, details);
+            var eduRecDal1 = new EducationLevelRecordDAL()
+            {
+                ID = eduRec1.ID,
+                Content = JsonSerializer.Serialize(eduRec1)
+            };
+            var eduRecDal2 = new EducationLevelRecordDAL()
+            {
+                ID = eduRec2.ID,
+                Content = JsonSerializer.Serialize(eduRec2)
+            };
+
+            var src = new EducationLevelUpdateDAL()
+            {
+                ID = Guid.NewGuid(),
+                Created = DateTime.Now - TimeSpan.FromDays(7),
+                LastEdit = DateTime.Now - TimeSpan.FromDays(3),
+                DocumentDate = DateTime.Now - TimeSpan.FromDays(5),
+                IsDeleted = false,
+                Survivor = survivorDal,
+                SurvivorID = survivorDal.ID,
+                AllRecords = new List<BaseRecordDAL> { eduRecDal1, eduRecDal2 }
+            };
+
+            var sut = BuildMapper();
+
+            //act
+            var result = sut.Map<LifeSituationDocument>(src);
+
+            //assert
+            result.Should().BeOfType<MultiRecordsUpdate<EducationLevelRecord>>();
+            var document = (result as MultiRecordsUpdate<EducationLevelRecord>)!;
+
+            document.ID.Should().Be(src.ID);
+            document.Created.Should().Be(src.Created);
+            document.LastEdit.Should().Be(src.LastEdit);
+            document.DocumentDate.Should().Be(src.DocumentDate);
+            document.IsDeleted.Should().Be(src.IsDeleted);
+            document.Survivor.Should().NotBeNull();
+            document.Survivor.ID.Should().Be(survivorDal.ID);
+            document.Records.Should().NotBeNull()
+                .And.ContainEquivalentOf(eduRec1)
+                .And.ContainEquivalentOf(eduRec2);
+        }
     }
 }
