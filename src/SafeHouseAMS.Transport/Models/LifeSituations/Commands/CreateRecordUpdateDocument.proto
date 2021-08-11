@@ -5,20 +5,19 @@ option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.C
 import "Models/Common/UUID.proto";
 import "google/protobuf/timestamp.proto";
 
+enum RecordType{
+  CHILDREN = 0;
+  CITIZENSHIP = 1;
+  DOMICILE = 2;
+  EDUCATION = 3;
+  MIGRATION = 4;
+  REGISTRATION = 5;
+  SPECIALITY = 6;
+}
 
 message CreateRecordUpdateDocument{
   UUID EntityID = 1;
   google.protobuf.Timestamp DocumentDate = 2;
   UUID SurvivorId = 3;
-
-  enum RecordTypes{
-    CHILDREN = 0;
-    CITIZENSHIP = 1;
-    DOMICILE = 2;
-    EDUCATION = 3;
-    MIGRATION = 4;
-    REGISTRATION = 5;
-    SPECIALITY = 6;
-  }
-  RecordTypes Type = 4;
+  RecordType Type = 4;
 }
