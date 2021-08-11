@@ -90,7 +90,7 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
                 IsForwardedBySurvivor = true, ForwardedBySurvivor = forwardedBySurvivor,
                 IsForwardedByPerson = true, ForwardedByPerson = forwardedByPerson,
                 IsForwardedByOrganization = true, ForwardedByOrgannization = forwardedByOrgannization,
-                Records = new BaseRecordDAL[]{citizenshipRecordDAL, domicileRecordDAL, childrenRecordDAL, eduRec1Dal, eduRec2Dal, specRec1Dal, specRec2Dal },
+                AllRecords = new BaseRecordDAL[]{citizenshipRecordDAL, domicileRecordDAL, childrenRecordDAL, eduRec1Dal, eduRec2Dal, specRec1Dal, specRec2Dal },
                 WorkingExperience = workingExperience,
                 HasAddiction = true, AddictionKind = addictionKind,
                 ChildhoodViolence = true, Homelessness = true, Migration = true, OrphanageExperience = true,
@@ -166,7 +166,7 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
                 IsDeleted = false,
                 Survivor = survivorDal,
                 SurvivorID = survivorDal.ID,
-                Records = new List<BaseRecordDAL> { citizenshipRecDal }
+                AllRecords = new List<BaseRecordDAL> { citizenshipRecDal }
             };
 
             var sut = BuildMapper();
@@ -186,8 +186,8 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
             document.Survivor.Should().NotBeNull();
             document.Survivor.ID.Should().Be(survivorDal.ID);
             document.Record.Should().NotBeNull();
-            document.Record.ID.Should().Be(citizenshipRec.ID);
-            document.Record.Citizenship.Should().Be(citizenship);
+            document.Record?.ID.Should().Be(citizenshipRec.ID);
+            document.Record?.Citizenship.Should().Be(citizenship);
         }
     }
 }

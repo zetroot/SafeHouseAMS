@@ -9,7 +9,7 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
         public DateTime DocumentDate { get; set; }
         public Guid SurvivorID { get; set; }
         public virtual SurvivorDAL? Survivor { get; set; }
-        public virtual ICollection<BaseRecordDAL> Records { get; set; } = new List<BaseRecordDAL>();
+        public virtual ICollection<BaseRecordDAL> AllRecords { get; set; } = new List<BaseRecordDAL>();
     }
 
 }

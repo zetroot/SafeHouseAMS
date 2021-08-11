@@ -33,7 +33,14 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder
                 .HasDiscriminator<string>("DocumentType")
                 .HasValue<InquiryDAL>("Inquiry")
-                .HasValue<CitizenshipChangeDAL>("CitizenshipChange");
+                .HasValue<CitizenshipChangeDAL>("CitizenshipChange")
+                .HasValue<ChildrenUpdateDAL>("ChildrenUpdate")
+                .HasValue<DomicileUpdateDAL>("DomicileUpdate")
+                .HasValue<EducationLevelUpdateDAL>("EducationUpdate")
+                .HasValue<MigrationStatusUpdateDAL>("MigrationStatusUpdate")
+                .HasValue<RegistrationStatusUpdateDAL>("RegistrationStatusUpdate")
+                .HasValue<SpecialitiesUpdateDAL>("SpecialitiesUpdate");
+
         }
     }
 
@@ -86,6 +93,66 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.HasBaseType<LifeSituationDocumentDAL>();
 
             builder.Ignore(x => x.Record);
+        }
+    }
+
+    internal class ChildrenUpdateConfiguration : IEntityTypeConfiguration<ChildrenUpdateDAL>
+    {
+        public void Configure(EntityTypeBuilder<ChildrenUpdateDAL> builder)
+        {
+            builder.HasBaseType<LifeSituationDocumentDAL>();
+
+            builder.Ignore(x => x.Record);
+        }
+    }
+
+    internal class DomicileUpdateConfiguration : IEntityTypeConfiguration<DomicileUpdateDAL>
+    {
+        public void Configure(EntityTypeBuilder<DomicileUpdateDAL> builder)
+        {
+            builder.HasBaseType<LifeSituationDocumentDAL>();
+
+            builder.Ignore(x => x.Record);
+        }
+    }
+
+    internal class EducationLevelUpdateConfiguration : IEntityTypeConfiguration<EducationLevelUpdateDAL>
+    {
+        public void Configure(EntityTypeBuilder<EducationLevelUpdateDAL> builder)
+        {
+            builder.HasBaseType<LifeSituationDocumentDAL>();
+
+            builder.Ignore(x => x.Records);
+        }
+    }
+
+    internal class MigrationStatusUpdateConfiguration : IEntityTypeConfiguration<MigrationStatusUpdateDAL>
+    {
+        public void Configure(EntityTypeBuilder<MigrationStatusUpdateDAL> builder)
+        {
+            builder.HasBaseType<LifeSituationDocumentDAL>();
+
+            builder.Ignore(x => x.Record);
+        }
+    }
+
+    internal class RegistrationStatusUpdateConfiguration : IEntityTypeConfiguration<RegistrationStatusUpdateDAL>
+    {
+        public void Configure(EntityTypeBuilder<RegistrationStatusUpdateDAL> builder)
+        {
+            builder.HasBaseType<LifeSituationDocumentDAL>();
+
+            builder.Ignore(x => x.Record);
+        }
+    }
+
+    internal class SpecialitiesUpdateConfiguration : IEntityTypeConfiguration<SpecialitiesUpdateDAL>
+    {
+        public void Configure(EntityTypeBuilder<SpecialitiesUpdateDAL> builder)
+        {
+            builder.HasBaseType<LifeSituationDocumentDAL>();
+
+            builder.Ignore(x => x.Records);
         }
     }
 }

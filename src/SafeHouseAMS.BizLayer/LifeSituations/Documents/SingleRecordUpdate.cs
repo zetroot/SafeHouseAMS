@@ -14,7 +14,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Documents
         /// <summary>
         /// Добавленная запись
         /// </summary>
-        public T Record { get; }
+        public T? Record { get; }
 
         /// <summary>
         /// ctor
@@ -26,17 +26,16 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Documents
         /// <param name="documentDate">дата документа</param>
         /// <param name="survivor">пострадавший, к которому относится этот документ</param>
         /// <param name="record">собственно запись обновляемая в документе</param>
-        /// <exception cref="ArgumentNullException"></exception>
         public SingleRecordUpdate(Guid id,
             bool isDeleted,
             DateTime created,
             DateTime lastEdit,
             DateTime documentDate,
             Survivor survivor,
-            T record) :
+            T? record) :
             base(id, isDeleted, created, lastEdit, documentDate, survivor)
         {
-            Record = record ?? throw new ArgumentNullException(nameof(record));
+            Record = record;
         }
     }
 
