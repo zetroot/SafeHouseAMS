@@ -13,6 +13,7 @@
             <div class="row" style="margin-top: 5px">
                 <div class="col-md-12">
                     <RadzenTextBox @bind-Value="@item.Speciality" Placeholder="Уточните.."/>
+                    @* ReSharper disable once Asp.Entity *@
                     <button type="button" class="btn btn-outline-primary" @onclick="@(() => _items.Remove(item))">&Cross;</button>
                 </div>
             </div>

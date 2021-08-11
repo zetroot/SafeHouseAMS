@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace SafeHouseAMS.WasmApp.Services
     {
         private readonly LifeSituationDocumentsCatalogue.LifeSituationDocumentsCatalogueClient _client;
         private readonly IMapper _mapper;
+        [SuppressMessage("ReSharper", "NotAccessedField.Local")]
         private readonly ILogger<LifeSituationDocumentsClient> _logger;
 
         public LifeSituationDocumentsClient(IMapper mapper, ILogger<LifeSituationDocumentsClient> logger, GrpcChannel channel)
@@ -26,20 +28,20 @@ namespace SafeHouseAMS.WasmApp.Services
             _mapper = mapper;
             _logger = logger;
         }
-        
+
         public async Task<LifeSituationDocument> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             var uuid = _mapper.Map<UUID>(id);
             var response = await _client.GetSingleAsync(uuid, new CallOptions(cancellationToken: cancellationToken));
             return _mapper.Map<LifeSituationDocument>(response);
         }
-        
+
         public async Task ApplyCommand(LifeSituationDocumentCommand command, CancellationToken cancellationToken)
         {
             var request = _mapper.Map<Transport.Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand>(command);
             await _client.ApplyCommandAsync(request, new CallOptions(cancellationToken: cancellationToken));
         }
-        
+
         public async IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             using var call = _client.GetAllBySurvivor(_mapper.Map<UUID>(survivorId), new CallOptions(cancellationToken: cancellationToken));
@@ -48,7 +50,7 @@ namespace SafeHouseAMS.WasmApp.Services
                 yield return _mapper.Map<LifeSituationDocument>(call.ResponseStream.Current);
             }
         }
-        
+
         public async IAsyncEnumerable<string> GetCitizenshipsCompletions([EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var collection = await _client.GetCitizenshipsCompletionsAsync(new(), new CallOptions(cancellationToken: cancellationToken));

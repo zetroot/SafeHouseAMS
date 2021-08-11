@@ -17,6 +17,7 @@ namespace SafeHouseAMS.Backend.Server.Services
     [ExcludeFromCodeCoverage, Authorize]
     internal class LifeSituationDocumentsCatalogueService : LifeSituationDocumentsCatalogue.LifeSituationDocumentsCatalogueBase
     {
+        [SuppressMessage("ReSharper", "NotAccessedField.Local")]
         private readonly ILogger<LifeSituationDocumentsCatalogueService> _logger;
         private readonly ILifeSituationDocumentsAggregate _catalogue;
         private readonly IMapper _mapper;
@@ -34,14 +35,14 @@ namespace SafeHouseAMS.Backend.Server.Services
             var doc = await _catalogue.GetSingleAsync(id, context.CancellationToken);
             return _mapper.Map<LifeSituationDocument>(doc);
         }
-        
+
         public override async Task<Empty> ApplyCommand(LifeSituationDocumentCommand request, ServerCallContext context)
         {
             var cmd = _mapper.Map<BizLayer.LifeSituations.Commands.LifeSituationDocumentCommand>(request);
             await _catalogue.ApplyCommand(cmd, context.CancellationToken);
             return new();
         }
-        
+
         public override async Task GetAllBySurvivor(UUID request, IServerStreamWriter<LifeSituationDocument> responseStream, ServerCallContext context)
         {
             var id = _mapper.Map<Guid>(request);
@@ -51,7 +52,7 @@ namespace SafeHouseAMS.Backend.Server.Services
                 await responseStream.WriteAsync(docDto);
             }
         }
-        
+
         public override async Task<CitizenshipCompletionCollection> GetCitizenshipsCompletions(Empty request, ServerCallContext context)
         {
             var result = new CitizenshipCompletionCollection();
