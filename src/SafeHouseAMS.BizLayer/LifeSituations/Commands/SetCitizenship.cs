@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using SafeHouseAMS.BizLayer.LifeSituations.Records;
 
 namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
 {
@@ -26,7 +27,8 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
 
         internal override Task ApplyOn(ILifeSituationDocumentsRepository repository)
         {
-            throw new NotImplementedException();
+            if (repository is null) throw new ArgumentNullException(nameof(repository));
+            return repository.AddRecord(EntityID, new CitizenshipRecord(Guid.NewGuid(), Citizenship));
         }
     }
 }
