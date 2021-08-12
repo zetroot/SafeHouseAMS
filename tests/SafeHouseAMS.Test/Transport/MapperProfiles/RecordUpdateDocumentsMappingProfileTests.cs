@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
 using FluentAssertions;
 using FsCheck;
@@ -133,21 +131,6 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
                     result.Should().BeEquivalentTo(src);
                 })
                 .QuickCheckThrowOnFailure();
-        }
-
-        public class RecordListGenerators
-        {
-            public static Arbitrary<IEnumerable<SpecialityRecord>> SpecList =>
-                Arb.From(
-                Arb.From<SpecialityRecord>().Generator
-                    .ListOf().Select(x => x.AsEnumerable())
-                );
-
-            public static Arbitrary<IEnumerable<EducationLevelRecord>> EduList =>
-                Arb.From(
-                Arb.From<EducationLevelRecord>().Generator
-                    .ListOf().Select(x => x.AsEnumerable())
-                );
         }
     }
 }
