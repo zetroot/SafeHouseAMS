@@ -1,8 +1,9 @@
 ﻿@page "/SurvivorDetails/{SurvivorID}"
 @using System.Threading
 @using SafeHouseAMS.BizLayer.LifeSituations
+@using SafeHouseAMS.BizLayer.LifeSituations.Documents
+@using SafeHouseAMS.BizLayer.LifeSituations.Records
 @using SafeHouseAMS.BizLayer.Survivors
-@using SafeHouseAMS.WasmApp.Pages.LifeSituationDocuments
 @inject ISurvivorCatalogue _survivorCatalogue;
 @inject ILifeSituationDocumentsAggregate _documentsAggregate;
 @inject NavigationManager _navigationManager;
@@ -13,7 +14,21 @@
     <div class="row">
         <div class="col-12-md">
             <button type="button" class="btn btn-primary" @onclick="() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue))">В каталог</button>
-            <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"CreateCitizenshipChange/{SurvivorID}"))">Смена гражданства</button>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 5px">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary" @onclick="@(() => _navigationManager.NavigateTo($"CreateCitizenshipChange/{SurvivorID}"))">Смена гражданства</button>
+            <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"DomicileUpdateEditor/{SurvivorID}"))">Обновление информации о проживании</button>
+            <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"MigrationStatusUpdateEditor/{SurvivorID}"))">Изменение миграционного статуса</button>
+            <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"RegistrationStatusUpdateEditor/{SurvivorID}"))">Изменение статуса регистрации</button>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 5px">
+        <div class="col-md-12" st>
+            <button type="button" class="btn btn-primary" @onclick="@(() => _navigationManager.NavigateTo($"ChildrenUpdateEditor/{SurvivorID}"))">Обновление информации о детях</button>
+            <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"EducationUpdateEditor/{SurvivorID}"))">Обновление информации об образовании</button>
+            <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"SpecialitiesUpdateEditor/{SurvivorID}"))">Обновление специальностей</button>
         </div>
     </div>
     @if (_survivor is null)
@@ -87,8 +102,26 @@
                                 case Inquiry:
                                     <RadzenLabel Text="Обращение за помощью"/>
                                     break;
-                                case CitizenshipChange:
+                                case SingleRecordUpdate<CitizenshipRecord>:
                                     <RadzenLabel Text="Смена гражданства"/>
+                                    break;
+                                case SingleRecordUpdate<ChildrenRecord>:
+                                    <RadzenLabel Text="Обновление информации о детях"/>
+                                    break;
+                                case SingleRecordUpdate<DomicileRecord>:
+                                    <RadzenLabel Text="Обновление информации о проживании"/>
+                                    break;
+                                case MultiRecordsUpdate<EducationLevelRecord>:
+                                    <RadzenLabel Text="Обновление образования"/>
+                                    break;
+                                case SingleRecordUpdate<MigrationStatusRecord>:
+                                    <RadzenLabel Text="Изменение миграционного статуса"/>
+                                    break;
+                                case SingleRecordUpdate<RegistrationStatusRecord>:
+                                    <RadzenLabel Text="Изменение статуса регистрации"/>
+                                    break;
+                                case MultiRecordsUpdate<SpecialityRecord>:
+                                    <RadzenLabel Text="Обновление информации о специальностях"/>
                                     break;
                                 default:
                                     <RadzenLabel Text="Иной тип документа"/>

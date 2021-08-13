@@ -6,7 +6,7 @@ using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 using SafeHouseAMS.BizLayer.Survivors;
 
-namespace SafeHouseAMS.BizLayer.LifeSituations
+namespace SafeHouseAMS.BizLayer.LifeSituations.Documents
 {
     /// <summary>
     /// Обращение за помощью
@@ -104,7 +104,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
             base(id, isDeleted, created, lastEdit, documentDate, survivor)
         {
             IsJuvenile = isJuvenile;
-            InquirySources = inquirySources?.ToList() ?? throw new ArgumentNullException(nameof(inquirySources));
+            InquirySources = inquirySources.ToList() ?? throw new ArgumentNullException(nameof(inquirySources));
             Citizenship = citizenship ?? throw new ArgumentNullException(nameof(citizenship));
             Domicile = domicile;
             HasChildren = hasChildren;

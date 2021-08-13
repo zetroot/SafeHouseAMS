@@ -647,17 +647,17 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             await ctx.SaveChangesAsync();
 
             var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
-            const string HealthStatusDetails = "HealthStatus details";
+            const string healthStatusDetails = "HealthStatus details";
 
             //act
-            await sut.SetHealthStatusVulnerability(docId, HealthStatus.HealthStatusVulnerabilityType.Other, HealthStatusDetails);
+            await sut.SetHealthStatusVulnerability(docId, HealthStatus.HealthStatusVulnerabilityType.Other, healthStatusDetails);
 
             //assert
             var document = await ctx.LifeSituationDocuments
                 .OfType<InquiryDAL>()
                 .SingleAsync(x => x.ID == docId);
             document.HealthStatusVulnerabilityMask.Should().Be(128);
-            document.OtherHealthStatusVulnerabilityDetail.Should().Be(HealthStatusDetails);
+            document.OtherHealthStatusVulnerabilityDetail.Should().Be(healthStatusDetails);
         }
 
         [Fact,IntegrationTest]
@@ -686,8 +686,15 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             document.OtherHealthStatusVulnerabilityDetail.Should().BeNull();
         }
 
-        [Fact,IntegrationTest]
-        public async Task CreateCitizenshipChange_WhenCalled_AddsNewDocument()
+        [Theory,IntegrationTest]
+        [InlineData(typeof(CitizenshipRecord), typeof(CitizenshipChangeDAL))]
+        [InlineData(typeof(ChildrenRecord), typeof(ChildrenUpdateDAL))]
+        [InlineData(typeof(DomicileRecord), typeof(DomicileUpdateDAL))]
+        [InlineData(typeof(EducationLevelRecord), typeof(EducationLevelUpdateDAL))]
+        [InlineData(typeof(MigrationStatusRecord), typeof(MigrationStatusUpdateDAL))]
+        [InlineData(typeof(RegistrationStatusRecord), typeof(RegistrationStatusUpdateDAL))]
+        [InlineData(typeof(SpecialityRecord), typeof(SpecialitiesUpdateDAL))]
+        public async Task CreateRecordUpdateDocument_WhenCalled_AddsNewDocument(Type recordType, Type documentType)
         {
             //arrange
             await using var ctx = CreateInMemoryDatabase();
@@ -704,13 +711,12 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             var docdate = DateTime.Now - TimeSpan.FromDays(6);
 
             //act
-            await sut.CreateCitizenshipChange(docId, false, created, lastedit, surId1, docdate);
+            await sut.CreateRecordUpdateDocument(docId, false, created, lastedit, surId1, docdate, recordType);
 
             //assert
-            var document = await ctx.LifeSituationDocuments
-                .OfType<CitizenshipChangeDAL>()
-                .SingleAsync(x => x.ID == docId);
+            var document = await ctx.LifeSituationDocuments.SingleAsync(x => x.ID == docId);
 
+            document.Should().BeOfType(documentType);
             document.ID.Should().Be(docId);
             document.IsDeleted.Should().BeFalse();
             document.Created.Should().Be(created);

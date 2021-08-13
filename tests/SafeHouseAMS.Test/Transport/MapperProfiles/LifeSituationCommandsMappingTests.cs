@@ -4,6 +4,7 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
+using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.Transport.MapperProfiles;
 
 namespace SafeHouseAMS.Test.Transport.MapperProfiles
@@ -126,30 +127,30 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         }
 
         [Property]
-        public void AddMigrationStatus_RoundTrip_DoesNotChanges()
+        public void SetMigrationStatus_RoundTrip_DoesNotChanges()
         {
             Arb.Register<NotNullStringsGenerators>();
 
             var mapper = BuildMapper();
-            Prop.ForAll<AddMigrationStatus>(src =>
+            Prop.ForAll<SetMigrationStatus>(src =>
             {
-                var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands.AddMigrationStatus>(src);
-                var result = mapper.Map<AddMigrationStatus>(dto);
+                var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands.SetMigrationStatus>(src);
+                var result = mapper.Map<SetMigrationStatus>(dto);
 
                 result.Should().BeEquivalentTo(src);
             }).QuickCheckThrowOnFailure();
         }
 
         [Property]
-        public void AddRegistrationStatus_RoundTrip_DoesNotChanges()
+        public void SetRegistrationStatus_RoundTrip_DoesNotChanges()
         {
             Arb.Register<NotNullStringsGenerators>();
 
             var mapper = BuildMapper();
-            Prop.ForAll<AddRegistrationStatus>(src =>
+            Prop.ForAll<SetRegistrationStatus>(src =>
             {
-                var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands.AddRegistrationStatus>(src);
-                var result = mapper.Map<AddRegistrationStatus>(dto);
+                var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands.SetRegistrationStatus>(src);
+                var result = mapper.Map<SetRegistrationStatus>(dto);
 
                 result.Should().BeEquivalentTo(src);
             }).QuickCheckThrowOnFailure();
@@ -164,15 +165,23 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             var genList = new List<Gen<LifeSituationDocumentCommand>>
             {
                 Arb.From<AddEducationLevel>().Generator.Select(x => x as LifeSituationDocumentCommand),
-                Arb.From<AddMigrationStatus>().Generator.Select(x => x as LifeSituationDocumentCommand),
-                Arb.From<AddRegistrationStatus>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<SetMigrationStatus>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<SetRegistrationStatus>().Generator.Select(x => x as LifeSituationDocumentCommand),
                 Arb.From<AddSpeciality>().Generator.Select(x => x as LifeSituationDocumentCommand),
                 Arb.From<CreateInquiry>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<SetCitizenship>().Generator.Select(x => x as LifeSituationDocumentCommand),
                 Arb.From<SetChildren>().Generator.Select(x => x as LifeSituationDocumentCommand),
                 Arb.From<SetDomicile>().Generator.Select(x => x as LifeSituationDocumentCommand),
                 Arb.From<SetVulnerabilities>().Generator.Select(x => x as LifeSituationDocumentCommand),
                 Arb.From<SetWorkingExperience>().Generator.Select(x => x as LifeSituationDocumentCommand),
-                Arb.From<CreateCitizenshipChange>().Generator.Select(x => x as LifeSituationDocumentCommand)
+
+                Arb.From<CreateRecordUpdateDocument<ChildrenRecord>>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<CreateRecordUpdateDocument<CitizenshipRecord>>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<CreateRecordUpdateDocument<DomicileRecord>>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<CreateRecordUpdateDocument<EducationLevelRecord>>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<CreateRecordUpdateDocument<MigrationStatusRecord>>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<CreateRecordUpdateDocument<RegistrationStatusRecord>>().Generator.Select(x => x as LifeSituationDocumentCommand),
+                Arb.From<CreateRecordUpdateDocument<SpecialityRecord>>().Generator.Select(x => x as LifeSituationDocumentCommand),
             };
 
 

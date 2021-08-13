@@ -24,7 +24,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         /// <exception cref="ArgumentNullException">если вместо коллекции был null</exception>
         public SetVulnerabilities(Guid entityID, IEnumerable<Vulnerability> vulnerabilities) : base(entityID)
         {
-            Vulnerabilities = vulnerabilities?.ToList() ?? throw new ArgumentNullException(nameof(vulnerabilities));
+            Vulnerabilities = vulnerabilities.ToList() ?? throw new ArgumentNullException(nameof(vulnerabilities));
         }
 
         internal override async Task ApplyOn(ILifeSituationDocumentsRepository repository)
@@ -35,28 +35,28 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
                 await repository.SetHomeless(EntityID);
             else
                 await repository.ClearHomeless(EntityID);
-            
+
             if (Vulnerabilities.Any(x => x is Migration))
                 await repository.SetMigration(EntityID);
             else
                 await repository.ClearMigration(EntityID);
-            
+
             if (Vulnerabilities.Any(x => x is ChildhoodViolence))
                 await repository.SetChildhoodViolence(EntityID);
             else
                 await repository.ClearChildhoodViolence(EntityID);
-            
+
             if (Vulnerabilities.Any(x => x is OrphanageExperience))
                 await repository.SetOrphanageExperience(EntityID);
             else
                 await repository.ClearOrphanageExperience(EntityID);
-            
+
 
             if (Vulnerabilities.FirstOrDefault(x => x is Addiction) is Addiction addiction)
                 await repository.SetAddiction(EntityID, addiction.AddictionKind);
             else
                 await repository.ClearAddiction(EntityID);
-            
+
             if (Vulnerabilities.FirstOrDefault(x => x is Other) is Other other)
                 await repository.SetOther(EntityID, other.Details);
             else

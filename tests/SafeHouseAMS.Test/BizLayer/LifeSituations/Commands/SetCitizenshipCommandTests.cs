@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FsCheck;
@@ -7,37 +7,42 @@ using Moq;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
-using SafeHouseAMS.Test.Transport.MapperProfiles;
 using Xunit;
 using Xunit.Categories;
 
-namespace SafeHouseAMS.Test.BizLayer.LifeSituations
+namespace SafeHouseAMS.Test.BizLayer.LifeSituations.Commands
 {
-    public class AddRegistrationStatusCommandTests
+    public class SetCitizenshipCommandTests
     {
-        [Property, UnitTest]
+        [Property, Category("Property")]
         public void Ctor_Always_SetsProperties()
         {
             Arb.Register<NotNullStringsGenerators>();
-            Prop.ForAll<Guid, string>((docId, details) =>
+            Prop.ForAll<Guid, string>((id,citizenship) =>
             {
-                var sut = new RegistrationStatusRecord(docId, details);
-                sut.ID.Should().Be(docId);
-                sut.Details.Should().Be(details);
+                var cmd = new SetCitizenship(id, citizenship);
+
+                cmd.EntityID.Should().Be(id);
+                cmd.Citizenship.Should().Be(citizenship);
             }).QuickCheckThrowOnFailure();
         }
 
         [Fact, UnitTest]
         public Task ApplyOn_WhenRepositoryIsNull_Throws() =>
             Assert.ThrowsAsync<ArgumentNullException>(() =>
-                new AddRegistrationStatus(Guid.NewGuid(), "details").ApplyOn(null!));
+                new SetCitizenship(Guid.NewGuid(), "some").ApplyOn(null!));
+
+        [Fact, UnitTest]
+        public void Ctor_WhenCitizenshipIsNull_Throws() =>
+            Assert.Throws<ArgumentNullException>(() =>
+                new SetCitizenship(Guid.NewGuid(), null!));
 
         [Fact, UnitTest]
         public async Task ApplyOn_WhenCalled_InvokesRepoAddRecord()
         {
             //arrange
             var docId = Guid.NewGuid();
-            var sut = new AddRegistrationStatus(docId, "details");
+            var sut = new SetCitizenship(docId, "details");
             var repoMock = new Mock<ILifeSituationDocumentsRepository>();
             repoMock.Setup(x => x.AddRecord(It.IsAny<Guid>(), It.IsAny<BaseRecord>()));
 
@@ -46,7 +51,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //assert
             repoMock.Verify(x =>
-                x.AddRecord(docId, It.Is<RegistrationStatusRecord>(r => r.Details == "details")));
+                x.AddRecord(docId, It.IsAny<CitizenshipRecord>()), Times.Once());
         }
     }
 }

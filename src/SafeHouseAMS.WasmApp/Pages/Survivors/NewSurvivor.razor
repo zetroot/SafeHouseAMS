@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <RadzenDropDown @bind-Value="@_survivor.Sex" Data="_sexes" Style="width: 100%"
-                                                    TextProperty="@nameof(SexEnumVM.description)" ValueProperty="@nameof(SexEnumVM.sexValue)"/>
+                                                    TextProperty="@nameof(SexEnumVM.Description)" ValueProperty="@nameof(SexEnumVM.SexValue)"/>
                                 </div>
                                 @if (_survivor.Sex == SexEnum.Other)
                                 {
@@ -120,7 +120,7 @@
 
 @code {
     private bool _dobIsAccurate = true;
-    private record SexEnumVM(SexEnum sexValue, string description);
+    private record SexEnumVM(SexEnum SexValue, string Description);
 
     private readonly SexEnumVM[] _sexes = {
         new(SexEnum.Female, "женский"), new(SexEnum.Male, "мужской"),

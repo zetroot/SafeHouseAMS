@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -58,25 +57,25 @@ namespace SafeHouseAMS.DataLayer.Models.LifeSituations
         public string? WorkingExperience { get; set; }
 
         public CitizenshipRecordDAL Citizenship =>
-            Records.OfType<CitizenshipRecordDAL>().Single();
+            AllRecords.OfType<CitizenshipRecordDAL>().Single();
 
         public DomicileRecordDAL? Domicile =>
-            Records.OfType<DomicileRecordDAL>().SingleOrDefault();
+            AllRecords.OfType<DomicileRecordDAL>().SingleOrDefault();
 
         public ChildrenRecordDAL? HasChildren =>
-            Records.OfType<ChildrenRecordDAL>().SingleOrDefault();
+            AllRecords.OfType<ChildrenRecordDAL>().SingleOrDefault();
 
         public IReadOnlyCollection<EducationLevelRecordDAL> EducationLevel =>
-            Records.OfType<EducationLevelRecordDAL>().ToList();
+            AllRecords.OfType<EducationLevelRecordDAL>().ToList();
 
         public IReadOnlyCollection<SpecialityRecordDAL> Specialities =>
-            Records.OfType<SpecialityRecordDAL>().ToList();
+            AllRecords.OfType<SpecialityRecordDAL>().ToList();
 
         public MigrationStatusRecordDAL? MigrationStatus =>
-            Records.OfType<MigrationStatusRecordDAL>().SingleOrDefault();
+            AllRecords.OfType<MigrationStatusRecordDAL>().SingleOrDefault();
 
         public RegistrationStatusRecordDAL? RegistrationStatus =>
-            Records.OfType<RegistrationStatusRecordDAL>().SingleOrDefault();
+            AllRecords.OfType<RegistrationStatusRecordDAL>().SingleOrDefault();
 
         #region vulnerabilities
 

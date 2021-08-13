@@ -3,11 +3,8 @@ package safehouse.ams.models;
 option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands";
 
 import "Models/Common/UUID.proto";
-import "google/protobuf/timestamp.proto";
 
-message CreateCitizenshipChange{
+message SetMigrationStatus{
   UUID EntityID = 1;
-  google.protobuf.Timestamp DocumentDate = 2;
-  UUID SurvivorId = 3;
-  string Citizenship = 4;
+  string Details = 2;
 }

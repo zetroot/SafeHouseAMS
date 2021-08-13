@@ -1,0 +1,98 @@
+syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations";
+
+import "Models/Common/UUID.proto";
+import "Models/Survivors/Survivor.proto";
+import "Models/LifeSituations/Records/CitizenshipRecord.proto";
+import "Models/LifeSituations/Records/ChildrenRecord.proto";
+import "Models/LifeSituations/Records/DomicileRecord.proto";
+import "Models/LifeSituations/Records/EducationLevelRecord.proto";
+import "Models/LifeSituations/Records/MigrationStatusRecord.proto";
+import "Models/LifeSituations/Records/RegistrationStatusRecord.proto";
+import "Models/LifeSituations/Records/SpecialityRecord.proto";
+import "google/protobuf/timestamp.proto";
+
+message ChildrenUpdate {
+  safehouse.ams.UUID ID = 1;
+  bool IsDeleted = 2;
+  google.protobuf.Timestamp Created = 3;
+  google.protobuf.Timestamp LastEdit = 4;
+
+  google.protobuf.Timestamp DocumentDate = 5;
+  Survivor Survivor = 6;
+
+  records.ChildrenRecord Record = 7;
+}
+
+message CitizenshipUpdate {
+  safehouse.ams.UUID ID = 1;
+  bool IsDeleted = 2;
+  google.protobuf.Timestamp Created = 3;
+  google.protobuf.Timestamp LastEdit = 4;
+
+  google.protobuf.Timestamp DocumentDate = 5;
+  Survivor Survivor = 6;
+
+  records.CitizenshipRecord Record = 7;
+}
+
+message DomicileUpdate {
+  safehouse.ams.UUID ID = 1;
+  bool IsDeleted = 2;
+  google.protobuf.Timestamp Created = 3;
+  google.protobuf.Timestamp LastEdit = 4;
+
+  google.protobuf.Timestamp DocumentDate = 5;
+  Survivor Survivor = 6;
+
+  records.DomicileRecord Record = 7;
+}
+
+message EducationUpdate {
+  safehouse.ams.UUID ID = 1;
+  bool IsDeleted = 2;
+  google.protobuf.Timestamp Created = 3;
+  google.protobuf.Timestamp LastEdit = 4;
+
+  google.protobuf.Timestamp DocumentDate = 5;
+  Survivor Survivor = 6;
+
+  repeated records.EducationLevelRecord Records = 7;
+}
+
+message MigrationStatusUpdate {
+  safehouse.ams.UUID ID = 1;
+  bool IsDeleted = 2;
+  google.protobuf.Timestamp Created = 3;
+  google.protobuf.Timestamp LastEdit = 4;
+
+  google.protobuf.Timestamp DocumentDate = 5;
+  Survivor Survivor = 6;
+
+  records.MigrationStatusRecord Record = 7;
+}
+
+message RegistrationStatusUpdate {
+  safehouse.ams.UUID ID = 1;
+  bool IsDeleted = 2;
+  google.protobuf.Timestamp Created = 3;
+  google.protobuf.Timestamp LastEdit = 4;
+
+  google.protobuf.Timestamp DocumentDate = 5;
+  Survivor Survivor = 6;
+
+  records.RegistrationStatusRecord Record = 7;
+}
+
+message SpecialitiesUpdate {
+  safehouse.ams.UUID ID = 1;
+  bool IsDeleted = 2;
+  google.protobuf.Timestamp Created = 3;
+  google.protobuf.Timestamp LastEdit = 4;
+
+  google.protobuf.Timestamp DocumentDate = 5;
+  Survivor Survivor = 6;
+
+  repeated records.SpecialityRecord Records = 7;
+}

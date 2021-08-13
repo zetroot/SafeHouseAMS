@@ -1,7 +1,10 @@
 @page "/Document/{DocumentID}"
 @using SafeHouseAMS.BizLayer.LifeSituations
 @using System.Threading
+@using SafeHouseAMS.BizLayer.LifeSituations.Documents
+@using SafeHouseAMS.BizLayer.LifeSituations.Records
 @using SafeHouseAMS.WasmApp.Pages.Survivors
+@using SafeHouseAMS.WasmApp.RecordViews
 @inject ILifeSituationDocumentsAggregate _documentsCatalogue;
 @inject NavigationManager _navigationManager;
 
@@ -29,8 +32,32 @@
             case Inquiry inquiry:
                 <InquiryView Inquiry="@inquiry"/>
                 break;
-            case CitizenshipChange citizenshipChange:
-                <CitizenshipChangeView CitizenshipChange="citizenshipChange"/>
+            case SingleRecordUpdate<CitizenshipRecord> doc:
+                <CitizenshipChangeView CitizenshipChange="doc"/>
+                break;
+            case SingleRecordUpdate<ChildrenRecord> doc:
+                <ChildrenRecordView Record="doc.Record"/>
+                break;
+            case SingleRecordUpdate<DomicileRecord> doc:
+                <DomicileRecordView Domicile="doc.Record" />
+                break;
+            case MultiRecordsUpdate<EducationLevelRecord> doc:
+                foreach (var rec in doc.Records)
+                {
+                    <EducationLevelRecordView Record="rec"/>
+                }
+                break;
+            case SingleRecordUpdate<MigrationStatusRecord> doc:
+                <MigrationStatusRecordView Record="doc.Record"/>
+                break;
+            case SingleRecordUpdate<RegistrationStatusRecord> doc:
+                <RegistrationStatusRecordView Record="doc.Record"/>
+                break;
+            case MultiRecordsUpdate<SpecialityRecord> doc:
+                foreach (var rec in doc.Records)
+                {
+                    <SpecialityRecordView Record="rec"/>
+                }
                 break;
             default:
                 <div class="row">

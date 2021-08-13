@@ -12,12 +12,13 @@
         {
             <div class="row" style="margin-top: 5px">
                 <div class="col-md-2">
-                    <RadzenDropDown @bind-Value=@item.Level 
-                                    TextProperty="@nameof(EduLevelVM.Description)" ValueProperty="@nameof(EduLevelVM.Level)" 
+                    <RadzenDropDown @bind-Value=@item.Level
+                                    TextProperty="@nameof(EduLevelVM.Description)" ValueProperty="@nameof(EduLevelVM.Level)"
                                     Data=@_eduLevels  />
                 </div>
                 <div class="col-md-10">
                     <RadzenTextBox @bind-Value="@item.Details" Placeholder="Уточните.."/>
+                    @* ReSharper disable once Asp.Entity *@
                     <button type="button" class="btn btn-outline-primary" @onclick="@(() => _items.Remove(item))">&Cross;</button>
                 </div>
             </div>

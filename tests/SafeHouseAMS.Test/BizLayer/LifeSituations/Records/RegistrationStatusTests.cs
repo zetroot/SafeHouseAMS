@@ -3,7 +3,6 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
-using SafeHouseAMS.Test.Transport.MapperProfiles;
 using Xunit;
 using Xunit.Categories;
 

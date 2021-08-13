@@ -1,0 +1,79 @@
+@page "/MigrationStatusUpdateEditor/{SurvivorID}"
+@using SafeHouseAMS.BizLayer.LifeSituations
+@using SafeHouseAMS.BizLayer.LifeSituations.Commands
+@using SafeHouseAMS.BizLayer.LifeSituations.Records
+@using SafeHouseAMS.WasmApp.Pages.Survivors
+@using SafeHouseAMS.WasmApp.RecordEditors
+@using System.Threading
+
+@inject ILifeSituationDocumentsAggregate _documentsAggregate;
+@inject NavigationManager _navigationManager;
+@inject NotificationService _notificationService;
+
+<h3>Обновление информации о миграционном статусе</h3>
+
+<div class="container-fluid">
+    <RadzenTemplateForm TItem="MigrationStatusUpdateModel" Data="@_pageModel" Submit="@SubmitForm" >
+        <div class="row">
+            <div class="col-md-2">
+                <RadzenLabel Text="Дата документа"/>
+            </div>
+            <div class="col-md-10">
+                <RadzenDatePicker @bind-Value="@_pageModel.DocDate" ShowTime="true"/>
+            </div>
+        </div>
+        <div class="row">
+            <MigrationStatusEditorComponent @ref="@_editor"/>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
+                <button type="reset" style="margin-left: 8px" class="btn btn-warning" @onclick="@CancelClick">Отмена</button>
+            </div>
+        </div>
+    </RadzenTemplateForm>
+</div>
+
+@code {
+    private class MigrationStatusUpdateModel
+    {
+        public Guid DocId { get; } = Guid.NewGuid();
+        public DateTime DocDate { get; set; } = DateTime.Now;
+        public Guid SurvivorId { get; set; }
+        public CreateRecordUpdateDocument<MigrationStatusRecord> Command => new(DocId, SurvivorId, DocDate);
+    }
+
+    [Parameter] public string? SurvivorID { get; set; }
+    private MigrationStatusEditorComponent _editor = new();
+    private readonly MigrationStatusUpdateModel _pageModel = new();
+
+    protected override void OnParametersSet()
+    {
+        if (Guid.TryParse(SurvivorID, out var id))
+            _pageModel.SurvivorId = id;
+
+        base.OnParametersSet();
+    }
+
+    private void CancelClick()
+    {
+        _notificationService.Notify(summary: "Операция отменена", severity:NotificationSeverity.Warning);
+        _navigationManager.NavigateTo($"{nameof(SurvivorDetails)}/{SurvivorID}");
+    }
+
+    private async Task SubmitForm()
+    {
+        if(_editor.BuildCommand(_pageModel.DocId) is {} cmd)
+        {
+            await _documentsAggregate.ApplyCommand(_pageModel.Command, CancellationToken.None);
+            await _documentsAggregate.ApplyCommand(cmd, CancellationToken.None);
+            _notificationService.Notify(summary: "Успешно сохранено", severity:NotificationSeverity.Success);
+        }
+        else
+        {
+            _notificationService.Notify(summary: "Данные не введены", severity:NotificationSeverity.Info);
+        }
+
+        _navigationManager.NavigateTo($"{nameof(SurvivorDetails)}/{SurvivorID}");
+    }
+}

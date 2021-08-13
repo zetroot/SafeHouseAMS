@@ -1,6 +1,7 @@
 ﻿@using SafeHouseAMS.BizLayer.LifeSituations
 @using SafeHouseAMS.BizLayer.LifeSituations.InquirySources
 @using System.Text
+@using SafeHouseAMS.BizLayer.LifeSituations.Documents
 @using SafeHouseAMS.WasmApp.RecordViews
 
 <h3>Обращение за помощью</h3>
@@ -9,15 +10,15 @@
         <div class="row">
             <div class="col-md-8">
                 <RadzenLabel Text="Дата обращения"/>
-                <RadzenLabel Text="@Inquiry?.DocumentDate.ToString()"/>
+                <RadzenLabel Text="@InquiryDocument?.DocumentDate.ToString("d")"/>
             </div>
             <div class="col-md-4">
-                <RadzenCheckBox TValue="bool?" Disabled="true" Value="@Inquiry?.IsJuvenile"/>
+                <RadzenCheckBox TValue="bool?" Disabled="true" Value="@InquiryDocument?.IsJuvenile"/>
                 <RadzenLabel Text="Несовершеннолетний в момент обращения"/>
             </div>
         </div>
         <div class="row" style="margin-top: 5px">
-            @foreach (var inquirySource in Inquiry?.InquirySources ?? Enumerable.Empty<IInquirySource>())
+            @foreach (var inquirySource in InquiryDocument?.InquirySources ?? Enumerable.Empty<IInquirySource>())
             {
                 switch (inquirySource)
                 {
@@ -67,28 +68,28 @@
         <div class="row" style="margin-top: 5px">
             <div class="col-md-6">
                 <RadzenLabel Text="Гражданство:"/>
-                <RadzenLabel Text="@Inquiry?.Citizenship.Citizenship"/>
+                <RadzenLabel Text="@InquiryDocument?.Citizenship.Citizenship"/>
             </div>
             <div class="col-md-6">
-                <MigrationStatusRecordView Record="Inquiry?.MigrationStatus"/>
+                <MigrationStatusRecordView Record="InquiryDocument?.MigrationStatus"/>
             </div>
         </div>
         <div class="row" style="margin-top: 5px">
             <div class="col-md-6">
-                <DomicileRecordView Domicile="@Inquiry?.Domicile"/>
+                <DomicileRecordView Domicile="@InquiryDocument?.Domicile"/>
             </div>
             <div class="col-md-6">
-                <RegistrationStatusRecordView Record="@Inquiry?.RegistrationStatus"/>
+                <RegistrationStatusRecordView Record="@InquiryDocument?.RegistrationStatus"/>
             </div>
         </div>
         <div class="row" style="margin-top: 5px">
-            <ChildrenRecordView Record="@Inquiry?.HasChildren"/>
+            <ChildrenRecordView Record="@InquiryDocument?.HasChildren"/>
         </div>
         <div class="row">
             <div class="col-md-6">
-                @if (Inquiry?.EducationLevel?.Any() == true)
+                @if (InquiryDocument?.EducationLevel?.Any() == true)
                 {
-                    @foreach (var rec in Inquiry.EducationLevel)
+                    @foreach (var rec in InquiryDocument.EducationLevel)
                     {
                         <div class="row">
                             <EducationLevelRecordView Record="@rec"/>
@@ -103,9 +104,9 @@
                 }
             </div>
             <div class="col-md-6">
-                @if (Inquiry?.Specialities?.Any() == true)
+                @if (InquiryDocument?.Specialities?.Any() == true)
                 {
-                    @foreach (var rec in Inquiry.Specialities)
+                    @foreach (var rec in InquiryDocument.Specialities)
                     {
                         <div class="row">
                             <SpecialityRecordView Record="@rec"/>
@@ -120,22 +121,22 @@
                 }
             </div>
         </div>
-        @if (!string.IsNullOrWhiteSpace(Inquiry?.WorkingExperience))
+        @if (!string.IsNullOrWhiteSpace(InquiryDocument?.WorkingExperience))
         {
             <div class="row">
                 <div class="col-md-6">
                     <RadzenLabel Text="Опыт работы"/>
-                    <RadzenLabel Text="@Inquiry.WorkingExperience"/>
+                    <RadzenLabel Text="@InquiryDocument.WorkingExperience"/>
                 </div>
             </div>
         }
         <div class="row">
-            <VulnerabilitiesView Vulnerabilities="@Inquiry?.VulnerabilityFactors"/>
+            <VulnerabilitiesView Vulnerabilities="@InquiryDocument?.VulnerabilityFactors"/>
         </div>
     </RadzenFieldset>
 </div>
 @code {
-    [Parameter] public Inquiry? Inquiry { get; set; }
+    [Parameter] public Inquiry? InquiryDocument { get; set; }
 
     private static ICollection<SelfInquiry.InquiryChannel> Decompose(SelfInquiry.InquiryChannel chan)
     {

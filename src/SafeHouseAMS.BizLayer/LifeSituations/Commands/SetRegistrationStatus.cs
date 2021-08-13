@@ -5,12 +5,12 @@ using SafeHouseAMS.BizLayer.LifeSituations.Records;
 namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
 {
     /// <summary>
-    /// Команда добавления записи о миграционном стсатусе
+    /// Команда добавления записи о статусе регистрации
     /// </summary>
-    public class AddMigrationStatus : LifeSituationDocumentCommand
+    public class SetRegistrationStatus : LifeSituationDocumentCommand
     {
         /// <summary>
-        /// Собственно миграционный статус
+        /// Собственно статус регистрации
         /// </summary>
         public string Details { get; }
 
@@ -18,9 +18,9 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         /// Ctor
         /// </summary>
         /// <param name="entityID">идентификатор документ</param>
-        /// <param name="details">миграционный статус</param>
+        /// <param name="details">статус регистрации</param>
         /// <exception cref="ArgumentNullException">если специальность была null</exception>
-        public AddMigrationStatus(Guid entityID, string details) : base(entityID)
+        public SetRegistrationStatus(Guid entityID, string details) : base(entityID)
         {
             Details = details ?? throw new ArgumentNullException(nameof(details));
         }
@@ -28,8 +28,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         internal override Task ApplyOn(ILifeSituationDocumentsRepository repository)
         {
             if (repository is null) throw new ArgumentNullException(nameof(repository));
-            return repository.AddRecord(EntityID, new MigrationStatusRecord(Guid.NewGuid(), Details));
+            return repository.AddRecord(EntityID, new RegistrationStatusRecord(Guid.NewGuid(), Details));
         }
     }
-
 }

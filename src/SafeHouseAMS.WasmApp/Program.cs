@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Grpc.Net.Client;
@@ -27,10 +28,10 @@ namespace SafeHouseAMS.WasmApp
 
             ConfigureLogging(builder.Logging, builder.Configuration);
             ConfigureServices(builder.Services, builder.Configuration);
-            
+
             await builder.Build().RunAsync();
         }
-        
+
         /// <summary>
         /// Конфигурация DI-контейнера
         /// </summary>
@@ -47,12 +48,12 @@ namespace SafeHouseAMS.WasmApp
 
                     options.ProviderOptions.ResponseType = "code";
                 });
-            
+
             var backendUri = configuration.GetValue<string>("Backend");
             services.AddHttpClient("amsAPI", client => client.BaseAddress = new Uri(backendUri))
                 .AddHttpMessageHandler(_ => new GrpcWebHandler(GrpcWebMode.GrpcWebText))
                 .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationMessageHandler>().ConfigureHandler(new[] {backendUri}));
-            
+
             services.AddScoped(sp =>
                 {
                     // Create a gRPC-Web channel pointing to the backend server
@@ -60,25 +61,26 @@ namespace SafeHouseAMS.WasmApp
                     var channel = GrpcChannel.ForAddress(backendUri, new GrpcChannelOptions { HttpClient = httpClient });
                     return channel;
                 });
-            
+
             services.AddDtoMapping();
-            
+
             services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogueClient>();
             services.TryAddTransient<ILifeSituationDocumentsAggregate, LifeSituationDocumentsClient>();
-            
+
             services.AddScoped<DialogService>()
                 .AddScoped<NotificationService>()
                 .AddScoped<TooltipService>()
                 .AddScoped<ContextMenuService>();
         }
-        
+
         /// <summary>
         /// Настройка логирования.
         /// По умолчанию используется Serilog. Конфигурация логгера задаётся через IConfiguration, из секции "Serilog"
         /// </summary>
         /// <param name="builderLogging">Билдер логгера</param>
         /// <param name="builderConfiguration">Конфигурация</param>
-        private static void ConfigureLogging(ILoggingBuilder builderLogging, IConfiguration builderConfiguration)
+
+        private static void ConfigureLogging(ILoggingBuilder builderLogging, [SuppressMessage("ReSharper", "UnusedParameter.Local")] IConfiguration builderConfiguration)
         {
             builderLogging.ClearProviders();
             Log.Logger = new LoggerConfiguration().WriteTo.BrowserConsole().MinimumLevel.Information().CreateLogger();

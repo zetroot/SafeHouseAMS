@@ -9,9 +9,10 @@ import "Models/LifeSituations/Commands/SetChildren.proto";
 import "Models/LifeSituations/Commands/SetDomicile.proto";
 import "Models/LifeSituations/Commands/SetVulnerabilities.proto";
 import "Models/LifeSituations/Commands/SetWorkingExperience.proto";
-import "Models/LifeSituations/Commands/AddMigrationStatus.proto";
-import "Models/LifeSituations/Commands/AddRegistrationStatus.proto";
-import "Models/LifeSituations/Commands/CreateCitizenshipChange.proto";
+import "Models/LifeSituations/Commands/SetMigrationStatus.proto";
+import "Models/LifeSituations/Commands/SetRegistrationStatus.proto";
+import "Models/LifeSituations/Commands/SetCitizenship.proto";
+import "Models/LifeSituations/Commands/CreateRecordUpdateDocument.proto";
 
 message LifeSituationDocumentCommand{
   oneof Command {
@@ -22,8 +23,9 @@ message LifeSituationDocumentCommand{
     SetDomicile SetDomicile = 6;
     SetVulnerabilities SetVulnerabilities = 7;
     SetWorkingExperience SetWorkingExperience = 8;
-    AddMigrationStatus AddMigrationStatus = 9;
-    AddRegistrationStatus AddRegistrationStatus = 10;
-    CreateCitizenshipChange CreateCitizenshipChange = 11;
+    SetMigrationStatus SetMigrationStatus = 9;
+    SetRegistrationStatus SetRegistrationStatus = 10;
+    SetCitizenship SetCitizenship = 11;
+    CreateRecordUpdateDocument CreateRecordUpdateDocument = 12;
   }
 }

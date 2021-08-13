@@ -8,7 +8,7 @@ using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using Xunit;
 using Xunit.Categories;
 
-namespace SafeHouseAMS.Test.BizLayer.LifeSituations
+namespace SafeHouseAMS.Test.BizLayer.LifeSituations.Commands
 {
     public class AddSpecialityCommandTests
     {
@@ -18,22 +18,22 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
             //arrange
             var docId = Guid.NewGuid();
             var spec = "speciality";
-            
+
             //act
             var result = new AddSpeciality(docId, spec);
-            
+
             //assert
             result.EntityID.Should().Be(docId);
             result.Speciality.Should().Be(spec);
         }
 
         [Fact, UnitTest]
-        public void Ctor_WhenSpecialityIsNull_Throws() => 
+        public void Ctor_WhenSpecialityIsNull_Throws() =>
             Assert.Throws<ArgumentNullException>(() => new AddSpeciality(Guid.NewGuid(), null!));
 
         [Fact, UnitTest]
         public Task ApplyOn_WhenRepositoryIsNull_Throws() =>
-            Assert.ThrowsAsync<ArgumentNullException>(() => 
+            Assert.ThrowsAsync<ArgumentNullException>(() =>
                 new AddSpeciality(Guid.NewGuid(), "speciality").ApplyOn(null!));
 
         [Fact, UnitTest]
@@ -45,12 +45,12 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
             var sut = new AddSpeciality(docId, speciality);
             var repoMock = new Mock<ILifeSituationDocumentsRepository>();
             repoMock.Setup(x => x.AddRecord(It.IsAny<Guid>(), It.IsAny<BaseRecord>()));
-            
+
             //act
             await sut.ApplyOn(repoMock.Object);
-            
+
             //assert
-            repoMock.Verify(x => 
+            repoMock.Verify(x =>
                 x.AddRecord(docId, It.Is<SpecialityRecord>(r => r.Speciality == speciality)));
         }
     }

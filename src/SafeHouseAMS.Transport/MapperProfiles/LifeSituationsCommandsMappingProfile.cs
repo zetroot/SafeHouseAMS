@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
+using SafeHouseAMS.BizLayer.LifeSituations.Records;
 
 namespace SafeHouseAMS.Transport.MapperProfiles
 {
@@ -12,29 +13,82 @@ namespace SafeHouseAMS.Transport.MapperProfiles
             MapAddSpeciality();
             MapCreateInquiry();
             MapSetChildren();
+            MapSetCitizenship();
             MapSetDomicile();
             MapSetVulnerabilities();
             MapSetWorkingExperience();
             MapAddMigrationStatus();
             MapAddRegistrationStatus();
-            MapCreateCitizenshipChange();
+            MapCreateCreateRecordUpdateCommand();
             MapCommandsWrapper();
         }
-        private void MapCreateCitizenshipChange()
+        private void MapCreateCreateRecordUpdateCommand()
         {
-            CreateMap<CreateCitizenshipChange, Protos.Models.LifeSituations.Commands.CreateCitizenshipChange>();
-            CreateMap<Protos.Models.LifeSituations.Commands.CreateCitizenshipChange, CreateCitizenshipChange>();
+            CreateMap<CreateRecordUpdateDocument<ChildrenRecord>,
+                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Children);
+
+            CreateMap<CreateRecordUpdateDocument<CitizenshipRecord>,
+                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Citizenship);
+
+            CreateMap<CreateRecordUpdateDocument<DomicileRecord>,
+                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Domicile);
+
+            CreateMap<CreateRecordUpdateDocument<EducationLevelRecord>,
+                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Education);
+
+            CreateMap<CreateRecordUpdateDocument<MigrationStatusRecord>,
+                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Migration);
+
+            CreateMap<CreateRecordUpdateDocument<RegistrationStatusRecord>,
+                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Registration);
+
+            CreateMap<CreateRecordUpdateDocument<SpecialityRecord>,
+                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Speciality);
+
+
+            CreateMap<Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument, CreateDocument>()
+                .ConstructUsing((src, ctx) =>
+                {
+                    var entityId = ctx.Mapper.Map<Guid>(src.EntityID);
+                    var docDate = ctx.Mapper.Map<DateTime>(src.DocumentDate);
+                    var survId = ctx.Mapper.Map<Guid>(src.SurvivorId);
+                    return src.Type switch
+                    {
+                        Protos.Models.LifeSituations.Commands.RecordType.Citizenship =>
+                            new CreateRecordUpdateDocument<CitizenshipRecord>(entityId, survId, docDate),
+                        Protos.Models.LifeSituations.Commands.RecordType.Children =>
+                            new CreateRecordUpdateDocument<ChildrenRecord>(entityId, survId, docDate),
+                        Protos.Models.LifeSituations.Commands.RecordType.Domicile =>
+                            new CreateRecordUpdateDocument<DomicileRecord>(entityId, survId, docDate),
+                        Protos.Models.LifeSituations.Commands.RecordType.Education =>
+                            new CreateRecordUpdateDocument<EducationLevelRecord>(entityId, survId, docDate),
+                        Protos.Models.LifeSituations.Commands.RecordType.Migration =>
+                            new CreateRecordUpdateDocument<MigrationStatusRecord>(entityId, survId, docDate),
+                        Protos.Models.LifeSituations.Commands.RecordType.Registration =>
+                            new CreateRecordUpdateDocument<RegistrationStatusRecord>(entityId, survId, docDate),
+                        Protos.Models.LifeSituations.Commands.RecordType.Speciality =>
+                            new CreateRecordUpdateDocument<SpecialityRecord>(entityId, survId, docDate),
+                        _ => throw new ArgumentOutOfRangeException()
+                    };
+                });
         }
 
         private void MapAddRegistrationStatus()
         {
-            CreateMap<AddRegistrationStatus, Protos.Models.LifeSituations.Commands.AddRegistrationStatus>();
-            CreateMap<Protos.Models.LifeSituations.Commands.AddRegistrationStatus, AddRegistrationStatus>();
+            CreateMap<SetRegistrationStatus, Protos.Models.LifeSituations.Commands.SetRegistrationStatus>();
+            CreateMap<Protos.Models.LifeSituations.Commands.SetRegistrationStatus, SetRegistrationStatus>();
         }
         private void MapAddMigrationStatus()
         {
-            CreateMap<AddMigrationStatus, Protos.Models.LifeSituations.Commands.AddMigrationStatus>();
-            CreateMap<Protos.Models.LifeSituations.Commands.AddMigrationStatus, AddMigrationStatus>();
+            CreateMap<SetMigrationStatus, Protos.Models.LifeSituations.Commands.SetMigrationStatus>();
+            CreateMap<Protos.Models.LifeSituations.Commands.SetMigrationStatus, SetMigrationStatus>();
         }
 
         private void MapCommandsWrapper()
@@ -45,8 +99,13 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     var result = new Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand();
                     switch (src)
                     {
+                        case SetCitizenship setCitizenship:
+                            result.SetCitizenship =
+                                ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.SetCitizenship>(setCitizenship);
+                            break;
                         case AddEducationLevel addEducationLevel:
-                            result.AddEducationLevel = ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.AddEducationLevel>(addEducationLevel);
+                            result.AddEducationLevel =
+                                ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.AddEducationLevel>(addEducationLevel);
                             break;
                         case AddSpeciality addSpeciality:
                             result.AddSpeciality = ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.AddSpeciality>(addSpeciality);
@@ -66,17 +125,17 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                         case SetWorkingExperience setWorkingExperience:
                             result.SetWorkingExperience = ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.SetWorkingExperience>(setWorkingExperience);
                             break;
-                        case AddMigrationStatus addMigrationStatus:
-                            result.AddMigrationStatus =
-                                ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.AddMigrationStatus>(addMigrationStatus);
+                        case SetMigrationStatus addMigrationStatus:
+                            result.SetMigrationStatus =
+                                ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.SetMigrationStatus>(addMigrationStatus);
                             break;
-                        case AddRegistrationStatus addRegistrationStatus:
-                            result.AddRegistrationStatus =
-                                ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.AddRegistrationStatus>(addRegistrationStatus);
+                        case SetRegistrationStatus addRegistrationStatus:
+                            result.SetRegistrationStatus =
+                                ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.SetRegistrationStatus>(addRegistrationStatus);
                             break;
-                        case CreateCitizenshipChange createCitizenshipChange:
-                            result.CreateCitizenshipChange =
-                                ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.CreateCitizenshipChange>(createCitizenshipChange);
+                        case CreateDocument createDocument:
+                            result.CreateRecordUpdateDocument =
+                                ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>(createDocument);
                              break;
                     }
                     return result;
@@ -89,12 +148,13 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddSpeciality => ctx.Mapper.Map<AddSpeciality>(src.AddSpeciality),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.CreateInquiry => ctx.Mapper.Map<CreateInquiry>(src.CreateInquiry),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetChildren => ctx.Mapper.Map<SetChildren>(src.SetChildren),
+                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetCitizenship => ctx.Mapper.Map<SetCitizenship>(src.SetCitizenship),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetDomicile => ctx.Mapper.Map<SetDomicile>(src.SetDomicile),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetVulnerabilities => ctx.Mapper.Map<SetVulnerabilities>(src.SetVulnerabilities),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetWorkingExperience => ctx.Mapper.Map<SetWorkingExperience>(src.SetWorkingExperience),
-                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddMigrationStatus => ctx.Mapper.Map<AddMigrationStatus>(src.AddMigrationStatus),
-                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddRegistrationStatus => ctx.Mapper.Map<AddRegistrationStatus>(src.AddRegistrationStatus),
-                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.CreateCitizenshipChange => ctx.Mapper.Map<CreateCitizenshipChange>(src.CreateCitizenshipChange),
+                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetMigrationStatus => ctx.Mapper.Map<SetMigrationStatus>(src.SetMigrationStatus),
+                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetRegistrationStatus => ctx.Mapper.Map<SetRegistrationStatus>(src.SetRegistrationStatus),
+                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.CreateRecordUpdateDocument => ctx.Mapper.Map<CreateDocument>(src.CreateRecordUpdateDocument),
                     _ => throw new InvalidOperationException()
                 });
         }
@@ -117,6 +177,11 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         {
             CreateMap<SetChildren, Protos.Models.LifeSituations.Commands.SetChildren>();
             CreateMap<Protos.Models.LifeSituations.Commands.SetChildren, SetChildren>();
+        }
+        private void MapSetCitizenship()
+        {
+            CreateMap<SetCitizenship, Protos.Models.LifeSituations.Commands.SetCitizenship>();
+            CreateMap<Protos.Models.LifeSituations.Commands.SetCitizenship, SetCitizenship>();
         }
         private void MapCreateInquiry()
         {

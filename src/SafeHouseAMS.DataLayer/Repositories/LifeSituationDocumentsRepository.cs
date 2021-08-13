@@ -28,7 +28,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
         public async Task<LifeSituationDocument> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             var doc = await _context.LifeSituationDocuments
-                .Include(x => x.Records)
+                .Include(x => x.AllRecords)
                 .Include(x => x.Survivor)
                 .SingleAsync(x => !x.IsDeleted && x.ID == id, cancellationToken);
             return _mapper.Map<LifeSituationDocument>(doc);
@@ -36,7 +36,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
         public async IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var documents = _context.LifeSituationDocuments
-                .Include(x => x.Records)
+                .Include(x => x.AllRecords)
                 .Include(x => x.Survivor)
                 .Where(x => !x.IsDeleted && x.SurvivorID == survivorId)
                 .OrderByDescending(x => x.DocumentDate)
@@ -261,19 +261,28 @@ namespace SafeHouseAMS.DataLayer.Repositories
             }
         }
 
-        public async Task CreateCitizenshipChange(Guid docId, bool isDeleted, DateTime created, DateTime lastEdit,
-            Guid survivorID, DateTime documentDate)
+        public async Task CreateRecordUpdateDocument(Guid docId, bool isDeleted, DateTime created, DateTime lastEdit,
+            Guid survivorID, DateTime documentDate, Type recordType)
         {
-            var document = new CitizenshipChangeDAL
+            LifeSituationDocumentDAL doc = recordType switch
             {
-                ID = docId,
-                IsDeleted = isDeleted,
-                Created = created,
-                LastEdit = lastEdit,
-                DocumentDate = documentDate,
-                SurvivorID = survivorID
+                {} type when type == typeof(ChildrenRecord) => new ChildrenUpdateDAL(),
+                {} type when type == typeof(CitizenshipRecord) => new CitizenshipChangeDAL(),
+                {} type when type == typeof(DomicileRecord) => new DomicileUpdateDAL(),
+                {} type when type == typeof(EducationLevelRecord) => new EducationLevelUpdateDAL(),
+                {} type when type == typeof(MigrationStatusRecord) => new MigrationStatusUpdateDAL(),
+                {} type when type == typeof(RegistrationStatusRecord) => new RegistrationStatusUpdateDAL(),
+                {} type when type == typeof(SpecialityRecord) => new SpecialitiesUpdateDAL(),
+                _ => throw new ArgumentException()
             };
-            await _context.LifeSituationDocuments.AddAsync(document);
+            doc.ID = docId;
+            doc.IsDeleted = isDeleted;
+            doc.Created = created;
+            doc.LastEdit = lastEdit;
+            doc.DocumentDate = documentDate;
+            doc.SurvivorID = survivorID;
+
+            await _context.LifeSituationDocuments.AddAsync(doc);
             await _context.SaveChangesAsync();
         }
     }

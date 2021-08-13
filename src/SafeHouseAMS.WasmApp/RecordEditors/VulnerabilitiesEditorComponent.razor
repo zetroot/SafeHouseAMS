@@ -4,142 +4,142 @@
     <RadzenFieldset Text="Факторы уязвимости">
         <div class="row">
             <div class="col-md-4">
-                <RadzenCheckBox TValue="bool" @bind-Value="@hasAddiction"/>
+                <RadzenCheckBox TValue="bool" @bind-Value="@_hasAddiction"/>
                 <RadzenLabel Text="Заивисмость" />
-                @if (hasAddiction)
+                @if (_hasAddiction)
                 {
-                    <RadzenTextBox @bind-Value="@addictionKind" Placeholder="Уточните тип" Style="margin-left: 5px" />
+                    <RadzenTextBox @bind-Value="@_addictionKind" Placeholder="Уточните тип" Style="margin-left: 5px" />
                 }
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <RadzenCheckBox TValue="bool" @bind-Value="@childhoodViolence"/>
+                <RadzenCheckBox TValue="bool" @bind-Value="@_childhoodViolence"/>
                 <RadzenLabel Text="Насилие в детстве" />
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <RadzenCheckBox TValue="bool" @bind-Value="@orphanageExperience"/>
+                <RadzenCheckBox TValue="bool" @bind-Value="@_orphanageExperience"/>
                 <RadzenLabel Text="Опыт интернатного учреждения" />
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <RadzenCheckBox TValue="bool" @bind-Value="@homelessness"/>
+                <RadzenCheckBox TValue="bool" @bind-Value="@_homelessness"/>
                 <RadzenLabel Text="Бездомность" />
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <RadzenCheckBox TValue="bool" @bind-Value="@migration"/>
+                <RadzenCheckBox TValue="bool" @bind-Value="@_migration"/>
                 <RadzenLabel Text="Мигрант_ка" />
             </div>
-        </div>        
+        </div>
         <div class="row">
             <div class="col-md-2">
-                <RadzenCheckBox TValue="bool" @bind-Value="@healthStatusVulnerability"/>
+                <RadzenCheckBox TValue="bool" @bind-Value="@_healthStatusVulnerability"/>
                 <RadzenLabel Text="Состояние здоровья" />
             </div>
-            @if (healthStatusVulnerability)
+            @if (_healthStatusVulnerability)
             {
                 <div class="col-md-6">
                     <div class="row">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@disability"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_disability"/>
                         <RadzenLabel Text="Инвалидность"/>
                     </div>
                     <div class="row">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@specialNeeds"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_specialNeeds"/>
                         <RadzenLabel Text="ОВЗ"/>
                     </div>
                     <div class="row">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@mentalDisorder"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_mentalDisorder"/>
                         <RadzenLabel Text="Психическое расстройство"/>
                     </div>
                     <div class="row">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@tuberculosis"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_tuberculosis"/>
                         <RadzenLabel Text="Туберкулёз"/>
                     </div>
                     <div class="row">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@hiv"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_hiv"/>
                         <RadzenLabel Text="ВИЧ"/>
                     </div>
                     <div class="row">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@hepatitisB"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_hepatitisB"/>
                         <RadzenLabel Text="Гепатит B"/>
                     </div>
                     <div class="row">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@hepatitisC"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_hepatitisC"/>
                         <RadzenLabel Text="Гепатит C"/>
                     </div>
                     <div class="row">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@otherHealthStatus"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_otherHealthStatus"/>
                         <RadzenLabel Text="Другое"/>
-                        @if (otherHealthStatus)
+                        @if (_otherHealthStatus)
                         {
-                            <RadzenTextBox Placeholder="Уточните" Style="margin-left: 5px" @bind-Value="@otherHealthStatusDetails"/>
+                            <RadzenTextBox Placeholder="Уточните" Style="margin-left: 5px" @bind-Value="@_otherHealthStatusDetails"/>
                         }
                     </div>
                 </div>
             }
-        </div>    
+        </div>
         <div class="row">
             <div class="col-md-4">
-                <RadzenCheckBox TValue="bool" @bind-Value="@otherVulnerability"/>
+                <RadzenCheckBox TValue="bool" @bind-Value="@_otherVulnerability"/>
                 <RadzenLabel Text="Другое" />
-                @if (otherVulnerability)
+                @if (_otherVulnerability)
                 {
-                    <RadzenTextBox Placeholder="Уточните.." Style="margin-left: 5px" @bind-Value="@otherVulnerabilityDetails"/>
+                    <RadzenTextBox Placeholder="Уточните.." Style="margin-left: 5px" @bind-Value="@_otherVulnerabilityDetails"/>
                 }
             </div>
         </div>
     </RadzenFieldset>
 </div>
 @code {
-    private bool hasAddiction;
-    private string? addictionKind;
-    private bool childhoodViolence;
-    private bool orphanageExperience;
-    private bool homelessness;
-    private bool migration;
-    private bool otherVulnerability;
-    private string? otherVulnerabilityDetails;
-    
-    private bool healthStatusVulnerability;
-    private bool disability;
-    private bool specialNeeds;
-    private bool mentalDisorder;
-    private bool tuberculosis;
-    private bool hiv;
-    private bool hepatitisB;
-    private bool hepatitisC;
-    private bool otherHealthStatus;
-    private string? otherHealthStatusDetails;
+    private bool _hasAddiction;
+    private string? _addictionKind;
+    private bool _childhoodViolence;
+    private bool _orphanageExperience;
+    private bool _homelessness;
+    private bool _migration;
+    private bool _otherVulnerability;
+    private string? _otherVulnerabilityDetails;
+
+    private bool _healthStatusVulnerability;
+    private bool _disability;
+    private bool _specialNeeds;
+    private bool _mentalDisorder;
+    private bool _tuberculosis;
+    private bool _hiv;
+    private bool _hepatitisB;
+    private bool _hepatitisC;
+    private bool _otherHealthStatus;
+    private string? _otherHealthStatusDetails;
 
     private HealthStatus.HealthStatusVulnerabilityType BuildHealthStatus()
     {
         var result = HealthStatus.HealthStatusVulnerabilityType.None;
-        if (disability) result |= HealthStatus.HealthStatusVulnerabilityType.Disability;
-        if (specialNeeds) result |= HealthStatus.HealthStatusVulnerabilityType.SpecialNeeds;
-        if (mentalDisorder) result |= HealthStatus.HealthStatusVulnerabilityType.MentalDisorder;
-        if (tuberculosis) result |= HealthStatus.HealthStatusVulnerabilityType.Tuberculosis;
-        if (hiv) result |= HealthStatus.HealthStatusVulnerabilityType.HIV;
-        if (hepatitisB) result |= HealthStatus.HealthStatusVulnerabilityType.HepatitisB;
-        if (hepatitisC) result |= HealthStatus.HealthStatusVulnerabilityType.HepatitisC;
-        if (otherHealthStatus) result |= HealthStatus.HealthStatusVulnerabilityType.Other;
+        if (_disability) result |= HealthStatus.HealthStatusVulnerabilityType.Disability;
+        if (_specialNeeds) result |= HealthStatus.HealthStatusVulnerabilityType.SpecialNeeds;
+        if (_mentalDisorder) result |= HealthStatus.HealthStatusVulnerabilityType.MentalDisorder;
+        if (_tuberculosis) result |= HealthStatus.HealthStatusVulnerabilityType.Tuberculosis;
+        if (_hiv) result |= HealthStatus.HealthStatusVulnerabilityType.HIV;
+        if (_hepatitisB) result |= HealthStatus.HealthStatusVulnerabilityType.HepatitisB;
+        if (_hepatitisC) result |= HealthStatus.HealthStatusVulnerabilityType.HepatitisC;
+        if (_otherHealthStatus) result |= HealthStatus.HealthStatusVulnerabilityType.Other;
         return result;
     }
 
     private List<Vulnerability> GetVulnerabilities()
     {
         var result = new List<Vulnerability>();
-        if(hasAddiction) result.Add(new Addiction(addictionKind ?? string.Empty));
-        if(childhoodViolence) result.Add(new ChildhoodViolence());
-        if(orphanageExperience) result.Add(new OrphanageExperience());
-        if(homelessness) result.Add(new Homelessness());
-        if(migration) result.Add(new Migration());
-        if(otherVulnerability) result.Add(new Other(otherVulnerabilityDetails ?? string.Empty));
-        if(healthStatusVulnerability) result.Add(new HealthStatus(BuildHealthStatus(), otherHealthStatusDetails));
+        if(_hasAddiction) result.Add(new Addiction(_addictionKind ?? string.Empty));
+        if(_childhoodViolence) result.Add(new ChildhoodViolence());
+        if(_orphanageExperience) result.Add(new OrphanageExperience());
+        if(_homelessness) result.Add(new Homelessness());
+        if(_migration) result.Add(new Migration());
+        if(_otherVulnerability) result.Add(new Other(_otherVulnerabilityDetails ?? string.Empty));
+        if(_healthStatusVulnerability) result.Add(new HealthStatus(BuildHealthStatus(), _otherHealthStatusDetails));
         return result;
     }
 

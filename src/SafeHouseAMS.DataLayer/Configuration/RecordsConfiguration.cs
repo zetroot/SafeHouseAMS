@@ -17,7 +17,7 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.HasKey(x => x.ID);
             builder
                 .HasOne(x => x.Document)
-                .WithMany(x => x.Records)
+                .WithMany(x => x.AllRecords)
                 .HasForeignKey(x => x.DocumentID)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();

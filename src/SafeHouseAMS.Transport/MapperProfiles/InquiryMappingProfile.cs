@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using SafeHouseAMS.BizLayer.LifeSituations;
+using SafeHouseAMS.BizLayer.LifeSituations.Documents;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 

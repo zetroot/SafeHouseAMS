@@ -9,9 +9,9 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         public TimestampMappingProfile()
         {
             CreateMap<DateTime, Timestamp>()
-                .ConstructUsing((d, ctx) => 
+                .ConstructUsing((d, _) =>
                     Timestamp.FromDateTime(d.Kind != DateTimeKind.Utc? d.ToUniversalTime() : d));
-            
+
             CreateMap<Timestamp, DateTime>()
                 .ConstructUsing(d => d.ToDateTime().ToLocalTime());
         }

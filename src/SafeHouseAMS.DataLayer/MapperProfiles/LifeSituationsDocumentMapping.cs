@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using SafeHouseAMS.BizLayer.LifeSituations;
+using SafeHouseAMS.BizLayer.LifeSituations.Documents;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
@@ -17,11 +18,52 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
             MapBase();
             MapInquiries();
             MapCitizenshipChange();
+            MapChildrenUpdate();
+            MapDomicileUpdate();
+            MapEducationLevelUpdate();
+            MapMigrationStatusUpdate();
+            MapRegistrationStatusUpdate();
+            MapSpecialitiesUpdate();
+        }
+        private void MapSpecialitiesUpdate()
+        {
+            CreateMap<SpecialitiesUpdateDAL, MultiRecordsUpdate<SpecialityRecord>>()
+                .IncludeBase<LifeSituationDocumentDAL, LifeSituationDocument>();
+        }
+
+        private void MapRegistrationStatusUpdate()
+        {
+            CreateMap<RegistrationStatusUpdateDAL, SingleRecordUpdate<RegistrationStatusRecord>>()
+                .IncludeBase<LifeSituationDocumentDAL, LifeSituationDocument>();
+        }
+
+        private void MapMigrationStatusUpdate()
+        {
+            CreateMap<MigrationStatusUpdateDAL, SingleRecordUpdate<MigrationStatusRecord>>()
+                .IncludeBase<LifeSituationDocumentDAL, LifeSituationDocument>();
+        }
+
+        private void MapEducationLevelUpdate()
+        {
+            CreateMap<EducationLevelUpdateDAL, MultiRecordsUpdate<EducationLevelRecord>>()
+                .IncludeBase<LifeSituationDocumentDAL, LifeSituationDocument>();
+        }
+
+        private void MapDomicileUpdate()
+        {
+            CreateMap<DomicileUpdateDAL, SingleRecordUpdate<DomicileRecord>>()
+                .IncludeBase<LifeSituationDocumentDAL, LifeSituationDocument>();
+        }
+
+        private void MapChildrenUpdate()
+        {
+            CreateMap<ChildrenUpdateDAL, SingleRecordUpdate<ChildrenRecord>>()
+                .IncludeBase<LifeSituationDocumentDAL, LifeSituationDocument>();
         }
 
         private void MapCitizenshipChange()
         {
-            CreateMap<CitizenshipChangeDAL, CitizenshipChange>()
+            CreateMap<CitizenshipChangeDAL, SingleRecordUpdate<CitizenshipRecord>>()
                 .IncludeBase<LifeSituationDocumentDAL, LifeSituationDocument>();
         }
 

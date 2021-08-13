@@ -3,6 +3,7 @@
 @using SafeHouseAMS.BizLayer.LifeSituations.Commands
 @using SafeHouseAMS.WasmApp.Pages.Survivors
 @using System.Threading
+@using SafeHouseAMS.BizLayer.LifeSituations.Records
 @inject NavigationManager _navigationManager;
 @inject ILifeSituationDocumentsAggregate _documentsAggregate;
 @inject NotificationService _notificationService;
@@ -10,13 +11,13 @@
 <h3>Смена гражданства</h3>
 
 <div class="container-fluid">
-    <RadzenTemplateForm TItem="CreateCitizenshipChangeModel" Data="@pageModel" Submit="@SubmitForm" >
+    <RadzenTemplateForm TItem="CreateCitizenshipChangeModel" Data="@_pageModel" Submit="@SubmitForm" >
         <div class="row">
             <div class="col-md-2">
                 <RadzenLabel Text="Дата документа"/>
             </div>
             <div class="col-md-10">
-                <RadzenDatePicker @bind-Value="@pageModel.DocDate" ShowTime="true"/>
+                <RadzenDatePicker @bind-Value="@_pageModel.DocDate" ShowTime="true"/>
             </div>
         </div>
         <div class="row">
@@ -25,7 +26,7 @@
             </div>
             <div class="col-md-10">
                 <RadzenAutoComplete Data="@_citizenshipAutoCompletions" TextProperty="Value" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                    Style="display: block" Name="CitizenshipTextBox" Placeholder="Укажите гражданство" @bind-Value="@pageModel.Citizenship"/>
+                                    Style="display: block" Name="CitizenshipTextBox" Placeholder="Укажите гражданство" @bind-Value="@_pageModel.Citizenship"/>
                 <RadzenRequiredValidator Style="position: absolute" Component="CitizenshipTextBox" Text="Гражданство обязательно для заполнения"/>
             </div>
         </div>
@@ -45,7 +46,8 @@
         public DateTime DocDate { get; set; } = DateTime.Now;
         public Guid SurvivorId { get; set; }
         public string Citizenship { get; set; } = string.Empty;
-        public CreateCitizenshipChange Command => new(DocId, SurvivorId, DocDate, Citizenship);
+        public CreateRecordUpdateDocument<CitizenshipRecord> Command => new(DocId, SurvivorId, DocDate);
+        public SetCitizenship SetCitizenshipCommand => new(DocId, Citizenship);
     }
 
     private record CitizenshipAutoComplete(string Value)
@@ -55,7 +57,7 @@
     }
 
     [Parameter] public string? SurvivorID { get; set; }
-    private readonly CreateCitizenshipChangeModel pageModel = new();
+    private readonly CreateCitizenshipChangeModel _pageModel = new();
     private IReadOnlyCollection<CitizenshipAutoComplete> _citizenshipAutoCompletions = Array.Empty<CitizenshipAutoComplete>();
 
     protected override async Task OnInitializedAsync()
@@ -71,7 +73,7 @@
     protected override async Task OnParametersSetAsync()
     {
         if (Guid.TryParse(SurvivorID, out var id))
-            pageModel.SurvivorId = id;
+            _pageModel.SurvivorId = id;
 
         await base.OnParametersSetAsync();
     }
@@ -84,7 +86,8 @@
 
     private async Task SubmitForm()
     {
-        await _documentsAggregate.ApplyCommand(pageModel.Command, CancellationToken.None);
+        await _documentsAggregate.ApplyCommand(_pageModel.Command, CancellationToken.None);
+        await _documentsAggregate.ApplyCommand(_pageModel.SetCitizenshipCommand, CancellationToken.None);
         _notificationService.Notify(summary: "Успешно сохранено", severity:NotificationSeverity.Success);
         _navigationManager.NavigateTo($"{nameof(SurvivorDetails)}/{SurvivorID}");
     }

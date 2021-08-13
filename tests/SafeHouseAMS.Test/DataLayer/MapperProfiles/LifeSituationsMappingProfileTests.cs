@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Text.Json;
 using AutoMapper;
 using FluentAssertions;
-using FsCheck;
-using FsCheck.Xunit;
 using SafeHouseAMS.BizLayer.LifeSituations;
+using SafeHouseAMS.BizLayer.LifeSituations.Documents;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
 using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.BizLayer.LifeSituations.Vulnerabilities;
 using SafeHouseAMS.DataLayer.MapperProfiles;
 using SafeHouseAMS.DataLayer.Models.LifeSituations;
 using SafeHouseAMS.DataLayer.Models.Survivors;
-using SafeHouseAMS.Test.Transport.MapperProfiles;
 using Xunit;
 using Xunit.Categories;
 
@@ -89,7 +87,7 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
                 IsForwardedBySurvivor = true, ForwardedBySurvivor = forwardedBySurvivor,
                 IsForwardedByPerson = true, ForwardedByPerson = forwardedByPerson,
                 IsForwardedByOrganization = true, ForwardedByOrgannization = forwardedByOrgannization,
-                Records = new BaseRecordDAL[]{citizenshipRecordDAL, domicileRecordDAL, childrenRecordDAL, eduRec1Dal, eduRec2Dal, specRec1Dal, specRec2Dal },
+                AllRecords = new BaseRecordDAL[]{citizenshipRecordDAL, domicileRecordDAL, childrenRecordDAL, eduRec1Dal, eduRec2Dal, specRec1Dal, specRec2Dal },
                 WorkingExperience = workingExperience,
                 HasAddiction = true, AddictionKind = addictionKind,
                 ChildhoodViolence = true, Homelessness = true, Migration = true, OrphanageExperience = true,
@@ -165,7 +163,7 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
                 IsDeleted = false,
                 Survivor = survivorDal,
                 SurvivorID = survivorDal.ID,
-                Records = new List<BaseRecordDAL> { citizenshipRecDal }
+                AllRecords = new List<BaseRecordDAL> { citizenshipRecDal }
             };
 
             var sut = BuildMapper();
@@ -174,8 +172,8 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
             var result = sut.Map<LifeSituationDocument>(src);
 
             //assert
-            result.Should().BeOfType<CitizenshipChange>();
-            var document = (result as CitizenshipChange)!;
+            result.Should().BeOfType<SingleRecordUpdate<CitizenshipRecord>>();
+            var document = (result as SingleRecordUpdate<CitizenshipRecord>)!;
 
             document.ID.Should().Be(src.ID);
             document.Created.Should().Be(src.Created);
@@ -184,9 +182,61 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
             document.IsDeleted.Should().Be(src.IsDeleted);
             document.Survivor.Should().NotBeNull();
             document.Survivor.ID.Should().Be(survivorDal.ID);
-            document.Citizenship.Should().NotBeNull();
-            document.Citizenship.ID.Should().Be(citizenshipRec.ID);
-            document.Citizenship.Citizenship.Should().Be(citizenship);
+            document.Record.Should().NotBeNull();
+            document.Record?.ID.Should().Be(citizenshipRec.ID);
+            document.Record?.Citizenship.Should().Be(citizenship);
+        }
+
+        [Fact, UnitTest]
+        public void Mapper_MapsEducationLevelUpdate_Dal2Bl()
+        {
+            //arrange
+            var survivorDal = new SurvivorDAL{ID = Guid.NewGuid(), IsDeleted = true, Name = "name", Sex = 0};
+            const string details = "details";
+            var eduRec1 = new EducationLevelRecord(Guid.NewGuid(), EducationLevelRecord.EduLevel.Courses, details);
+            var eduRec2 = new EducationLevelRecord(Guid.NewGuid(), EducationLevelRecord.EduLevel.Courses, details);
+            var eduRecDal1 = new EducationLevelRecordDAL()
+            {
+                ID = eduRec1.ID,
+                Content = JsonSerializer.Serialize(eduRec1)
+            };
+            var eduRecDal2 = new EducationLevelRecordDAL()
+            {
+                ID = eduRec2.ID,
+                Content = JsonSerializer.Serialize(eduRec2)
+            };
+
+            var src = new EducationLevelUpdateDAL()
+            {
+                ID = Guid.NewGuid(),
+                Created = DateTime.Now - TimeSpan.FromDays(7),
+                LastEdit = DateTime.Now - TimeSpan.FromDays(3),
+                DocumentDate = DateTime.Now - TimeSpan.FromDays(5),
+                IsDeleted = false,
+                Survivor = survivorDal,
+                SurvivorID = survivorDal.ID,
+                AllRecords = new List<BaseRecordDAL> { eduRecDal1, eduRecDal2 }
+            };
+
+            var sut = BuildMapper();
+
+            //act
+            var result = sut.Map<LifeSituationDocument>(src);
+
+            //assert
+            result.Should().BeOfType<MultiRecordsUpdate<EducationLevelRecord>>();
+            var document = (result as MultiRecordsUpdate<EducationLevelRecord>)!;
+
+            document.ID.Should().Be(src.ID);
+            document.Created.Should().Be(src.Created);
+            document.LastEdit.Should().Be(src.LastEdit);
+            document.DocumentDate.Should().Be(src.DocumentDate);
+            document.IsDeleted.Should().Be(src.IsDeleted);
+            document.Survivor.Should().NotBeNull();
+            document.Survivor.ID.Should().Be(survivorDal.ID);
+            document.Records.Should().NotBeNull()
+                .And.ContainEquivalentOf(eduRec1)
+                .And.ContainEquivalentOf(eduRec2);
         }
     }
 }

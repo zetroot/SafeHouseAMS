@@ -23,7 +23,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             Prop.ForAll<Guid>(g =>
             {
                 var uuid = mapper.Map<UUID>(g);
-                var roundGuid = mapper.Map<Guid>(g);
+                var roundGuid = mapper.Map<Guid>(uuid);
                 roundGuid.Should().Be(g);
             }).QuickCheckThrowOnFailure();
         }

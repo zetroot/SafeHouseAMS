@@ -13,5 +13,4 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         /// <param name="entityID">идентификатор документа на котором выполняется команда</param>
         protected LifeSituationDocumentCommand(Guid entityID) : base(entityID) {}
     }
-
 }
