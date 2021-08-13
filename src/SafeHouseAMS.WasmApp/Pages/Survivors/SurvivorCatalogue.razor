@@ -15,8 +15,8 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <RadzenDataGrid TItem="Survivor" Data="@_persons" Count="@count" 
-                            @ref="personsGrid" AllowColumnResize="true"
+            <RadzenDataGrid TItem="Survivor" Data="@_persons" Count="@_count"
+                            @ref="_personsGrid" AllowColumnResize="true"
                             LoadData="LoadDataHandler"
                             AllowPaging="true" PageSize="20">
                 <Columns>
@@ -39,9 +39,9 @@
 
 
 @code {
-    RadzenDataGrid<Survivor>? personsGrid;
+    RadzenDataGrid<Survivor>? _personsGrid;
     private List<Survivor> _persons = new();
-    int count;
+    int _count;
 
     protected override async Task OnInitializedAsync()
     {
@@ -52,7 +52,7 @@
             items.Add(survivor);
         }
         _persons = items;
-        count = await _survivorCatalogue.GetTotalCount();
+        _count = await _survivorCatalogue.GetTotalCount();
         await base.OnInitializedAsync();
         _logger.LogInformation("Initialized");
     }
@@ -66,7 +66,7 @@
             items.Add(survivor);
         }
         _persons = items;
-        count = await _survivorCatalogue.GetTotalCount();
+        _count = await _survivorCatalogue.GetTotalCount();
         _logger.LogInformation("loaded");
     }
 

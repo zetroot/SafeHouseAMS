@@ -20,10 +20,10 @@
             <RadzenFieldset Text="Канал обращения">
                 <div class="row">
                     <div class="col-2-md" style="margin-right: 5px">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@selfInquiry"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_selfInquiry"/>
                         Самообращение
                     </div>
-                    @if (selfInquiry)
+                    @if (_selfInquiry)
                     {
                         <div class="col-10-md">
                             <div class="row">
@@ -86,37 +86,37 @@
                 </div>
                 <div class="row">
                     <div class="col-2-md" style="margin-right: 5px">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@isForwardedBySurvivor"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_isForwardedBySurvivor"/>
                         Перенаправлен другим пострадавшим
                     </div>
-                    @if (isForwardedBySurvivor)
+                    @if (_isForwardedBySurvivor)
                     {
                         <div class="col-10-md">
-                            <RadzenTextBox Placeholder="Укажите каким" @bind-Value="@forwardedBySurvivor"></RadzenTextBox>
+                            <RadzenTextBox Placeholder="Укажите каким" @bind-Value="@_forwardedBySurvivor"></RadzenTextBox>
                         </div>
                     }
                 </div>
                 <div class="row">
                     <div class="col-2-md" style="margin-right: 5px">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@isForwardedByPerson"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_isForwardedByPerson"/>
                         Перенаправлен другим лицом
                     </div>
-                    @if (isForwardedByPerson)
+                    @if (_isForwardedByPerson)
                     {
                         <div class="col-10-md" style="margin-right: 5px">
-                            <RadzenTextBox Placeholder="Укажите каким" @bind-Value="@forwardedByPerson"></RadzenTextBox>
+                            <RadzenTextBox Placeholder="Укажите каким" @bind-Value="@_forwardedByPerson"></RadzenTextBox>
                         </div>
                     }
                 </div>
                 <div class="row">
                     <div class="col-2-md" style="margin-right: 5px">
-                        <RadzenCheckBox TValue="bool" @bind-Value="@isForwardedByOrganization"/>
+                        <RadzenCheckBox TValue="bool" @bind-Value="@_isForwardedByOrganization"/>
                         <RadzenLabel Text="Перенаправлен другой организацией"/>
                     </div>
-                    @if (isForwardedByOrganization)
+                    @if (_isForwardedByOrganization)
                     {
                         <div class="col-10-md">
-                            <RadzenTextBox Style="display: block" Name="ForwardedOrganizationTextBox" Placeholder="Название организации" @bind-Value="@forwardedByOrganization"/>
+                            <RadzenTextBox Style="display: block" Name="ForwardedOrganizationTextBox" Placeholder="Название организации" @bind-Value="@_forwardedByOrganization"/>
                             <RadzenRequiredValidator Component="ForwardedOrganizationTextBox" Text="Укажите организацию" Style="position: absolute"/>
                         </div>
                     }
@@ -143,7 +143,7 @@
 
     public bool? IsJuvenile { get; private set; }
 
-    private bool selfInquiry;
+    private bool _selfInquiry;
     private bool _vk;
     private bool _facebook;
     private bool _instagram;
@@ -154,14 +154,14 @@
     private bool _telegramm;
     private bool _signal;
 
-    private bool isForwardedBySurvivor;
-    private string forwardedBySurvivor = string.Empty;
+    private bool _isForwardedBySurvivor;
+    private string _forwardedBySurvivor = string.Empty;
 
-    private bool isForwardedByPerson;
-    private string forwardedByPerson = string.Empty;
+    private bool _isForwardedByPerson;
+    private string _forwardedByPerson = string.Empty;
 
-    private bool isForwardedByOrganization;
-    private string? forwardedByOrganization;
+    private bool _isForwardedByOrganization;
+    private string? _forwardedByOrganization;
 
     public string? Citizenship { get; private set; }
 
@@ -177,7 +177,7 @@
         get
         {
             var result = new List<IInquirySource>(4);
-            if (selfInquiry)
+            if (_selfInquiry)
             {
                 var channel = SelfInquiry.InquiryChannel.None;
                 if (_vk) channel |= SelfInquiry.InquiryChannel.Vk;
@@ -191,9 +191,9 @@
                 if (_signal) channel |= SelfInquiry.InquiryChannel.Signal;
                 result.Add(new SelfInquiry(channel));
             }
-            if (isForwardedBySurvivor) result.Add(new ForwardedBySurvivor(forwardedBySurvivor));
-            if (isForwardedByPerson) result.Add(new ForwardedByPerson(forwardedByPerson));
-            if (isForwardedByOrganization && !string.IsNullOrWhiteSpace(forwardedByOrganization)) result.Add(new ForwardedByOrganization(forwardedByOrganization));
+            if (_isForwardedBySurvivor) result.Add(new ForwardedBySurvivor(_forwardedBySurvivor));
+            if (_isForwardedByPerson) result.Add(new ForwardedByPerson(_forwardedByPerson));
+            if (_isForwardedByOrganization && !string.IsNullOrWhiteSpace(_forwardedByOrganization)) result.Add(new ForwardedByOrganization(_forwardedByOrganization));
             return result;
         }
     }

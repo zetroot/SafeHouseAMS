@@ -17,7 +17,7 @@ namespace SafeHouseAMS.WasmApp.Services
 {
     internal class SurvivorCatalogueClient : ISurvivorCatalogue
     {
-        private readonly SurvivorCatalogue.SurvivorCatalogueClient client;
+        private readonly SurvivorCatalogue.SurvivorCatalogueClient _client;
         private readonly IMapper _mapper;
         [SuppressMessage("ReSharper", "NotAccessedField.Local")]
         private readonly ILogger<SurvivorCatalogueClient> _logger;
@@ -26,13 +26,13 @@ namespace SafeHouseAMS.WasmApp.Services
         {
             _mapper = mapper;
             _logger = logger;
-            client = new SurvivorCatalogue.SurvivorCatalogueClient(channel);
+            _client = new SurvivorCatalogue.SurvivorCatalogueClient(channel);
         }
 
         public async Task<Survivor> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             var uuid = _mapper.Map<UUID>(id);
-            var response = await client.GetSingleAsync(uuid, new CallOptions(cancellationToken: cancellationToken));
+            var response = await _client.GetSingleAsync(uuid, new CallOptions(cancellationToken: cancellationToken));
             return _mapper.Map<Survivor>(response);
         }
 
@@ -43,12 +43,12 @@ namespace SafeHouseAMS.WasmApp.Services
                 CreateSurvivor create => new CommandWrapper {CreateCommand = _mapper.Map<Transport.Protos.Models.Survivors.CreateSurvivor>(create)},
                 _ => throw new InvalidOperationException()
             };
-            await client.ApplyCommandAsync(request, new CallOptions(cancellationToken: cancellationToken));
+            await _client.ApplyCommandAsync(request, new CallOptions(cancellationToken: cancellationToken));
         }
 
         public async IAsyncEnumerable<Survivor> GetCollection(int skip, int? take, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            using var streamingCall = client.GetCollection(new() {Skip = skip, Take = take}, new CallOptions(cancellationToken: cancellationToken));
+            using var streamingCall = _client.GetCollection(new() {Skip = skip, Take = take}, new CallOptions(cancellationToken: cancellationToken));
             while (await streamingCall.ResponseStream.MoveNext())
             {
                 var chunk = streamingCall.ResponseStream.Current;
@@ -58,7 +58,7 @@ namespace SafeHouseAMS.WasmApp.Services
 
         public async Task<int> GetTotalCount()
         {
-            var result = await client.GetTotalCountAsync(new());
+            var result = await _client.GetTotalCountAsync(new());
             return result.Count;
         }
     }
