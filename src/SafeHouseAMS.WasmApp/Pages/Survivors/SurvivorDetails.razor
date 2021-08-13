@@ -105,6 +105,24 @@
                                 case SingleRecordUpdate<CitizenshipRecord>:
                                     <RadzenLabel Text="Смена гражданства"/>
                                     break;
+                                case SingleRecordUpdate<ChildrenRecord>:
+                                    <RadzenLabel Text="Обновление информации о детях"/>
+                                    break;
+                                case SingleRecordUpdate<DomicileRecord>:
+                                    <RadzenLabel Text="Обновление информации о проживании"/>
+                                    break;
+                                case MultiRecordsUpdate<EducationLevelRecord>:
+                                    <RadzenLabel Text="Обновление образования"/>
+                                    break;
+                                case SingleRecordUpdate<MigrationStatusRecord>:
+                                    <RadzenLabel Text="Изменение миграционного статуса"/>
+                                    break;
+                                case SingleRecordUpdate<RegistrationStatusRecord>:
+                                    <RadzenLabel Text="Изменение статуса регистрации"/>
+                                    break;
+                                case MultiRecordsUpdate<SpecialityRecord>:
+                                    <RadzenLabel Text="Обновление информации о специальностях"/>
+                                    break;
                                 default:
                                     <RadzenLabel Text="Иной тип документа"/>
                                     break;
