@@ -13,13 +13,13 @@
 <h3>Обновление информации о детях</h3>
 
 <div class="container-fluid">
-    <RadzenTemplateForm TItem="ChildrenUpdateModel" Data="@pageModel" Submit="@SubmitForm" >
+    <RadzenTemplateForm TItem="ChildrenUpdateModel" Data="@_pageModel" Submit="@SubmitForm" >
         <div class="row">
             <div class="col-md-2">
                 <RadzenLabel Text="Дата документа"/>
             </div>
             <div class="col-md-10">
-                <RadzenDatePicker @bind-Value="@pageModel.DocDate" ShowTime="true"/>
+                <RadzenDatePicker @bind-Value="@_pageModel.DocDate" ShowTime="true"/>
             </div>
         </div>
         <div class="row">
@@ -45,12 +45,12 @@
 
     [Parameter] public string? SurvivorID { get; set; }
     private ChildrenRecordComponent _editor = new();
-    private readonly ChildrenUpdateModel pageModel = new();
+    private readonly ChildrenUpdateModel _pageModel = new();
 
     protected override void OnParametersSet()
     {
         if (Guid.TryParse(SurvivorID, out var id))
-            pageModel.SurvivorId = id;
+            _pageModel.SurvivorId = id;
 
         base.OnParametersSet();
     }
@@ -63,8 +63,8 @@
 
     private async Task SubmitForm()
     {
-        await _documentsAggregate.ApplyCommand(pageModel.Command, CancellationToken.None);
-        await _documentsAggregate.ApplyCommand(_editor.BuildCommand(pageModel.DocId), CancellationToken.None);
+        await _documentsAggregate.ApplyCommand(_pageModel.Command, CancellationToken.None);
+        await _documentsAggregate.ApplyCommand(_editor.BuildCommand(_pageModel.DocId), CancellationToken.None);
         _notificationService.Notify(summary: "Успешно сохранено", severity:NotificationSeverity.Success);
         _navigationManager.NavigateTo($"{nameof(SurvivorDetails)}/{SurvivorID}");
     }
