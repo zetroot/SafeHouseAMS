@@ -16,6 +16,7 @@
             <button type="button" class="btn btn-primary" @onclick="() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue))">В каталог</button>
             <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"CreateCitizenshipChange/{SurvivorID}"))">Смена гражданства</button>
             <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"ChildrenUpdateEditor/{SurvivorID}"))">Обновление информации о детях</button>
+            <button type="button" class="btn btn-primary" style="margin-left: 5px" @onclick="@(() => _navigationManager.NavigateTo($"DomicileUpdateEditor/{SurvivorID}"))">Обновление информации о проживании</button>
         </div>
     </div>
     @if (_survivor is null)
