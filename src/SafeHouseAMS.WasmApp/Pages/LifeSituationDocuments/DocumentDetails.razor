@@ -17,6 +17,36 @@
             </button>
         </div>
     </div>
+    @if (_document is not null)
+    {
+        <div class="row">
+            <div class="col-12">
+                <h3>@DocName</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <RadzenLabel Text="Дата документа:"/>
+                <RadzenLabel Text="@_document.DocumentDate.ToString("d")" />
+            </div>
+            <div class="col-md-2">
+                <RadzenLabel Text="Пострадаший:"/>
+                <RadzenLabel Text="@_document.Survivor.Name" />
+            </div>
+            <div class="col-md text-muted">
+                <RadzenFieldset Text="Системная информация" AllowCollapse="true" Collapsed="true">
+                    <RadzenLabel Text="ID"/>
+                    <RadzenLabel Text="@_document.ID.ToString("D")"/>
+                    <br/>
+                    <RadzenLabel Text="Создан:"/>
+                    <RadzenLabel Text="@_document.Created.ToString("g")"/>
+                    <br/>
+                    <RadzenLabel Text="Изменён: "/>
+                    <RadzenLabel Text="@_document.LastEdit.ToString("g")"/>
+                </RadzenFieldset>
+            </div>
+        </div>
+    }
     <div class="row">
         @switch (@_document)
         {
@@ -75,6 +105,19 @@
 @code {
     [Parameter] public string? DocumentID { get; set; }
     private LifeSituationDocument? _document;
+
+    private string DocName => _document switch
+        {
+            Inquiry => "Обращение за помощью",
+            SingleRecordUpdate<CitizenshipRecord> => "Смена гражданства",
+            SingleRecordUpdate<ChildrenRecord> => "Обновление в составе детей",
+            SingleRecordUpdate<DomicileRecord> => "Изменение жилья",
+            MultiRecordsUpdate<EducationLevelRecord> => "Получение образования",
+            SingleRecordUpdate<MigrationStatusRecord> => "Изменение миграционного статуса",
+            SingleRecordUpdate<RegistrationStatusRecord> => "Изменение статуса регистрации",
+            MultiRecordsUpdate<SpecialityRecord> => "Получение специальностей",
+            _ => _document?.ToString() ?? "Нет документа"
+        };
 
     protected override async Task OnParametersSetAsync()
     {
