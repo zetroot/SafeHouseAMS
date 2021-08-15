@@ -171,8 +171,8 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// Построить отчёт о состоянии пострадавшего
         /// </summary>
         /// <param name="surId">Идентификатор пострадавшего</param>
-        /// <param name="none">Токен отмены операции</param>
+        /// <param name="ct">Токен отмены операции</param>
         /// <returns>Сводка-отчёт о текущем состоянии пострадавшего</returns>
-        Task<SurvivorStateReport> GetSurvivorReport(Guid surId, CancellationToken none);
+        Task<SurvivorStateReport> GetSurvivorReport(Guid surId, CancellationToken ct);
     }
 }
