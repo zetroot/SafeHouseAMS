@@ -59,5 +59,9 @@ namespace SafeHouseAMS.WasmApp.Services
                 yield return completion;
             }
         }
+        public Task<SurvivorStateReport> GetSurvivorReport(Guid survivroId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
