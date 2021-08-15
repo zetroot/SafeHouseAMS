@@ -724,5 +724,154 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             document.DocumentDate.Should().Be(docdate);
             document.SurvivorID.Should().Be(surId1);
         }
+
+        [Fact, IntegrationTest]
+        public async Task GetSurvivorReport_WhenCalled_CatchesCorrectOneSingleRecord()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var citDoc1 = new CitizenshipChangeDAL { ID = Guid.NewGuid(), SurvivorID = surId };
+            var citRecId1 = Guid.NewGuid();
+            await ctx.LifeSituationDocuments.AddAsync(citDoc1);
+            await ctx.SaveChangesAsync();
+
+            const string citizenship = "citizenship";
+            var citRec1 = new CitizenshipRecordDAL
+            {
+                ID = citRecId1,
+                DocumentID = citDoc1.ID,
+                Content = JsonSerializer.Serialize(new CitizenshipRecord(citRecId1, citizenship))
+            };
+            await ctx.Records.AddAsync(citRec1);
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            //act
+            var report = await sut.GetSurvivorReport(surId, CancellationToken.None);
+
+            //assert
+            report.SurvivorID.Should().Be(surId);
+            report.Citizenship.Should().NotBeNull()
+                .And.BeEquivalentTo(new CitizenshipRecord(citRecId1, citizenship));
+            report.HasChangedCitizenship.Should().BeFalse();
+        }
+
+        [Fact, IntegrationTest]
+        public async Task GetSurvivorReport_WhenCalled_CatchesCorrectTwoSingleRecord()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var citDoc1 = new CitizenshipChangeDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new (2005, 01, 01)};
+            var citDoc2 = new CitizenshipChangeDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new (2006, 01, 01)};
+            await ctx.LifeSituationDocuments.AddAsync(citDoc1);
+            await ctx.LifeSituationDocuments.AddAsync(citDoc2);
+            await ctx.SaveChangesAsync();
+
+            const string citizenshipOld = "citizenshipOld";
+            const string citizenshipNew = "citizenshipNew";
+            var citRecId1 = Guid.NewGuid();
+            var citRec1 = new CitizenshipRecordDAL
+            {
+                ID = citRecId1,
+                DocumentID = citDoc1.ID,
+                Content = JsonSerializer.Serialize(new CitizenshipRecord(citRecId1, citizenshipOld))
+            };
+
+            var citRecId2 = Guid.NewGuid();
+            var citRec2 = new CitizenshipRecordDAL
+            {
+                ID = citRecId2,
+                DocumentID = citDoc2.ID,
+                Content = JsonSerializer.Serialize(new CitizenshipRecord(citRecId2, citizenshipNew))
+            };
+
+            await ctx.Records.AddAsync(citRec1);
+            await ctx.Records.AddAsync(citRec2);
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            //act
+            var report = await sut.GetSurvivorReport(surId, CancellationToken.None);
+
+            //assert
+            report.SurvivorID.Should().Be(surId);
+            report.Citizenship.Should().NotBeNull()
+                .And.BeEquivalentTo(new CitizenshipRecord(citRecId2, citizenshipNew));
+            report.HasChangedCitizenship.Should().BeTrue();
+        }
+
+        [Fact, IntegrationTest]
+        public async Task GetSurvivorReport_WhenCalled_CatchesCorrectMultiRecords()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var specDoc1 = new SpecialitiesUpdateDAL()
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new (2005, 01, 01)};
+            var specDoc2 = new SpecialitiesUpdateDAL()
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new (2006, 01, 01)};
+            await ctx.LifeSituationDocuments.AddAsync(specDoc1);
+            await ctx.LifeSituationDocuments.AddAsync(specDoc2);
+            await ctx.SaveChangesAsync();
+
+            const string specName1 = "spec1";
+            const string specName11 = "spec11";
+            const string specName2 = "spec2";
+            var specRecId1 = Guid.NewGuid();
+            var specRec1 = new SpecialityRecordDAL
+            {
+                ID = specRecId1,
+                DocumentID = specDoc1.ID,
+                Content = JsonSerializer.Serialize(new SpecialityRecord(specRecId1, specName1))
+            };
+            var specRecId11 = Guid.NewGuid();
+            var specRec11 = new SpecialityRecordDAL
+            {
+                ID = specRecId11,
+                DocumentID = specDoc1.ID,
+                Content = JsonSerializer.Serialize(new SpecialityRecord(specRecId11, specName11))
+            };
+
+            var specRecId2 = Guid.NewGuid();
+            var specRec2 = new SpecialityRecordDAL
+            {
+                ID = specRecId2,
+                DocumentID = specDoc2.ID,
+                Content = JsonSerializer.Serialize(new SpecialityRecord(specRecId2, specName2))
+            };
+
+            await ctx.Records.AddAsync(specRec1);
+            await ctx.Records.AddAsync(specRec11);
+            await ctx.Records.AddAsync(specRec2);
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            //act
+            var report = await sut.GetSurvivorReport(surId, CancellationToken.None);
+
+            //assert
+            report.SurvivorID.Should().Be(surId);
+            report.Specialities.Should().NotBeNull()
+                .And.ContainEquivalentOf(new SpecialityRecord(specRecId1, specName1))
+                .And.ContainEquivalentOf(new SpecialityRecord(specRecId11, specName11))
+                .And.ContainEquivalentOf(new SpecialityRecord(specRecId2, specName2));
+            report.HasChangedSpecialities.Should().BeTrue();
+        }
     }
 }
