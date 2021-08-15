@@ -285,5 +285,10 @@ namespace SafeHouseAMS.DataLayer.Repositories
             await _context.LifeSituationDocuments.AddAsync(doc);
             await _context.SaveChangesAsync();
         }
+
+        public Task<SurvivorStateReport> GetSurvivorReport(Guid surId, CancellationToken none)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
