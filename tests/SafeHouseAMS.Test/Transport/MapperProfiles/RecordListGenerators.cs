@@ -18,5 +18,17 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             Arb.From<EducationLevelRecord>().Generator
                 .ListOf().Select(x => x.AsEnumerable())
             );
+
+        public static Arbitrary<IReadOnlyCollection<SpecialityRecord>> SpecRoCollection =>
+            Arb.From(
+            Arb.From<SpecialityRecord>().Generator
+                .ListOf().Select(x => x.ToList() as IReadOnlyCollection<SpecialityRecord>)
+            );
+
+        public static Arbitrary<IReadOnlyCollection<EducationLevelRecord>> EduRoCollection =>
+            Arb.From(
+            Arb.From<EducationLevelRecord>().Generator
+                .ListOf().Select(x => x.ToList() as IReadOnlyCollection<EducationLevelRecord>));
+
     }
 }
