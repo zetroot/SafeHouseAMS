@@ -29,10 +29,10 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <summary>
         /// Получить сводку-отчёт о пострадавшем
         /// </summary>
-        /// <param name="survivroId">идентификатор пострадавшего</param>
+        /// <param name="survivorId">идентификатор пострадавшего</param>
         /// <param name="cancellationToken">Токен отмены операции</param>
         /// <returns>Отчёт о текущем состоянии ситуации у пострадавшего</returns>
-        Task<SurvivorStateReport> GetSurvivorReport(Guid survivroId, CancellationToken cancellationToken);
+        Task<SurvivorStateReport> GetSurvivorReport(Guid survivorId, CancellationToken cancellationToken);
     }
 
 }

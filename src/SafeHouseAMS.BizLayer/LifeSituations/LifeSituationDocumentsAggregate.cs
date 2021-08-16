@@ -31,7 +31,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         public IAsyncEnumerable<string> GetCitizenshipsCompletions(CancellationToken cancellationToken) =>
             _repository.GetCitizenshipsCompletions(cancellationToken);
 
-        public Task<SurvivorStateReport> GetSurvivorReport(Guid survivroId, CancellationToken cancellationToken) =>
-            _repository.GetSurvivorReport(survivroId, cancellationToken);
+        public Task<SurvivorStateReport> GetSurvivorReport(Guid survivorId, CancellationToken cancellationToken) =>
+            _repository.GetSurvivorReport(survivorId, cancellationToken);
     }
 }

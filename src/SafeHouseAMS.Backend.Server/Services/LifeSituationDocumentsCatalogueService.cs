@@ -11,6 +11,7 @@ using SafeHouseAMS.Transport.Protos.Models.Common;
 using SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands;
 using SafeHouseAMS.Transport.Protos.Services;
 using LifeSituationDocument=SafeHouseAMS.Transport.Protos.Models.LifeSituations.LifeSituationDocument;
+using SurvivorStateReport=SafeHouseAMS.Transport.Protos.Models.LifeSituations.SurvivorStateReport;
 
 namespace SafeHouseAMS.Backend.Server.Services
 {
@@ -61,6 +62,13 @@ namespace SafeHouseAMS.Backend.Server.Services
                 result.Item.Add(completion);
             }
             return result;
+        }
+
+        public override async Task<SurvivorStateReport> GetSurvivorStateReport(UUID request, ServerCallContext context)
+        {
+            var survivorId = _mapper.Map<Guid>(request);
+            var report = await _catalogue.GetSurvivorReport(survivorId, context.CancellationToken);
+            return _mapper.Map<SurvivorStateReport>(report);
         }
     }
 }
