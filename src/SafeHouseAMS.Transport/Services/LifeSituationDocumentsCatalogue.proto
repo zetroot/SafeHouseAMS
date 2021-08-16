@@ -6,6 +6,7 @@ import "Models/Common/UUID.proto";
 import "google/protobuf/empty.proto";
 import "Models/LifeSituations/LifeSituationDocument.proto";
 import "Models/LifeSituations/Commands/LifeSituationDocumentCommand.proto";
+import "Models/LifeSituations/SurvivorStateReport.proto";
 
 service LifeSituationDocumentsCatalogue{
   rpc GetSingle (UUID) returns (models.LifeSituationDocument);
@@ -13,6 +14,8 @@ service LifeSituationDocumentsCatalogue{
 
   rpc GetAllBySurvivor (UUID) returns (stream models.LifeSituationDocument);
   rpc GetCitizenshipsCompletions (google.protobuf.Empty) returns (CitizenshipCompletionCollection);
+
+  rpc GetSurvivorStateReport (UUID) returns (ams.models.SurvivorStateReport);
 }
 
 message CitizenshipCompletionCollection{
