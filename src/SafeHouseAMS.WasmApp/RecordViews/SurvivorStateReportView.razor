@@ -19,7 +19,7 @@
                 {
                     <div class="row">
                         <div class="col-md-12">
-                            <EducationLevelRecordView Record="@report.Education"/>
+                            <EducationLevelRecordView Record="@eduRec"/>
                         </div>
                     </div>
                 }
@@ -33,6 +33,18 @@
         <div class="row">
             <div class="col-md-12">
                 <RegistrationStatusRecordView Record="@report.Registration"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @foreach (var specRec in report.Specialities)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <SpecialityRecordView Record="@specRec"/>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
