@@ -12,11 +12,7 @@
                 <ChildrenRecordView Record="@report.Children"/>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <DomicileRecordView Domicile="@report.Domicile"/>
-            </div>
-        </div>
+
         <div class="row">
             <div class="col-md-12">
                 @foreach (var eduRec in report.Education)
@@ -27,6 +23,11 @@
                         </div>
                     </div>
                 }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <MigrationStatusRecordView Record="@report.Migration"/>
             </div>
         </div>
     </div>
