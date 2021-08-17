@@ -1,0 +1,27 @@
+@using SafeHouseAMS.BizLayer.LifeSituations
+@if (StateReport is not null)
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <CitizenshipRecordView Record="@StateReport?.Citizenship"/>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <RadzenLabel Text="Отчёт загружается..."/>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public SurvivorStateReport? StateReport { get; set; }
+}
