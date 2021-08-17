@@ -1,20 +1,32 @@
 @using SafeHouseAMS.BizLayer.LifeSituations
-@if (StateReport is not null)
+@if (StateReport is {} report)
 {
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <CitizenshipRecordView Record="@StateReport?.Citizenship"/>
+                <CitizenshipRecordView Record="@report.Citizenship"/>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <ChildrenRecordView Record="@StateReport?.Children"/>
+                <ChildrenRecordView Record="@report.Children"/>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <DomicileRecordView Record="@StateReport?.Domicile"/>
+                <DomicileRecordView Domicile="@report.Domicile"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @foreach (var eduRec in report.Education)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <EducationLevelRecordView Record="@report.Education"/>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
