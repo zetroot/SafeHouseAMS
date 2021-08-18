@@ -48,59 +48,53 @@
         </div>
     }
     <div class="row">
-        @switch (@_document)
-        {
-            case null:
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-info">
-                            Документ загружается...
-                        </div>
+        <div class="col-md-12">
+            @switch (@_document)
+            {
+                case null:
+                    <div class="alert alert-info">
+                        Документ загружается...
                     </div>
-                </div>
-                break;
-            case Inquiry inquiry:
-                <InquiryView InquiryDocument="@inquiry"/>
-                break;
-            case SingleRecordUpdate<CitizenshipRecord> doc:
-                <CitizenshipRecordView Record="doc.Record"/>
-                break;
-            case SingleRecordUpdate<ChildrenRecord> doc:
-                <ChildrenRecordView Record="doc.Record"/>
-                break;
-            case SingleRecordUpdate<DomicileRecord> doc:
-                <DomicileRecordView Domicile="doc.Record" />
-                break;
-            case MultiRecordsUpdate<EducationLevelRecord> doc:
-                <RadzenLabel Text="Полученное образование:" />
-                foreach (var rec in doc.Records)
-                {
-                    <EducationLevelRecordView Record="rec"/>
-                }
-                break;
-            case SingleRecordUpdate<MigrationStatusRecord> doc:
-                <MigrationStatusRecordView Record="doc.Record"/>
-                break;
-            case SingleRecordUpdate<RegistrationStatusRecord> doc:
-                <RegistrationStatusRecordView Record="doc.Record"/>
-                break;
-            case MultiRecordsUpdate<SpecialityRecord> doc:
-                <RadzenLabel Text="Специальности:"/>
-                foreach (var rec in doc.Records)
-                {
-                    <SpecialityRecordView Record="rec"/>
-                }
-                break;
-            default:
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-danger">
-                            Тип документа @_document.GetType().Name не поддерживается
-                        </div>
+                    break;
+                case Inquiry inquiry:
+                    <InquiryView InquiryDocument="@inquiry"/>
+                    break;
+                case SingleRecordUpdate<CitizenshipRecord> doc:
+                    <CitizenshipRecordView Record="doc.Record"/>
+                    break;
+                case SingleRecordUpdate<ChildrenRecord> doc:
+                    <ChildrenRecordView Record="doc.Record"/>
+                    break;
+                case SingleRecordUpdate<DomicileRecord> doc:
+                    <DomicileRecordView Domicile="doc.Record"/>
+                    break;
+                case MultiRecordsUpdate<EducationLevelRecord> doc:
+                    <RadzenLabel Text="Полученное образование:"/>
+                    foreach (var rec in doc.Records)
+                    {
+                        <EducationLevelRecordView Record="rec"/>
+                    }
+                    break;
+                case SingleRecordUpdate<MigrationStatusRecord> doc:
+                    <MigrationStatusRecordView Record="doc.Record"/>
+                    break;
+                case SingleRecordUpdate<RegistrationStatusRecord> doc:
+                    <RegistrationStatusRecordView Record="doc.Record"/>
+                    break;
+                case MultiRecordsUpdate<SpecialityRecord> doc:
+                    <RadzenLabel Text="Специальности:"/>
+                    foreach (var rec in doc.Records)
+                    {
+                        <SpecialityRecordView Record="rec"/>
+                    }
+                    break;
+                default:
+                    <div class="alert alert-danger">
+                        Тип документа @_document.GetType().Name не поддерживается
                     </div>
-                </div>
-                break;
-        }
+                    break;
+            }
+        </div>
     </div>
 </div>
 
