@@ -1,0 +1,11 @@
+syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations";
+
+import "Models/Common/UUID.proto";
+import "google/protobuf/timestamp.proto";
+
+message RecordHistoryItem {
+  google.protobuf.Timestamp DocumentDate = 1;
+  safehouse.ams.UUID DocumentID = 2;
+}
