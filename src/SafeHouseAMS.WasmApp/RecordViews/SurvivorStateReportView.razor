@@ -1,4 +1,9 @@
 @using SafeHouseAMS.BizLayer.LifeSituations
+@using SafeHouseAMS.BizLayer.LifeSituations.Records
+@using System.Threading
+@inject DialogService _dialogService;
+@inject ILifeSituationDocumentsAggregate _documentsAggregate;
+
 @if (StateReport is {} report)
 {
     <div class="container-fluid">
@@ -10,7 +15,9 @@
                         <div class="container-fluid">
                             @if (report.HasChangedCitizenship)
                             {
-                                <span class="oi oi-graph"></span>
+                                <a @onclick="@(OpenHistory<CitizenshipRecord>)">
+                                    <span class="oi oi-graph"></span>
+                                </a>
                             }
                             <CitizenshipRecordView Record="@report.Citizenship"/>
                         </div>
@@ -21,7 +28,9 @@
                         <div class="container-fluid">
                             @if (report.HasChangedMigration)
                             {
-                                <span class="oi oi-graph"></span>
+                                <a @onclick="@(OpenHistory<MigrationStatusRecord>)">
+                                    <span class="oi oi-graph"></span>
+                                </a>
                             }
                             <MigrationStatusRecordView Record="@report.Migration"/>
                         </div>
@@ -32,7 +41,9 @@
                         <div class="container-fluid">
                             @if (report.HasChangedRegistration)
                             {
-                                <span class="oi oi-graph"></span>
+                                <a @onclick="@(OpenHistory<RegistrationStatusRecord>)">
+                                    <span class="oi oi-graph"></span>
+                                </a>
                             }
                             <RegistrationStatusRecordView Record="@report.Registration"/>
                         </div>
@@ -46,7 +57,9 @@
                         <div class="container-fluid">
                             @if (report.HasChangedDomicile)
                             {
-                                <span class="oi oi-graph"></span>
+                                <a @onclick="@(OpenHistory<DomicileRecord>)">
+                                    <span class="oi oi-graph"></span>
+                                </a>
                             }
                             <DomicileRecordView Domicile="@report.Domicile"/>
                         </div>
@@ -58,7 +71,9 @@
                         <div class="container-fluid">
                             @if (report.HasChangedChildren)
                             {
-                                <span class="oi oi-graph"></span>
+                                <a @onclick="@(OpenHistory<ChildrenRecord>)">
+                                    <span class="oi oi-graph"></span>
+                                </a>
                             }
                             <ChildrenRecordView Record="@report.Children"/>
                         </div>
@@ -74,7 +89,9 @@
                             <div class="col-md-2">
                                 @if (report.HasChangedEducation)
                                 {
-                                    <span class="oi oi-graph"></span>
+                                    <a @onclick="@(OpenHistory<EducationLevelRecord>)">
+                                        <span class="oi oi-graph"></span>
+                                    </a>
                                 }
                                 <RadzenLabel Text="Образование:"/>
                             </div>
@@ -98,7 +115,9 @@
                             <div class="col-md-2">
                                 @if (report.HasChangedSpecialities)
                                 {
-                                    <span class="oi oi-graph"></span>
+                                    <a @onclick="@(OpenHistory<SpecialityRecord>)">
+                                        <span class="oi oi-graph"></span>
+                                    </a>
                                 }
                                 <RadzenLabel Text="Специальности:"/>
                             </div>
@@ -134,4 +153,13 @@ else
 
 @code {
     [Parameter] public SurvivorStateReport? StateReport { get; set; }
+    private async Task OpenHistory<T>() where T : BaseRecord
+    {
+        if (StateReport is not null)
+        {
+            var stream = _documentsAggregate.GetRecordHistory<T>(StateReport.SurvivorID, CancellationToken.None);
+            await _dialogService.OpenAsync<RecordHistoryDialogView>("История изменения",
+                new() { { nameof(RecordHistoryDialogView.HistoryStream), stream } });
+        }
+    }
 }
