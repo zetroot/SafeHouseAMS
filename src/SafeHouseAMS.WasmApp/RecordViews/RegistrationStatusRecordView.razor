@@ -1,27 +1,25 @@
 ﻿@using SafeHouseAMS.BizLayer.LifeSituations.Records
-<div class="container-fluid">
-    @if (Record is null)
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-info">
-                    <RadzenLabel Text="Нет информации о статусе регистрации"/>
-                </div>
+
+@if (Record is null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <RadzenLabel Text="Нет информации о статусе регистрации"/>
             </div>
         </div>
-    }
-    else
-    {
-        <div class="row">
-            <div class="col-md-2">
-                <RadzenLabel Text="Статус регистрации"/>
-            </div>
-            <div class="col-md-10">
-                <RadzenLabel Text="@Record.Details"/>
-            </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <RadzenLabel Text="Статус регистрации"/>
+            <RadzenLabel Text="@Record.Details"/>
         </div>
-    }
-</div>
+    </div>
+}
+
 @code {
     [Parameter] public RegistrationStatusRecord? Record { get; set; }
 }

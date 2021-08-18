@@ -3,91 +3,118 @@
 {
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                @if (report.HasChangedCitizenship)
-                {
-                    <span class="oi oi-graph"></span>
-                }
-                <CitizenshipRecordView Record="@report.Citizenship"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                @if (report.HasChangedMigration)
-                {
-                    <span class="oi oi-graph"></span>
-                }
-                <MigrationStatusRecordView Record="@report.Migration"/>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                @if (report.HasChangedRegistration)
-                {
-                    <span class="oi oi-graph"></span>
-                }
-                <RegistrationStatusRecordView Record="@report.Registration"/>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    @if (report.HasChangedChildren)
-                    {
-                        <span class="oi oi-graph"></span>
-                    }
-                    <ChildrenRecordView Record="@report.Children"/>
+            <div class="col-md-4">
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-12">
+                        <div class="container-fluid">
+                            @if (report.HasChangedCitizenship)
+                            {
+                                <span class="oi oi-graph"></span>
+                            }
+                            <CitizenshipRecordView Record="@report.Citizenship"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-12">
+                        <div class="container-fluid">
+                            @if (report.HasChangedMigration)
+                            {
+                                <span class="oi oi-graph"></span>
+                            }
+                            <MigrationStatusRecordView Record="@report.Migration"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-12">
+                        <div class="container-fluid">
+                            @if (report.HasChangedRegistration)
+                            {
+                                <span class="oi oi-graph"></span>
+                            }
+                            <RegistrationStatusRecordView Record="@report.Registration"/>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                @if (report.Education.Any())
-                {
-                    <div class="col-md-2">
-                        @if (report.HasChangedEducation)
-                        {
-                            <span class="oi oi-graph"></span>
-                        }
-                        <RadzenLabel Text="Образование:"/>
+            <div class="col-md-4">
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-12">
+                        <div class="container-fluid">
+                            @if (report.HasChangedDomicile)
+                            {
+                                <span class="oi oi-graph"></span>
+                            }
+                            <DomicileRecordView Domicile="@report.Domicile"/>
+                        </div>
                     </div>
-                    <div class="col-md-10">
-                        <ul>
-                        @foreach (var eduRec in report.Education.OrderBy(x => x.Level))
-                        {
-                            <li>
-                                <EducationLevelRecordView Record="@eduRec"/>
-                            </li>
-                        }
-                        </ul>
+                </div>
+
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-12">
+                        <div class="container-fluid">
+                            @if (report.HasChangedChildren)
+                            {
+                                <span class="oi oi-graph"></span>
+                            }
+                            <ChildrenRecordView Record="@report.Children"/>
+                        </div>
                     </div>
-                }
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                @if (report.Specialities.Any())
-                {
-                    <div class="col-md-2">
-                        @if (report.HasChangedSpecialities)
+
+            <div class="col-md-4">
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-12">
+                        @if (report.Education.Any())
                         {
-                            <span class="oi oi-graph"></span>
+                            <div class="col-md-2">
+                                @if (report.HasChangedEducation)
+                                {
+                                    <span class="oi oi-graph"></span>
+                                }
+                                <RadzenLabel Text="Образование:"/>
+                            </div>
+                            <div class="col-md-10">
+                                <ul>
+                                    @foreach (var eduRec in report.Education.OrderBy(x => x.Level))
+                                    {
+                                        <li>
+                                            <EducationLevelRecordView Record="@eduRec"/>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
                         }
-                        <RadzenLabel Text="Специальности:"/>
                     </div>
-                    <div class="col-md-10">
-                        <ul>
-                        @foreach (var specRec in report.Specialities)
+                </div>
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-12">
+                        @if (report.Specialities.Any())
                         {
-                            <li>
-                                <SpecialityRecordView Record="@specRec"/>
-                            </li>
+                            <div class="col-md-2">
+                                @if (report.HasChangedSpecialities)
+                                {
+                                    <span class="oi oi-graph"></span>
+                                }
+                                <RadzenLabel Text="Специальности:"/>
+                            </div>
+                            <div class="col-md-10">
+                                <ul>
+                                    @foreach (var specRec in report.Specialities)
+                                    {
+                                        <li>
+                                            <SpecialityRecordView Record="@specRec"/>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
                         }
-                        </ul>
                     </div>
-                }
+                </div>
             </div>
         </div>
     </div>

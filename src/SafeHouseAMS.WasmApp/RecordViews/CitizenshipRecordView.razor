@@ -2,27 +2,25 @@
 @using SafeHouseAMS.BizLayer.LifeSituations.Documents
 @using SafeHouseAMS.BizLayer.LifeSituations.Records
 
-<div class="container-fluid">
-    @if (Record is null)
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="alert alert-danger">
-                    Нет записи для отображения
-                </div>
+@if (Record is null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-danger">
+                Нет записи для отображения
             </div>
         </div>
-    }
-    else
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <RadzenLabel Text="Гражданство: "/>
-                <RadzenLabel Text="@Record.Citizenship"/>
-            </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <RadzenLabel Text="Гражданство: "/>
+            <RadzenLabel Text="@Record.Citizenship"/>
         </div>
-    }
-</div>
+    </div>
+}
 
 @code {
     [Parameter] public CitizenshipRecord? Record { get; set; }

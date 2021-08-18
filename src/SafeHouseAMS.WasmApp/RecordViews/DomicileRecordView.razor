@@ -1,103 +1,103 @@
 ﻿@using SafeHouseAMS.BizLayer.LifeSituations.Records
-<div class="container-fluid">
-    @if (Domicile is null)
-    {
+
+@if (Domicile is null)
+{
+    <div class="col-md-12">
+        <div class="alert alert-info">
+            <RadzenLabel Text="Нет информации о проживании"/>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
         <div class="col-md-12">
-            <div class="alert alert-info">
-                <RadzenLabel Text="Нет информации о проживании"/>
-            </div>
+            @if (string.IsNullOrWhiteSpace(Domicile?.Place))
+            {
+                <RadzenLabel Text="Место жительства не заполнено"/>
+            }
+            else
+            {
+                <RadzenLabel Text="Место жительства: "/>
+                <RadzenLabel Text="@Domicile?.Place"/>
+            }
         </div>
-    }
-    else
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @if (Domicile?.Kind is null)
+            {
+                <RadzenLabel Text="Тип жилья не заполнен"/>
+            }
+            else
+            {
+                <RadzenLabel Text="Тип жилья: "/>
+                <RadzenLabel Text="@MapPlaceKind(Domicile.Kind.Value)"/>
+            }
+        </div>
+    </div>
+    @if (Domicile?.LivesAlone == true)
     {
         <div class="row">
             <div class="col-md-12">
-                @if (string.IsNullOrWhiteSpace(Domicile?.Place))
-                {
-                    <RadzenLabel Text="Место жительства не заполнено"/>
-                }
-                else
-                {
-                    <RadzenLabel Text="Место жительства: "/>
-                    <RadzenLabel Text="@Domicile?.Place"/>
-                }
+                <RadzenLabel Text="Проживает од_на"/>
             </div>
         </div>
+    }
+    @if (Domicile?.WithPartner == true)
+    {
         <div class="row">
             <div class="col-md-12">
-                @if (Domicile?.Kind is null)
-                {
-                    <RadzenLabel Text="Тип жилья не заполнен"/>
-                }
-                else
-                {
-                    <RadzenLabel Text="Тип жилья: "/>
-                    <RadzenLabel Text="@MapPlaceKind(Domicile.Kind.Value)"/>
-                }
+                <RadzenLabel Text="Проживает с партнером/супругом"/>
             </div>
         </div>
-        @if (Domicile?.LivesAlone == true)
-        {
-            <div class="row">
-                <div class="col-md-12">
-                    <RadzenLabel Text="Проживает од_на"/>
-                </div>
-            </div>
-        }
-        @if (Domicile?.WithPartner == true)
-        {
-            <div class="row">
-                <div class="col-md-12">
-                    <RadzenLabel Text="Проживает с партнером/супругом"/>
-                </div>
-            </div>
-        }
-        @if (Domicile?.WithChildren == true)
-        {
-            <div class="row">
-                <div class="col-md-2">
-                    <RadzenLabel Text="Проживает с детьми"/>
-                </div>
-                <div class="col-md-8 text-muted">
-                    <RadzenLabel Text="@Domicile?.ChildrenDetails"/>
-                </div>
-            </div>
-        }
-        @if (Domicile?.WithParents == true)
-        {
-            <div class="row">
-                <div class="col-md-2">
-                    <RadzenLabel Text="Проживает с родителями"/>
-                </div>
-                <div class="col-md-8 text-muted">
-                    <RadzenLabel Text="@Domicile?.ParentsDetails"/>
-                </div>
-            </div>
-        }
-        @if (Domicile?.WithOtherRelatives == true)
-        {
-            <div class="row">
-                <div class="col-md-2">
-                    <RadzenLabel Text="Проживает с другими родственниками"/>
-                </div>
-                <div class="col-md-8 text-muted">
-                    <RadzenLabel Text="@Domicile?.OtherRelativesDetails"/>
-                </div>
-            </div>
-        }
-        @if (Domicile?.WithOtherPeople == true)
-        {
-            <div class="row">
-                <div class="col-md-2">
-                    <RadzenLabel Text="Проживает с другими людьми"/>
-                </div>
-                <div class="col-md-8 text-muted">
-                    <RadzenLabel Text="@Domicile?.OtherPeopleDetails"/>
-                </div>
-            </div>
-        }
     }
-</div>
+    @if (Domicile?.WithChildren == true)
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <RadzenLabel Text="Проживает с детьми"/>
+            </div>
+            <div class="col-md-8 text-muted">
+                <RadzenLabel Text="@Domicile?.ChildrenDetails"/>
+            </div>
+        </div>
+    }
+    @if (Domicile?.WithParents == true)
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <RadzenLabel Text="Проживает с родителями"/>
+            </div>
+            <div class="col-md-8 text-muted">
+                <RadzenLabel Text="@Domicile?.ParentsDetails"/>
+            </div>
+        </div>
+    }
+    @if (Domicile?.WithOtherRelatives == true)
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <RadzenLabel Text="Проживает с другими родственниками"/>
+            </div>
+            <div class="col-md-8 text-muted">
+                <RadzenLabel Text="@Domicile?.OtherRelativesDetails"/>
+            </div>
+        </div>
+    }
+    @if (Domicile?.WithOtherPeople == true)
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <RadzenLabel Text="Проживает с другими людьми"/>
+            </div>
+            <div class="col-md-8 text-muted">
+                <RadzenLabel Text="@Domicile?.OtherPeopleDetails"/>
+            </div>
+        </div>
+    }
+}
+
 @code {
     [Parameter] public DomicileRecord? Domicile { get; set; }
 
