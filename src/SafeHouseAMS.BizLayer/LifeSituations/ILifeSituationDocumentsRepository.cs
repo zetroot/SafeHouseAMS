@@ -165,5 +165,14 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="recordType">тип записи, которую изменяет документ</param>
         Task CreateRecordUpdateDocument(Guid docId, bool isDeleted, DateTime created, DateTime lastEdit,
             Guid survivorID, DateTime documentDate, Type recordType);
+
+
+        /// <summary>
+        /// Построить отчёт о состоянии пострадавшего
+        /// </summary>
+        /// <param name="surId">Идентификатор пострадавшего</param>
+        /// <param name="ct">Токен отмены операции</param>
+        /// <returns>Сводка-отчёт о текущем состоянии пострадавшего</returns>
+        Task<SurvivorStateReport> GetSurvivorReport(Guid surId, CancellationToken ct);
     }
 }

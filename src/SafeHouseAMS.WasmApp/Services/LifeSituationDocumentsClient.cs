@@ -59,5 +59,13 @@ namespace SafeHouseAMS.WasmApp.Services
                 yield return completion;
             }
         }
+        public async Task<SurvivorStateReport> GetSurvivorReport(Guid survivorId, CancellationToken cancellationToken)
+        {
+            var request = _mapper.Map<UUID>(survivorId);
+            var result =
+                await _client.GetSurvivorStateReportAsync(request,
+                new CallOptions(cancellationToken: cancellationToken));
+            return _mapper.Map<SurvivorStateReport>(result);
+        }
     }
 }

@@ -4,6 +4,8 @@
 @using SafeHouseAMS.BizLayer.LifeSituations.Documents
 @using SafeHouseAMS.BizLayer.LifeSituations.Records
 @using SafeHouseAMS.BizLayer.Survivors
+@using SafeHouseAMS.WasmApp.RecordViews
+
 @inject ISurvivorCatalogue _survivorCatalogue;
 @inject ILifeSituationDocumentsAggregate _documentsAggregate;
 @inject NavigationManager _navigationManager;
@@ -80,6 +82,9 @@
             </div>
         </div>
     }
+
+    <SurvivorStateReportView StateReport="_report"/>
+
     @if (!_documents.Any())
     {
         <p>Нет документов для отображения</p>
@@ -141,12 +146,14 @@
     [Parameter] public string? SurvivorID { get; set; }
 
     private List<LifeSituationDocument> _documents = new();
+    private SurvivorStateReport? _report;
 
     protected override async Task OnParametersSetAsync()
     {
         if (Guid.TryParse(SurvivorID, out var surId))
         {
             _survivor = await _survivorCatalogue.GetSingleAsync(surId, CancellationToken.None);
+            _report = await _documentsAggregate.GetSurvivorReport(surId, CancellationToken.None);
             await foreach (var doc in _documentsAggregate.GetAllBySurvivor(surId, CancellationToken.None))
             {
                 _logger.LogInformation("Getting document");

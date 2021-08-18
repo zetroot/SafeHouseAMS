@@ -285,5 +285,67 @@ namespace SafeHouseAMS.DataLayer.Repositories
             await _context.LifeSituationDocuments.AddAsync(doc);
             await _context.SaveChangesAsync();
         }
+
+        private async Task<(TBiz?, bool)> CountSingleRecords<TDAL, TBiz>(Guid surId, CancellationToken ct)
+            where TDAL : BaseRecordDAL
+            where TBiz : BaseRecord
+        {
+            var sortedRecords = _context.Records
+                .Include(x => x.Document)
+                .Where(x => x.Document.SurvivorID == surId)
+                .Where(x => !x.Document.IsDeleted)
+                .OrderByDescending(x => x.Document.DocumentDate)
+                .OfType<TDAL>();
+
+            var actualRecord = await sortedRecords.FirstOrDefaultAsync(ct);
+            var recordDocsCnt = await sortedRecords.Select(x => x.DocumentID).Distinct().CountAsync(ct);
+
+            return (_mapper.Map<TBiz>(actualRecord), recordDocsCnt > 1);
+        }
+
+        private async Task<(List<TBiz>, bool)> CountMultiRecords<TDAL,TBiz>(Guid surId, CancellationToken ct)
+            where TDAL : BaseRecordDAL
+            where TBiz : BaseRecord
+        {
+            var sortedRecords = _context.Records
+                .Include(x => x.Document)
+                .Where(x => x.Document.SurvivorID == surId)
+                .Where(x => !x.Document.IsDeleted)
+                .OrderByDescending(x => x.Document.DocumentDate)
+                .OfType<TDAL>();
+
+            var actualRecords = await sortedRecords.ToListAsync(ct);
+            var recordDocsCnt = await sortedRecords.Select(x => x.DocumentID).Distinct().CountAsync(ct);
+
+            return (actualRecords.Select(_mapper.Map<TBiz>).ToList(), recordDocsCnt > 1);
+        }
+
+        public async Task<SurvivorStateReport> GetSurvivorReport(Guid surId, CancellationToken ct)
+        {
+            var (childrenRecord, hasChangedChildren) =
+                await CountSingleRecords<ChildrenRecordDAL, ChildrenRecord>(surId, ct);
+            var (citizenshipRecord, hasChangedCitizenship) =
+                await CountSingleRecords<CitizenshipRecordDAL, CitizenshipRecord>(surId, ct);
+            var (domicileRecord, hasChangedDomicile) =
+                await CountSingleRecords<DomicileRecordDAL, DomicileRecord>(surId, ct);
+            var (migrationRecord, hasChangedMigration) =
+                await CountSingleRecords<MigrationStatusRecordDAL, MigrationStatusRecord>(surId, ct);
+            var (registrationRecord, hasChangedRegistration) =
+                await CountSingleRecords<RegistrationStatusRecordDAL, RegistrationStatusRecord>(surId, ct);
+
+            var (eduRecords, hasChangedEdu) =
+                await CountMultiRecords<EducationLevelRecordDAL, EducationLevelRecord>(surId, ct);
+            var (specialityRecords, hasChangedSpecialities) =
+                await CountMultiRecords<SpecialityRecordDAL, SpecialityRecord>(surId, ct);
+
+            return new(surId,
+            childrenRecord, hasChangedChildren,
+            citizenshipRecord, hasChangedCitizenship,
+            domicileRecord, hasChangedDomicile,
+            eduRecords, hasChangedEdu,
+            migrationRecord, hasChangedMigration,
+            registrationRecord, hasChangedRegistration,
+            specialityRecords, hasChangedSpecialities);
+        }
     }
 }

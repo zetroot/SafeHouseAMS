@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
 
 namespace SafeHouseAMS.BizLayer.LifeSituations
 {
     /// <summary>
-    /// Агрегат документов жизненных ситуаций 
+    /// Агрегат документов жизненных ситуаций
     /// </summary>
     public interface ILifeSituationDocumentsAggregate : IDomainAggregate<LifeSituationDocument, LifeSituationDocumentCommand>
     {
@@ -24,6 +25,14 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="cancellationToken">токен отмены операции</param>
         /// <returns>Асинхронная последовательность строк - что вводили в поле "гражданство"</returns>
         IAsyncEnumerable<string> GetCitizenshipsCompletions(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Получить сводку-отчёт о пострадавшем
+        /// </summary>
+        /// <param name="survivorId">идентификатор пострадавшего</param>
+        /// <param name="cancellationToken">Токен отмены операции</param>
+        /// <returns>Отчёт о текущем состоянии ситуации у пострадавшего</returns>
+        Task<SurvivorStateReport> GetSurvivorReport(Guid survivorId, CancellationToken cancellationToken);
     }
 
 }

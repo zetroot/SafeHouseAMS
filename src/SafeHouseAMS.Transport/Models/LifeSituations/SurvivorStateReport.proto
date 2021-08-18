@@ -1,0 +1,37 @@
+syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations";
+
+import "Models/Common/UUID.proto";
+import "Models/LifeSituations/Records/ChildrenRecord.proto";
+import "Models/LifeSituations/Records/CitizenshipRecord.proto";
+import "Models/LifeSituations/Records/DomicileRecord.proto";
+import "Models/LifeSituations/Records/EducationLevelRecord.proto";
+import "Models/LifeSituations/Records/SpecialityRecord.proto";
+import "Models/LifeSituations/Records/MigrationStatusRecord.proto";
+import "Models/LifeSituations/Records/RegistrationStatusRecord.proto";
+
+message SurvivorStateReport {
+  safehouse.ams.UUID SurvivorID = 1;
+
+  records.ChildrenRecord Children = 2;
+  bool HasChangedChildren = 3;
+
+  records.CitizenshipRecord Citizenship = 4;
+  bool HasChangedCitizenship = 5;
+
+  records.DomicileRecord Domicile = 6;
+  bool HasChangedDomicile = 7;
+
+  repeated records.EducationLevelRecord Education = 8;
+  bool HasChangedEducation = 9;
+
+  records.MigrationStatusRecord Migration = 10;
+  bool HasChangedMigration = 11;
+
+  records.RegistrationStatusRecord Registration = 12;
+  bool HasChangedRegistration = 13;
+
+  repeated records.SpecialityRecord Specialities = 14;
+  bool HasChangedSpecialities = 15;
+}

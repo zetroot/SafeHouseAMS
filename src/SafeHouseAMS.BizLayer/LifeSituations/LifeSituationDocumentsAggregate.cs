@@ -24,10 +24,14 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
             await command.ApplyOn(_repository);
         }
 
-        public IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId, CancellationToken cancellationToken) =>
+        public IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId,
+            CancellationToken cancellationToken) =>
             _repository.GetAllBySurvivor(survivorId, cancellationToken);
 
         public IAsyncEnumerable<string> GetCitizenshipsCompletions(CancellationToken cancellationToken) =>
             _repository.GetCitizenshipsCompletions(cancellationToken);
+
+        public Task<SurvivorStateReport> GetSurvivorReport(Guid survivorId, CancellationToken cancellationToken) =>
+            _repository.GetSurvivorReport(survivorId, cancellationToken);
     }
 }
