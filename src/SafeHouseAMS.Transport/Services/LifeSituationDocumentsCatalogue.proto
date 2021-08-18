@@ -18,9 +18,24 @@ service LifeSituationDocumentsCatalogue{
 
   rpc GetSurvivorStateReport (UUID) returns (ams.models.SurvivorStateReport);
 
-  rpc GetRecordHistory (UUID) returns (stream ams.models.RecordHistoryItem);
+  rpc GetRecordHistory (RecordHistoryRequest) returns (stream ams.models.RecordHistoryItem);
 }
 
 message CitizenshipCompletionCollection{
   repeated string Item = 1;
+}
+
+enum RecordTypeEnum{
+  Children = 0;
+  Citizenship = 1;
+  Domicile = 2;
+  Education = 3;
+  Migration = 4;
+  Registration = 5;
+  Speciality = 6;
+}
+
+message RecordHistoryRequest {
+  UUID SurvivorID = 1;
+  RecordTypeEnum RecordType = 2;
 }

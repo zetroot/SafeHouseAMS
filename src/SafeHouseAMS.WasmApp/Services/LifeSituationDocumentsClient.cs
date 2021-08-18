@@ -10,6 +10,7 @@ using Grpc.Net.Client;
 using Microsoft.Extensions.Logging;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
+using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.Transport.Protos.Models.Common;
 using SafeHouseAMS.Transport.Protos.Services;
 
@@ -66,6 +67,29 @@ namespace SafeHouseAMS.WasmApp.Services
                 await _client.GetSurvivorStateReportAsync(request,
                 new CallOptions(cancellationToken: cancellationToken));
             return _mapper.Map<SurvivorStateReport>(result);
+        }
+
+        public async IAsyncEnumerable<RecordHistoryItem> GetRecordHistory<T>(Guid survivorId,
+            [EnumeratorCancellation] CancellationToken cancellationToken) where T : BaseRecord
+        {
+            var request = new RecordHistoryRequest
+            {
+                SurvivorID = _mapper.Map<UUID>(survivorId)
+            };
+            if (typeof(T) == typeof(ChildrenRecord)) request.RecordType = RecordTypeEnum.Children;
+            else if (typeof(T) == typeof(CitizenshipRecord)) request.RecordType = RecordTypeEnum.Citizenship;
+            else if (typeof(T) == typeof(DomicileRecord)) request.RecordType = RecordTypeEnum.Domicile;
+            else if (typeof(T) == typeof(EducationLevelRecord)) request.RecordType = RecordTypeEnum.Education;
+            else if (typeof(T) == typeof(MigrationStatusRecord)) request.RecordType = RecordTypeEnum.Migration;
+            else if (typeof(T) == typeof(RegistrationStatusRecord)) request.RecordType = RecordTypeEnum.Registration;
+            else if (typeof(T) == typeof(SpecialityRecord)) request.RecordType = RecordTypeEnum.Speciality;
+
+            using var call = _client.GetRecordHistory(request, new CallOptions(cancellationToken: cancellationToken));
+
+            while (await call.ResponseStream.MoveNext(cancellationToken))
+            {
+                yield return _mapper.Map<RecordHistoryItem>(call.ResponseStream.Current);
+            }
         }
     }
 }
