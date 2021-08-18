@@ -7,10 +7,12 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using SafeHouseAMS.BizLayer.LifeSituations;
+using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using SafeHouseAMS.Transport.Protos.Models.Common;
 using SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands;
 using SafeHouseAMS.Transport.Protos.Services;
 using LifeSituationDocument=SafeHouseAMS.Transport.Protos.Models.LifeSituations.LifeSituationDocument;
+using RecordHistoryItem=SafeHouseAMS.Transport.Protos.Models.LifeSituations.RecordHistoryItem;
 using SurvivorStateReport=SafeHouseAMS.Transport.Protos.Models.LifeSituations.SurvivorStateReport;
 
 namespace SafeHouseAMS.Backend.Server.Services
@@ -69,6 +71,34 @@ namespace SafeHouseAMS.Backend.Server.Services
             var survivorId = _mapper.Map<Guid>(request);
             var report = await _catalogue.GetSurvivorReport(survivorId, context.CancellationToken);
             return _mapper.Map<SurvivorStateReport>(report);
+        }
+
+        public override async Task GetRecordHistory(RecordHistoryRequest request, IServerStreamWriter<RecordHistoryItem> responseStream, ServerCallContext context)
+        {
+            var id = _mapper.Map<Guid>(request.SurvivorID);
+            var asyncStream = request.RecordType switch
+            {
+                RecordTypeEnum.Children =>
+                    _catalogue.GetRecordHistory<ChildrenRecord>(id, context.CancellationToken),
+                RecordTypeEnum.Citizenship =>
+                    _catalogue.GetRecordHistory<CitizenshipRecord>(id, context.CancellationToken),
+                RecordTypeEnum.Domicile =>
+                    _catalogue.GetRecordHistory<DomicileRecord>(id, context.CancellationToken),
+                RecordTypeEnum.Education =>
+                    _catalogue.GetRecordHistory<EducationLevelRecord>(id, context.CancellationToken),
+                RecordTypeEnum.Migration =>
+                    _catalogue.GetRecordHistory<MigrationStatusRecord>(id, context.CancellationToken),
+                RecordTypeEnum.Registration =>
+                    _catalogue.GetRecordHistory<RegistrationStatusRecord>(id, context.CancellationToken),
+                RecordTypeEnum.Speciality =>
+                    _catalogue.GetRecordHistory<SpecialityRecord>(id, context.CancellationToken),
+                _ => throw new ArgumentException("Запрошен неизвестный тип записи")
+            };
+
+            await foreach (var item in asyncStream)
+            {
+                await responseStream.WriteAsync(_mapper.Map<RecordHistoryItem>(item));
+            }
         }
     }
 }
