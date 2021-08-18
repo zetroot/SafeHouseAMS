@@ -7,6 +7,7 @@ import "google/protobuf/empty.proto";
 import "Models/LifeSituations/LifeSituationDocument.proto";
 import "Models/LifeSituations/Commands/LifeSituationDocumentCommand.proto";
 import "Models/LifeSituations/SurvivorStateReport.proto";
+import "Models/LifeSituations/RecordHistoryItem.proto";
 
 service LifeSituationDocumentsCatalogue{
   rpc GetSingle (UUID) returns (models.LifeSituationDocument);
@@ -16,8 +17,25 @@ service LifeSituationDocumentsCatalogue{
   rpc GetCitizenshipsCompletions (google.protobuf.Empty) returns (CitizenshipCompletionCollection);
 
   rpc GetSurvivorStateReport (UUID) returns (ams.models.SurvivorStateReport);
+
+  rpc GetRecordHistory (RecordHistoryRequest) returns (stream ams.models.RecordHistoryItem);
 }
 
 message CitizenshipCompletionCollection{
   repeated string Item = 1;
+}
+
+enum RecordTypeEnum{
+  Children = 0;
+  Citizenship = 1;
+  Domicile = 2;
+  Education = 3;
+  Migration = 4;
+  Registration = 5;
+  Speciality = 6;
+}
+
+message RecordHistoryRequest {
+  UUID SurvivorID = 1;
+  RecordTypeEnum RecordType = 2;
 }

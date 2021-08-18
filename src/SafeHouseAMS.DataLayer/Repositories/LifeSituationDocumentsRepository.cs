@@ -347,5 +347,29 @@ namespace SafeHouseAMS.DataLayer.Repositories
             registrationRecord, hasChangedRegistration,
             specialityRecords, hasChangedSpecialities);
         }
+
+        public IAsyncEnumerable<RecordHistoryItem> GetRecordHistory<T>(Guid survivorId, CancellationToken cancellationToken)
+            where T : BaseRecord
+        {
+            var allRecs = _context.Records
+                .Include(x => x.Document)
+                .Where(x => x.Document.SurvivorID == survivorId && !x.Document.IsDeleted);
+            IQueryable<BaseRecordDAL> typedRecs;
+            if (typeof(T) == typeof(ChildrenRecord)) typedRecs = allRecs.OfType<ChildrenRecordDAL>();
+            else if (typeof(T) == typeof(CitizenshipRecord)) typedRecs = allRecs.OfType<CitizenshipRecordDAL>();
+            else if (typeof(T) == typeof(DomicileRecord)) typedRecs = allRecs.OfType<DomicileRecordDAL>();
+            else if (typeof(T) == typeof(EducationLevelRecord)) typedRecs = allRecs.OfType<EducationLevelRecordDAL>();
+            else if (typeof(T) == typeof(MigrationStatusRecord)) typedRecs = allRecs.OfType<MigrationStatusRecordDAL>();
+            else if (typeof(T) == typeof(RegistrationStatusRecord)) typedRecs = allRecs.OfType<RegistrationStatusRecordDAL>();
+            else if (typeof(T) == typeof(SpecialityRecord)) typedRecs = allRecs.OfType<SpecialityRecordDAL>();
+            else typedRecs = allRecs;
+
+            return typedRecs
+                .OrderByDescending(x => x.Document.DocumentDate)
+                .Select(x => x.Document)
+                .Distinct()
+                .Select(x => new RecordHistoryItem(x.DocumentDate, x.ID))
+                .AsAsyncEnumerable();
+        }
     }
 }
