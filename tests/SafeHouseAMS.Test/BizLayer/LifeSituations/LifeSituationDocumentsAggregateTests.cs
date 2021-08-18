@@ -5,6 +5,7 @@ using FluentAssertions;
 using Moq;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
+using SafeHouseAMS.BizLayer.LifeSituations.Records;
 using Xunit;
 using Xunit.Categories;
 
@@ -116,6 +117,21 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
 
             //assert
             repoMock.Verify(x => x.GetSurvivorReport(surId, CancellationToken.None), Times.Once());
+        }
+
+        [Fact, UnitTest]
+        public void GetRecordHistory_WhenCalled_InvokesRepo()
+        {
+            //arrange
+            var repoMock = new Mock<ILifeSituationDocumentsRepository>();
+            repoMock.Setup(x => x.GetRecordHistory<BaseRecord>(It.IsAny<Guid>(), It.IsAny<CancellationToken>()));
+            var sut = new LifeSituationDocumentsAggregate(repoMock.Object);
+            var surId = Guid.NewGuid();
+            //act
+            _ = sut.GetRecordHistory<BaseRecord>(surId, CancellationToken.None);
+
+            //assert
+            repoMock.Verify(x => x.GetRecordHistory<BaseRecord>(surId, CancellationToken.None), Times.Once());
         }
     }
 }

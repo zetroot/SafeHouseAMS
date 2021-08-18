@@ -174,5 +174,15 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="ct">Токен отмены операции</param>
         /// <returns>Сводка-отчёт о текущем состоянии пострадавшего</returns>
         Task<SurvivorStateReport> GetSurvivorReport(Guid surId, CancellationToken ct);
+
+        /// <summary>
+        /// Получить историю изменения статуса
+        /// </summary>
+        /// <param name="survivorId">Идентификатор пострадавшего</param>
+        /// <param name="cancellationToken">токен отмены</param>
+        /// <typeparam name="T">Тип записи</typeparam>
+        /// <returns>Асинхронная последовательность элементов истории изменения статуса</returns>
+        IAsyncEnumerable<RecordHistoryItem> GetRecordHistory<T>(Guid survivorId, CancellationToken cancellationToken)
+            where T : BaseRecord;
     }
 }

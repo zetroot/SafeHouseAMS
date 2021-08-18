@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
+using SafeHouseAMS.BizLayer.LifeSituations.Records;
 
 namespace SafeHouseAMS.BizLayer.LifeSituations
 {
@@ -33,5 +34,9 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
 
         public Task<SurvivorStateReport> GetSurvivorReport(Guid survivorId, CancellationToken cancellationToken) =>
             _repository.GetSurvivorReport(survivorId, cancellationToken);
+
+        public IAsyncEnumerable<RecordHistoryItem> GetRecordHistory<T>(Guid survivorId,
+            CancellationToken cancellationToken) where T : BaseRecord =>
+            _repository.GetRecordHistory<T>(survivorId, cancellationToken);
     }
 }
