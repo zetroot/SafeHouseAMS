@@ -353,7 +353,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
         {
             var allRecs = _context.Records
                 .Include(x => x.Document)
-                .Where(x => x.Document.SurvivorID == survivorId);
+                .Where(x => x.Document.SurvivorID == survivorId && !x.Document.IsDeleted);
             IQueryable<BaseRecordDAL> typedRecs;
             if (typeof(T) == typeof(ChildrenRecord)) typedRecs = allRecs.OfType<ChildrenRecordDAL>();
             else if (typeof(T) == typeof(CitizenshipRecord)) typedRecs = allRecs.OfType<CitizenshipRecordDAL>();
@@ -364,7 +364,10 @@ namespace SafeHouseAMS.DataLayer.Repositories
             else if (typeof(T) == typeof(SpecialityRecord)) typedRecs = allRecs.OfType<SpecialityRecordDAL>();
             else typedRecs = allRecs;
 
-            return typedRecs.Select(x => new RecordHistoryItem(x.Document.DocumentDate, x.DocumentID)).AsAsyncEnumerable();
+            return typedRecs
+                .OrderByDescending(x => x.Document.DocumentDate)
+                .Select(x => new RecordHistoryItem(x.Document.DocumentDate, x.DocumentID))
+                .AsAsyncEnumerable();
         }
     }
 }

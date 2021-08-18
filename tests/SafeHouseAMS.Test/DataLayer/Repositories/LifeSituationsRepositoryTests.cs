@@ -873,5 +873,40 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
                 .And.ContainEquivalentOf(new SpecialityRecord(specRecId2, specName2));
             report.HasChangedSpecialities.Should().BeTrue();
         }
+
+        [Fact, IntegrationTest]
+        public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForChildren()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var childDoc1 = new ChildrenUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2005, 01, 01) };
+            var childDoc2 = new ChildrenUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01) };
+            var childDoc3 = new ChildrenUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01), IsDeleted = true};
+
+            var rec1 = new ChildrenRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc1.ID };
+            var rec2 = new ChildrenRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc2.ID };
+            var rec3 = new ChildrenRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc3.ID };
+
+            await ctx.LifeSituationDocuments.AddRangeAsync(childDoc1, childDoc2, childDoc3);
+            await ctx.Records.AddRangeAsync(rec1, rec2, rec3);
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            //act
+            var result = new List<RecordHistoryItem>();
+            await foreach (var item in sut.GetRecordHistory<ChildrenRecord>(surId, CancellationToken.None))
+                result.Add(item);
+
+            //assert
+            result.Should().HaveCount(2);
+        }
     }
 }
