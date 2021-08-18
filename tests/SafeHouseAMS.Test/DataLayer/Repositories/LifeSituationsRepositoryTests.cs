@@ -908,5 +908,221 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             //assert
             result.Should().HaveCount(2);
         }
+
+        [Fact, IntegrationTest]
+        public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForCitizenship()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var childDoc1 = new CitizenshipChangeDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2005, 01, 01) };
+            var childDoc2 = new CitizenshipChangeDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01) };
+            var childDoc3 = new CitizenshipChangeDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01), IsDeleted = true};
+
+            var rec1 = new CitizenshipRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc1.ID };
+            var rec2 = new CitizenshipRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc2.ID };
+            var rec3 = new CitizenshipRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc3.ID };
+
+            await ctx.LifeSituationDocuments.AddRangeAsync(childDoc1, childDoc2, childDoc3);
+            await ctx.Records.AddRangeAsync(rec1, rec2, rec3);
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            //act
+            var result = new List<RecordHistoryItem>();
+            await foreach (var item in sut.GetRecordHistory<CitizenshipRecord>(surId, CancellationToken.None))
+                result.Add(item);
+
+            //assert
+            result.Should().HaveCount(2);
+        }
+
+        [Fact, IntegrationTest]
+        public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForDomicile()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var childDoc1 = new DomicileUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2005, 01, 01) };
+            var childDoc2 = new DomicileUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01) };
+            var childDoc3 = new DomicileUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01), IsDeleted = true};
+
+            var rec1 = new DomicileRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc1.ID };
+            var rec2 = new DomicileRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc2.ID };
+            var rec3 = new DomicileRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc3.ID };
+
+            await ctx.LifeSituationDocuments.AddRangeAsync(childDoc1, childDoc2, childDoc3);
+            await ctx.Records.AddRangeAsync(rec1, rec2, rec3);
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            //act
+            var result = new List<RecordHistoryItem>();
+            await foreach (var item in sut.GetRecordHistory<DomicileRecord>(surId, CancellationToken.None))
+                result.Add(item);
+
+            //assert
+            result.Should().HaveCount(2);
+        }
+
+        [Fact, IntegrationTest]
+        public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForMigration()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var childDoc1 = new MigrationStatusUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2005, 01, 01) };
+            var childDoc2 = new MigrationStatusUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01) };
+            var childDoc3 = new MigrationStatusUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01), IsDeleted = true};
+
+            var rec1 = new MigrationStatusRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc1.ID };
+            var rec2 = new MigrationStatusRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc2.ID };
+            var rec3 = new MigrationStatusRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc3.ID };
+
+            await ctx.LifeSituationDocuments.AddRangeAsync(childDoc1, childDoc2, childDoc3);
+            await ctx.Records.AddRangeAsync(rec1, rec2, rec3);
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            //act
+            var result = new List<RecordHistoryItem>();
+            await foreach (var item in sut.GetRecordHistory<MigrationStatusRecord>(surId, CancellationToken.None))
+                result.Add(item);
+
+            //assert
+            result.Should().HaveCount(2);
+        }
+
+        [Fact, IntegrationTest]
+        public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForRegistration()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var childDoc1 = new RegistrationStatusUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2005, 01, 01) };
+            var childDoc2 = new RegistrationStatusUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01) };
+            var childDoc3 = new RegistrationStatusUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01), IsDeleted = true};
+
+            var rec1 = new RegistrationStatusRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc1.ID };
+            var rec2 = new RegistrationStatusRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc2.ID };
+            var rec3 = new RegistrationStatusRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc3.ID };
+
+            await ctx.LifeSituationDocuments.AddRangeAsync(childDoc1, childDoc2, childDoc3);
+            await ctx.Records.AddRangeAsync(rec1, rec2, rec3);
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            //act
+            var result = new List<RecordHistoryItem>();
+            await foreach (var item in sut.GetRecordHistory<RegistrationStatusRecord>(surId, CancellationToken.None))
+                result.Add(item);
+
+            //assert
+            result.Should().HaveCount(2);
+        }
+
+        [Fact, IntegrationTest]
+        public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForEducation()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var childDoc1 = new EducationLevelUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2005, 01, 01) };
+            var childDoc2 = new EducationLevelUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01) };
+            var childDoc3 = new EducationLevelUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01), IsDeleted = true};
+
+            var rec1 = new EducationLevelRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc1.ID };
+            var rec11 = new EducationLevelRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc1.ID };
+            var rec2 = new EducationLevelRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc2.ID };
+            var rec21 = new EducationLevelRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc2.ID };
+            var rec3 = new EducationLevelRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc3.ID };
+            var rec31 = new EducationLevelRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc3.ID };
+
+            await ctx.LifeSituationDocuments.AddRangeAsync(childDoc1, childDoc2, childDoc3);
+            await ctx.Records.AddRangeAsync(rec1, rec11, rec2, rec21, rec3, rec31);
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            //act
+            var result = new List<RecordHistoryItem>();
+            await foreach (var item in sut.GetRecordHistory<EducationLevelRecord>(surId, CancellationToken.None))
+                result.Add(item);
+
+            //assert
+            result.Should().HaveCount(2);
+        }
+
+        [Fact, IntegrationTest]
+        public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForSpeciality()
+        {
+            //arrange
+            await using var ctx = CreateInMemoryDatabase();
+            var surId = Guid.NewGuid();
+            await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
+            await ctx.SaveChangesAsync();
+
+            var childDoc1 = new SpecialitiesUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2005, 01, 01) };
+            var childDoc2 = new SpecialitiesUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01) };
+            var childDoc3 = new SpecialitiesUpdateDAL
+                { ID = Guid.NewGuid(), SurvivorID = surId, DocumentDate = new DateTime(2006, 01, 01), IsDeleted = true};
+
+            var rec1 = new SpecialityRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc1.ID };
+            var rec11 = new SpecialityRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc1.ID };
+            var rec2 = new SpecialityRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc2.ID };
+            var rec21 = new SpecialityRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc2.ID };
+            var rec3 = new SpecialityRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc3.ID };
+            var rec31 = new SpecialityRecordDAL { ID = Guid.NewGuid(), DocumentID = childDoc3.ID };
+
+            await ctx.LifeSituationDocuments.AddRangeAsync(childDoc1, childDoc2, childDoc3);
+            await ctx.Records.AddRangeAsync(rec1, rec11, rec2, rec21, rec3, rec31);
+            await ctx.SaveChangesAsync();
+
+            var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
+
+            //act
+            var result = new List<RecordHistoryItem>();
+            await foreach (var item in sut.GetRecordHistory<SpecialityRecord>(surId, CancellationToken.None))
+                result.Add(item);
+
+            //assert
+            result.Should().HaveCount(2);
+        }
     }
 }

@@ -366,7 +366,9 @@ namespace SafeHouseAMS.DataLayer.Repositories
 
             return typedRecs
                 .OrderByDescending(x => x.Document.DocumentDate)
-                .Select(x => new RecordHistoryItem(x.Document.DocumentDate, x.DocumentID))
+                .Select(x => x.Document)
+                .Distinct()
+                .Select(x => new RecordHistoryItem(x.DocumentDate, x.ID))
                 .AsAsyncEnumerable();
         }
     }
