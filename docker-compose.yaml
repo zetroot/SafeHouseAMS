@@ -1,6 +1,6 @@
 version: '3'
 
-services:  
+services:
   app:
     container_name: ams-app
     image: ghcr.io/zetroot/safehouseams:master
@@ -13,15 +13,15 @@ services:
       - "443:443"
     restart: always
     volumes:
-    - ./ams_logs/:/logs/
-    - ./letucce-accounts/:/app/accounts/
-    - ./ssl-certs/:/certs/
-  
+    - /var/log/safehouse-ams/:/logs/
+    - /var/lib/safehouse-ams/letucce-accounts/:/app/accounts/
+    - /var/lib/safehouse-ams/ssl-certs/:/certs/
+
   postgres:
     container_name: ams-pgsql
     image: postgres:13
     restart: always
     volumes:
-      - ./db-data/:/var/lib/postgresql/data/
+      - /var/lib/safehouse-ams/db-data/:/var/lib/postgresql/data/
     env_file:
       - .env.postgres
