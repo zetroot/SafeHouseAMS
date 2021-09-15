@@ -15,7 +15,7 @@
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="10.1.1" />
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-      <PackageReference Include="Google.Protobuf" Version="3.17.3" />
+      <PackageReference Include="Google.Protobuf" Version="3.18.0" />
       <PackageReference Include="Grpc.Tools" Version="2.40.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
