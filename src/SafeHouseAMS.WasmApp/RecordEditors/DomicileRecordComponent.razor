@@ -16,9 +16,12 @@
                 <div class="col-md-4">
                     <RadzenLabel Text="Тип жилья"/>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <RadzenDropDown @bind-Value="@_placeKind" Data="@_placeKinds"
                                     TextProperty="@nameof(PlaceKindVM.Description)" ValueProperty="@nameof(PlaceKindVM.Kind)"/>
+                </div>
+                <div class="col-md-4">
+                    <RadzenTextBox @bind-Value="@_livingPlaceComment" Placeholder="Дополнительная информация"/>
                 </div>
             </div>
             <div class="row">
@@ -108,6 +111,7 @@
 
     private string _livingPlace = string.Empty;
     private DomicileRecord.PlaceKind? _placeKind;
+    private string _livingPlaceComment = string.Empty;
 
     private bool _livesAlone;
 
@@ -126,7 +130,8 @@
     private string? _otherPeopleDetails;
 
     public SetDomicile BuildCommandForDocument(Guid docId) =>
-        new(docId, _livingPlace, _placeKind, _livesAlone, _withPartner,
+        new(docId, _livingPlace, _placeKind, _livingPlaceComment,
+            _livesAlone, _withPartner,
             _withChildren ? (_childrenDetails ?? "") : null,
             _withParents ? (_parentsDetails ?? "") : null,
             _withOtherRelatives ? (_otherRelativesDetails ?? "") : null,

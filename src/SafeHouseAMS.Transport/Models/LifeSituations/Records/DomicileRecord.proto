@@ -9,18 +9,19 @@ message DomicileRecord {
   UUID ID = 1;
   string Place = 2;
   google.protobuf.Int32Value Kind = 3;
-  bool LivesAlone = 4;
-  bool WithPartner = 5;
-  
-  bool WithChildren = 6;
-  google.protobuf.StringValue ChildrenDetails = 7; 
-  
-  bool WithParents = 8;
-  google.protobuf.StringValue ParentsDetails = 9; 
-  
-  bool WithOtherRelatives = 10;
-  google.protobuf.StringValue OtherRelativesDetails = 11; 
-  
-  bool WithOtherPeople = 12;
-  google.protobuf.StringValue OtherPeopleDetails = 13; 
+  string LivingPlaceComment = 4;
+  bool LivesAlone = 5;
+  bool WithPartner = 6;
+
+  bool WithChildren = 7;
+  google.protobuf.StringValue ChildrenDetails = 8;
+
+  bool WithParents = 9;
+  google.protobuf.StringValue ParentsDetails = 10;
+
+  bool WithOtherRelatives = 11;
+  google.protobuf.StringValue OtherRelativesDetails = 12;
+
+  bool WithOtherPeople = 13;
+  google.protobuf.StringValue OtherPeopleDetails = 14;
 }

@@ -204,7 +204,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         [Fact, IntegrationTest]
         public Task AddRecord_WhenCalled_AddsDomicileRecord() =>
             AddRecord_TestCore<DomicileRecord, DomicileRecordDAL>(new(Guid.NewGuid(), "details",
-                DomicileRecord.PlaceKind.Dorm, default, default, default, default,
+                DomicileRecord.PlaceKind.Dorm, "", default, default, default, default,
                 default, default, default, default,
                 default, default));
 

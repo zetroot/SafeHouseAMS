@@ -84,8 +84,9 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
         {
             //arrange
             var recordId = Guid.NewGuid();
-            var recordBl = new DomicileRecord(recordId, place, placeKind, livesAlone, withPartner, withChildren, childrenDetails,
-            withParents, parentsDetails, withOtherRelatives, otherRelativesDetails, withOtherPeople, otherPeopleDetails);
+            var recordBl = new DomicileRecord(recordId, place, placeKind, "", livesAlone, withPartner, withChildren,
+            childrenDetails, withParents, parentsDetails, withOtherRelatives, otherRelativesDetails, withOtherPeople,
+            otherPeopleDetails);
             var src = new DomicileRecordDAL()
             {
                 ID = recordId,
