@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-4">
                 <RadzenCheckBox TValue="bool" @bind-Value="@_hasAddiction"/>
-                <RadzenLabel Text="Заивисмость" />
+                <RadzenLabel Text="Зависимость" />
                 @if (_hasAddiction)
                 {
                     <RadzenTextBox @bind-Value="@_addictionKind" Placeholder="Уточните тип" Style="margin-left: 5px" />
