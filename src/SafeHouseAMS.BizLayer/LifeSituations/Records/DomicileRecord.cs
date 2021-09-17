@@ -132,7 +132,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Records
         /// <param name="withOtherPeople">с другими людьми</param>
         /// <param name="otherPeopleDetails">о других людях</param>
         /// <exception cref="ArgumentNullException">если место жительства было null</exception>
-        public DomicileRecord(Guid id, string place, PlaceKind? kind, string livingPlaceComment,
+        public DomicileRecord(Guid id, string place, PlaceKind? kind, string? livingPlaceComment,
             bool livesAlone,
             bool withPartner,
             bool withChildren, string? childrenDetails,
@@ -142,7 +142,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Records
         {
             Place = place ?? throw new ArgumentNullException(nameof(place));
             Kind = kind;
-            LivingPlaceComment = livingPlaceComment;
+            LivingPlaceComment = livingPlaceComment ?? string.Empty;
             LivesAlone = livesAlone;
             WithPartner = withPartner;
             WithChildren = withChildren;
