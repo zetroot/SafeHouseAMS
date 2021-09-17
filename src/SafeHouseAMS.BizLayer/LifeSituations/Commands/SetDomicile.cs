@@ -20,6 +20,11 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         public DomicileRecord.PlaceKind? Kind { get; }
 
         /// <summary>
+        /// Комментарий к типу места жительства
+        /// </summary>
+        public string LivingPlaceComment { get; }
+
+        /// <summary>
         /// Живет од_на
         /// </summary>
         public bool LivesAlone { get; }
@@ -75,6 +80,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         /// <param name="entityID">идентификатор документа в рамках которого создана запись</param>
         /// <param name="place">место жительства</param>
         /// <param name="kind">тип места проживания</param>
+        /// <param name="livingPlaceComment">комментарий к типу места жительства</param>
         /// <param name="livesAlone">живет од_на</param>
         /// <param name="withPartner">с партнером</param>
         /// <param name="childrenDetails">если заполнено - то с детьми</param>
@@ -82,11 +88,11 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         /// <param name="otherRelativesDetails">если заполнено - то с другими родственниками</param>
         /// <param name="otherPeopleDetails">если заполнено - то с другими людьми</param>
         /// <exception cref="ArgumentNullException">если место жительства было null</exception>
-        public SetDomicile(Guid entityID, 
-            string place, DomicileRecord.PlaceKind? kind,
+        public SetDomicile(Guid entityID,
+            string place, DomicileRecord.PlaceKind? kind, string livingPlaceComment,
             bool livesAlone,
             bool withPartner,
-            string? childrenDetails, 
+            string? childrenDetails,
             string? parentsDetails,
             string? otherRelativesDetails,
             string? otherPeopleDetails) :
@@ -94,6 +100,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         {
             Place = place ?? throw new ArgumentNullException(nameof(place));
             Kind = kind;
+            LivingPlaceComment = livingPlaceComment;
             LivesAlone = livesAlone;
             WithPartner = withPartner;
             WithChildren = childrenDetails != null;
@@ -104,13 +111,14 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
             OtherRelativesDetails = otherRelativesDetails;
             WithOtherPeople = otherPeopleDetails != null;
             OtherPeopleDetails = otherPeopleDetails;
+            LivingPlaceComment = livingPlaceComment;
         }
 
         internal override Task ApplyOn(ILifeSituationDocumentsRepository repository)
         {
             if (repository is null) throw new ArgumentNullException(nameof(repository));
 
-            var record = new DomicileRecord(Guid.NewGuid(), Place, Kind,
+            var record = new DomicileRecord(Guid.NewGuid(), Place, Kind, LivingPlaceComment,
             LivesAlone, WithPartner,
             WithChildren, ChildrenDetails,
             WithParents, ParentsDetails,

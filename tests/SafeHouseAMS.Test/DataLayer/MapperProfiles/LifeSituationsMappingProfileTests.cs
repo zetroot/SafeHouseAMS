@@ -35,7 +35,7 @@ namespace SafeHouseAMS.Test.DataLayer.MapperProfiles
                 ID = citizenshipRecord.ID, Content = JsonSerializer.Serialize(citizenshipRecord)
             };
 
-            var domicile = new DomicileRecord(Guid.NewGuid(), "place", DomicileRecord.PlaceKind.OwnHome,
+            var domicile = new DomicileRecord(Guid.NewGuid(), "place", DomicileRecord.PlaceKind.OwnHome, "",
             false, true, false, null, false, null,
             false, null, true, "other");
             var domicileRecordDAL = new DomicileRecordDAL
