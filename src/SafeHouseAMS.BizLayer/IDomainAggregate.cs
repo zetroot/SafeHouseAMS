@@ -9,7 +9,7 @@ namespace SafeHouseAMS.BizLayer
     /// </summary>
     /// <typeparam name="TDomainEntity">Тип доменной сущности</typeparam>
     /// <typeparam name="TCommand">Базовый тип команды</typeparam>
-    public interface IDomainAggregate<TDomainEntity, in TCommand> 
+    public interface IDomainAggregate<TDomainEntity, in TCommand>
         where TDomainEntity : IDomainModel
         where TCommand : ICommand
     {
@@ -18,8 +18,8 @@ namespace SafeHouseAMS.BizLayer
         /// </summary>
         /// <param name="id">Идентификатор сущности</param>
         /// <param name="cancellationToken">Токен отмены</param>
-        /// <returns>Найденая сущность</returns>
-        Task<TDomainEntity> GetSingleAsync(Guid id, CancellationToken cancellationToken);
+        /// <returns>Найденая сущность, или null - если по идентификатору ничего найти не удалось</returns>
+        Task<TDomainEntity?> GetSingleAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Выполнить команду
