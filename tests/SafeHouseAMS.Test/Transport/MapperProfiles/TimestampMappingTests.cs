@@ -56,4 +56,29 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             result.Should().BeNull();
         }
     }
+
+    public class DurationMappingTests
+    {
+        private Mapper BuildMapper()
+        {
+            var cfg = new MapperConfiguration(c => c.AddMaps(typeof(DurationMappingProfile)));
+            return new(cfg);
+        }
+
+        [Property]
+        public void RoundMapping_ReturnsOriginalTimeSpan()
+        {
+            var mapper = BuildMapper();
+
+            Prop
+                .ForAll<TimeSpan>(src =>
+                {
+                    var dto = Duration.FromTimeSpan(src); // mapper.Map<Duration>(src);
+                    var result = dto.ToTimeSpan(); // mapper.Map<TimeSpan>(dto);
+
+                    result.Should().Be(src);
+                })
+                .QuickCheckThrowOnFailure();
+        }
+    }
 }
