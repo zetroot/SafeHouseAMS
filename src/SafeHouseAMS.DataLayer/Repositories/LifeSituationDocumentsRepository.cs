@@ -25,13 +25,13 @@ namespace SafeHouseAMS.DataLayer.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-        public async Task<LifeSituationDocument> GetSingleAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<LifeSituationDocument?> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             var doc = await _context.LifeSituationDocuments
                 .Include(x => x.AllRecords)
                 .Include(x => x.Survivor)
-                .SingleAsync(x => !x.IsDeleted && x.ID == id, cancellationToken);
-            return _mapper.Map<LifeSituationDocument>(doc);
+                .SingleOrDefaultAsync(x => !x.IsDeleted && x.ID == id, cancellationToken);
+            return _mapper.Map<LifeSituationDocument?>(doc);
         }
         public async IAsyncEnumerable<LifeSituationDocument> GetAllBySurvivor(Guid survivorId, [EnumeratorCancellation] CancellationToken cancellationToken)
         {

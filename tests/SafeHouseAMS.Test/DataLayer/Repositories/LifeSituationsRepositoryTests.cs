@@ -72,7 +72,8 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             var foundRecord = await sut.GetSingleAsync(id, CancellationToken.None);
 
             //assert
-            foundRecord.ID.Should().Be(id);
+            foundRecord.Should().NotBeNull();
+            foundRecord?.ID.Should().Be(id);
         }
 
         [Fact, IntegrationTest]
@@ -88,8 +89,11 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             await ctx.SaveChangesAsync();
             var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
 
-            //act && assert
-            await Assert.ThrowsAnyAsync<Exception>(() => sut.GetSingleAsync(id, CancellationToken.None));
+            //act
+            var result = await sut.GetSingleAsync(id, CancellationToken.None);
+
+            //assert
+            result.Should().BeNull();
         }
 
         [Fact, IntegrationTest]
