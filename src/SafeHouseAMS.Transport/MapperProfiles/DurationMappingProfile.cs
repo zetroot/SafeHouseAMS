@@ -9,10 +9,10 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         public DurationMappingProfile()
         {
             CreateMap<TimeSpan, Duration>()
-                .ConstructUsing(src => src.ToDuration());
+                .ConvertUsing(src => src.ToDuration());
 
             CreateMap<Duration, TimeSpan>()
-                .ConstructUsing(src => src.ToTimeSpan());
+                .ConvertUsing(src => src.ToTimeSpan());
         }
     }
 }
