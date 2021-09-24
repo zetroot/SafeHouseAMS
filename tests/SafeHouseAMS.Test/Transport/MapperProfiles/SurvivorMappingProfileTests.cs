@@ -20,7 +20,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         public void RoundMapping_ReturnsSameSurvivor()
         {
             var mapper = BuildMapper();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Arb.Register<NotNullStringsGenerators>();
             Prop.ForAll<Survivor>(src =>
             {
@@ -35,7 +35,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         public void RoundMapping_ReturnsSameCreateSurvivorCommand()
         {
             var mapper = BuildMapper();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Arb.Register<NotNullStringsGenerators>();
             Prop.ForAll<CreateSurvivor>(src =>
             {

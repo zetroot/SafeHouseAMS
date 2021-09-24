@@ -22,7 +22,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         {
             var mapper = BuildMapper();
             Arb.Register<NotNullStringsGenerators>();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Prop.ForAll(Arb.From<SingleRecordUpdate<CitizenshipRecord>>(), src =>
                 {
                     var dto = mapper.Map<CitizenshipUpdate>(src);
@@ -38,7 +38,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         {
             var mapper = BuildMapper();
             Arb.Register<NotNullStringsGenerators>();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Prop.ForAll(Arb.From<SingleRecordUpdate<ChildrenRecord>>(), src =>
                 {
                     var dto = mapper.Map<ChildrenUpdate>(src);
@@ -54,7 +54,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         {
             var mapper = BuildMapper();
             Arb.Register<NotNullStringsGenerators>();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Prop.ForAll(Arb.From<SingleRecordUpdate<DomicileRecord>>(), src =>
                 {
                     var dto = mapper.Map<DomicileUpdate>(src);
@@ -70,7 +70,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         {
             var mapper = BuildMapper();
             Arb.Register<NotNullStringsGenerators>();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Prop.ForAll(Arb.From<SingleRecordUpdate<MigrationStatusRecord>>(), src =>
                 {
                     var dto = mapper.Map<MigrationStatusUpdate>(src);
@@ -86,7 +86,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         {
             var mapper = BuildMapper();
             Arb.Register<NotNullStringsGenerators>();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Prop.ForAll(Arb.From<SingleRecordUpdate<RegistrationStatusRecord>>(), src =>
                 {
                     var dto = mapper.Map<RegistrationStatusUpdate>(src);
@@ -102,7 +102,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         {
             var mapper = BuildMapper();
             Arb.Register<NotNullStringsGenerators>();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Arb.Register<RecordListGenerators>();
 
             Prop.ForAll(Arb.From<MultiRecordsUpdate<EducationLevelRecord>>(), src =>
@@ -120,7 +120,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         {
             var mapper = BuildMapper();
             Arb.Register<NotNullStringsGenerators>();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Arb.Register<RecordListGenerators>();
 
             Prop.ForAll(Arb.From<MultiRecordsUpdate<SpecialityRecord>>(), src =>
