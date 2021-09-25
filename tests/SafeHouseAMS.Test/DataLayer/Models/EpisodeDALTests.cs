@@ -33,6 +33,7 @@ namespace SafeHouseAMS.Test.DataLayer.Models
                 sut.UpdateControlMethods(cm);
                 var resulted = sut.BuildControlMethods();
                 resulted.Should().BeEquivalentTo(cm);
+
             }).QuickCheckThrowOnFailure();
         }
     }
