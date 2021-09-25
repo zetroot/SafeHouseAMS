@@ -22,5 +22,18 @@ namespace SafeHouseAMS.Test.DataLayer.Models
                 resulted.Should().BeEquivalentTo(cr);
             }).QuickCheckThrowOnFailure();
         }
+
+        [Property]
+        public void EpisodeDAL_WhenUpdatedWithControlMethods_ReturnsUpdatedControlMethods()
+        {
+            var sut = new EpisodeDAL();
+
+            Prop.ForAll<ControlMethods>(cm =>
+            {
+                sut.UpdateControlMethods(cm);
+                var resulted = sut.BuildControlMethods();
+                resulted.Should().BeEquivalentTo(cm);
+            }).QuickCheckThrowOnFailure();
+        }
     }
 }
