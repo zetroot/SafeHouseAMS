@@ -65,6 +65,6 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
                 result.Should().BeEquivalentTo(src);
             }).QuickCheckThrowOnFailure();
         }
-
     }
+
 }
