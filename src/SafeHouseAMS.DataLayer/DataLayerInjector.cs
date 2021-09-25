@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SafeHouseAMS.BizLayer.ExploitationEpisodes;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
 using SafeHouseAMS.DataLayer.Repositories;
@@ -61,6 +62,7 @@ namespace SafeHouseAMS.DataLayer
 
             services.TryAddScoped<ISurvivorRepository, SurvivorsRepository>();
             services.TryAddScoped<ILifeSituationDocumentsRepository, LifeSituationDocumentsRepository>();
+            services.TryAddScoped<IEpisodesRepository, EpisodesRepository>();
             return services;
         }
     }
