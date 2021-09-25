@@ -72,41 +72,58 @@
                         </RadzenFieldset>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <InquiryHeaderComponent @ref="@_createInquiry"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-8">
-                        <DomicileRecordComponent @ref="@_domicileRecord"/>
-                    </div>
-                    <div class="col-md-4">
-                        <ChildrenRecordComponent @ref="@_childrenRecord"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <MigrationStatusEditorComponent @ref="@_migrationStatusEditor"/>
-                    </div>
-                    <div class="col-md-6">
-                        <RegistrationStatusEditorComponent @ref="@_registrationStatusEditor"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <EducationLevelsComponent @ref="@_educationLevelRecords"/>
-                    </div>
-                    <div class="col-md-4">
-                        <SpecialityRecordsComponent @ref="@_specialityRecords"/>
-                    </div>
-                    <div class="col-md-4">
-                        <WorkingExperienceEditorComponent @ref="@_workingExperienceEditor"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <VulnerabilitiesEditorComponent @ref="@_vulnerabilitiesEditor"/>
-                </div>
+                <RadzenTabs>
+                    <Tabs>
+                        <RadzenTabsItem Text="Жизненная ситуация">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <InquiryHeaderComponent @ref="@_createInquiry"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <DomicileRecordComponent @ref="@_domicileRecord"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <ChildrenRecordComponent @ref="@_childrenRecord"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <MigrationStatusEditorComponent @ref="@_migrationStatusEditor"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <RegistrationStatusEditorComponent @ref="@_registrationStatusEditor"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <EducationLevelsComponent @ref="@_educationLevelRecords"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <SpecialityRecordsComponent @ref="@_specialityRecords"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <WorkingExperienceEditorComponent @ref="@_workingExperienceEditor"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <VulnerabilitiesEditorComponent @ref="@_vulnerabilitiesEditor"/>
+                            </div>
+                        </RadzenTabsItem>
+                        <RadzenTabsItem Text="Причины обрщения">
+                            <div class="row">
+                                <button type="button" class="btn btn-outline-success" @onclick="@(() => episodes.Add(new()))">+</button>
+                            </div>
+                            @foreach (var episode in episodes)
+                            {
+                                <div class="row">
+                                    <EpisodeEditor Model="episode"/>
+                                </div>
+                            }
+                        </RadzenTabsItem>
+                    </Tabs>
+                </RadzenTabs>
                 <div class="row justify-content-center">
                     <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
                         <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
@@ -147,6 +164,7 @@
     private VulnerabilitiesEditorComponent? _vulnerabilitiesEditor;
     private MigrationStatusEditorComponent? _migrationStatusEditor;
     private RegistrationStatusEditorComponent? _registrationStatusEditor;
+    private readonly List<EpisodeEditorModel> episodes = new List<EpisodeEditorModel>();
 
     private void CancelClick()
     {

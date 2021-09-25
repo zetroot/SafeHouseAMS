@@ -1,0 +1,25 @@
+@if (Model is not null)
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.Involvement"/>
+                <RadzenLabel Text="Вовлечение" />
+            </div>
+            @if (Model.Involvement)
+            {
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="@Model.InvolvementDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <p>Не установлена модель</p>
+}
+
+@code {
+    [Parameter] public EpisodeEditorModel? Model { get; set; }
+}
