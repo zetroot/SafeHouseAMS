@@ -1,8 +1,10 @@
+@using SafeHouseAMS.BizLayer.ExploitationEpisodes
+
 @if (Model is not null)
 {
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <RadzenCheckBox TValue="bool" @bind-Value="@Model.Involvement"/>
                 <RadzenLabel Text="Вовлечение" />
             </div>
@@ -10,6 +12,186 @@
             {
                 <div class="col-md-8">
                     <RadzenTextBox @bind-Value="@Model.InvolvementDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.Cse"/>
+                <RadzenLabel Text="КСЭ"/>
+                @if (Model.Cse)
+                {
+                    <div class="row">
+                        <div class="col" style="margin-left: 20%">
+                        @foreach (var item in Model.CseType)
+                        {
+                            <div class="row">
+                                <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"/>
+                                <RadzenLabel Text="@item.Description"/>
+                            </div>
+                        }
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (Model.Cse)
+            {
+                <div class="col-md-4">
+                    <RadzenTextBox @bind-Value="@Model.CseDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.ForcedLabour"/>
+                <RadzenLabel Text="Принудительный труд" />
+                @if (Model.ForcedLabour)
+                {
+                    <div class="row">
+                        <div class="col" style="margin-left: 20%">
+                        @foreach (var item in Model.ForcedLabourType)
+                        {
+                            <div class="row">
+                                <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"/>
+                                <RadzenLabel Text="@item.Description"/>
+                            </div>
+                        }
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (Model.ForcedLabour)
+            {
+                <div class="col-md-4">
+                    <RadzenTextBox @bind-Value="@Model.ForcedLabourDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.ForcedMarriage"/>
+                <RadzenLabel Text="Принудительный брак" />
+                @if (Model.ForcedMarriage)
+                {
+                    <div class="row">
+                        <div class="col" style="margin-left: 20%">
+                            <RadzenRadioButtonList @bind-Value=@Model.ForcedMarriageKind TValue="ForcedMarriageKind">
+                                <Items>
+                                    <RadzenRadioButtonListItem Text="Orders" Value="1"/>
+                                    <RadzenRadioButtonListItem Text="Employees" Value="2"/>
+                                    <RadzenRadioButtonListItem Text="Customers" Value="3"/>
+                                    @foreach (var item in Model.ForcedMarriageKinds)
+                                    {
+                                        <RadzenRadioButtonListItem Text="@item.Description" Value="@item.Item"/>
+                                    }
+                                </Items>
+                            </RadzenRadioButtonList>
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (Model.ForcedMarriage)
+            {
+                <div class="col-md-4">
+                    <RadzenTextBox @bind-Value="@Model.ForcedMarriageDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.Cre"/>
+                <RadzenLabel Text="КРЭ" />
+            </div>
+            @if (Model.Cre)
+            {
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="@Model.CreDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.Begging"/>
+                <RadzenLabel Text="Попрошайничество" />
+            </div>
+            @if (Model.Begging)
+            {
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="@Model.BeggingDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.ForcedCriminalActivity"/>
+                <RadzenLabel Text="Принудительная криминальная активность" />
+                @if (Model.ForcedCriminalActivity)
+                {
+                    <div class="row">
+                        <div class="col" style="margin-left: 20%">
+                            @foreach (var item in Model.CriminalActivityKind)
+                            {
+                                <div class="row">
+                                    <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"/>
+                                    <RadzenLabel Text="@item.Description"/>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+            @if (Model.ForcedCriminalActivity)
+            {
+                <div class="col-md-4">
+                    <RadzenTextBox @bind-Value="@Model.CriminalActivityDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.OtherExploitationKind"/>
+                <RadzenLabel Text="Другой вид эксплуатации" />
+            </div>
+            @if (Model.OtherExploitationKind)
+            {
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="@Model.OtherExploitationKindDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.SexualViolence"/>
+                <RadzenLabel Text="Сексуальное насилие" />
+            </div>
+            @if (Model.SexualViolence)
+            {
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="@Model.SexualViolenceDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.DomesticViolence"/>
+                <RadzenLabel Text="Домашнее насилие" />
+            </div>
+            @if (Model.DomesticViolence)
+            {
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="@Model.DomesticViolenceDescription" Placeholder="Укажите подробнее..."/>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.OtherViolence"/>
+                <RadzenLabel Text="Другой вид насилия" />
+            </div>
+            @if (Model.OtherViolence)
+            {
+                <div class="col-md-8">
+                    <RadzenTextBox @bind-Value="@Model.OtherViolenceDescription" Placeholder="Укажите подробнее..."/>
                 </div>
             }
         </div>
