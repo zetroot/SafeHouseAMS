@@ -20,7 +20,8 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
         public string ForcedLabourDescription { get; set; } = string.Empty;
 
         public bool ForcedMarriage { get; set; }
-        public IReadOnlyList<EnumDetails<ForcedMarriageKind>> ForcedMarriageKind { get; }
+        public ForcedMarriageKind ForcedMarriageKind { get; set; }
+        public IReadOnlyList<EnumDetails<ForcedMarriageKind>> ForcedMarriageKinds { get; }
         public string ForcedMarriageDescription { get; set; } = string.Empty;
 
         public bool Cre { get; set; }
@@ -51,7 +52,7 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
             ForcedLabourType = Enum.GetValues<ForcedLabourType>()
                 .Where(x => x != BizLayer.ExploitationEpisodes.ForcedLabourType.None)
                 .Select(x => new EnumDetails<ForcedLabourType>(x, x.GetDescription())).ToList();
-            ForcedMarriageKind = Enum.GetValues<ForcedMarriageKind>()
+            ForcedMarriageKinds = Enum.GetValues<ForcedMarriageKind>()
                 .Select(x => new EnumDetails<ForcedMarriageKind>(x, x.GetDescription())).ToList();
             CriminalActivityKind = Enum.GetValues<CriminalActivityType>()
                 .Where(x => x != CriminalActivityType.None)
