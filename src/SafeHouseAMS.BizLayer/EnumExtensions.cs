@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace SafeHouseAMS.BizLayer
 {
@@ -19,10 +20,8 @@ namespace SafeHouseAMS.BizLayer
 
             if (field is null) return value.ToString();
 
-            return
-                Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) is DescriptionAttribute attribute ?
-                attribute.Description :
-                value.ToString();
+            var attr = field.GetCustomAttribute<DescriptionAttribute>();
+            return attr?.Description ?? value.ToString();
         }
     }
 }
