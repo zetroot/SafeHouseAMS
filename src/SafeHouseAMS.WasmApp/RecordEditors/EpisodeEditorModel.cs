@@ -46,12 +46,15 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
         public EpisodeEditorModel()
         {
             CseType = Enum.GetValues<CseType>()
+                .Where(x => x != BizLayer.ExploitationEpisodes.CseType.None)
                 .Select(x => new EnumDetails<CseType>(x, x.GetDescription())).ToList();
             ForcedLabourType = Enum.GetValues<ForcedLabourType>()
+                .Where(x => x != BizLayer.ExploitationEpisodes.ForcedLabourType.None)
                 .Select(x => new EnumDetails<ForcedLabourType>(x, x.GetDescription())).ToList();
             ForcedMarriageKind = Enum.GetValues<ForcedMarriageKind>()
                 .Select(x => new EnumDetails<ForcedMarriageKind>(x, x.GetDescription())).ToList();
             CriminalActivityKind = Enum.GetValues<CriminalActivityType>()
+                .Where(x => x != CriminalActivityType.None)
                 .Select(x => new EnumDetails<CriminalActivityType>(x, x.GetDescription())).ToList();
         }
     }
