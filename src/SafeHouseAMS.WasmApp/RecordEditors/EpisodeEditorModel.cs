@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EnumDesriptor;
-using SafeHouseAMS.BizLayer;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
 
 namespace SafeHouseAMS.WasmApp.RecordEditors
 {
     public class EpisodeEditorModel
     {
+        private int _durationLength = 0;
+
         #region contact reason description
         public bool Involvement { get; set; }
         public string InvolvementDescription { get; set; } = string.Empty;
@@ -53,6 +54,18 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
 
         public bool WasJuvenile { get; set; } = false;
 
+
+        public int DurationLength
+        {
+            get => _durationLength;
+            set
+            {
+                if(value > 0)
+                    _durationLength = value;
+            }
+        }
+        public enum DurationIntervalKind { Day, Month, Year }
+        public DurationIntervalKind DurationKind { get; set; }
 
         public EpisodeEditorModel()
         {

@@ -208,6 +208,12 @@
                 <RadzenCheckBox TValue="bool" @bind-Value="@Model.WasJuvenile"/>
                 <RadzenLabel Text="Был_а несовершеннолетней"></RadzenLabel>
             </div>
+            <div class="row">
+                <RadzenLabel Style="margin-right: 5px" Text="Длительность"/>
+                <RadzenNumeric TValue="int" Min="0" Step="1" @bind-Value="@Model.DurationLength"/>
+
+                <RadzenDropDown style="width: min-content" Data="@IntervalKinds" @bind-Value="@Model.DurationKind" TextProperty="Description" ValueProperty="IntervalKind"/>
+            </div>
         </div>
     </div>
     </div>
@@ -219,4 +225,14 @@ else
 
 @code {
     [Parameter] public EpisodeEditorModel? Model { get; set; }
+
+    private record DurationKindVM(EpisodeEditorModel.DurationIntervalKind IntervalKind, string Description);
+
+    private DurationKindVM[] IntervalKinds = new[]
+    {
+        new DurationKindVM(EpisodeEditorModel.DurationIntervalKind.Day, "Дней"),
+        new DurationKindVM(EpisodeEditorModel.DurationIntervalKind.Month, "Месяцев"),
+        new DurationKindVM(EpisodeEditorModel.DurationIntervalKind.Year, "Лет"),
+    };
+
 }
