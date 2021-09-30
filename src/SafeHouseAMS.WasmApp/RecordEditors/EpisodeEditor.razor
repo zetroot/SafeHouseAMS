@@ -214,6 +214,42 @@
 
                 <RadzenDropDown style="width: min-content" Data="@IntervalKinds" @bind-Value="@Model.DurationKind" TextProperty="Description" ValueProperty="IntervalKind"/>
             </div>
+            <div class="row">
+                <div class="col">
+                @foreach (var item in Model.ControlMethodKinds)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"
+                                            Change="@(selected =>{ switch (item.Item) { case ControlMethodKind.Debt: _showDebt = selected; break; case ControlMethodKind.Other: _showOtherControlMethods = selected; break; default: break; };})"/>
+                            <RadzenLabel Style="word-wrap: break-word" Text="@item.Description"/>
+                            @if (_showDebt && item.Item == ControlMethodKind.Debt)
+                            {
+                                <div class="row">
+                                    <div class="col" style="margin-left: 20%">
+                                        @foreach (var debt in Model.DebtKinds)
+                                        {
+                                            <div class="row">
+                                                <RadzenCheckBox TValue="bool" @bind-Value="@debt.Selected"/>
+                                                <RadzenLabel Text="@debt.Description"/>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            @if (_showOtherControlMethods && item.Item == ControlMethodKind.Other)
+                            {
+                                <div class="row">
+                                    <div class="col">
+                                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.OtherControlMethods"/>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                </div>
+            </div>
         </div>
     </div>
     </div>
@@ -227,6 +263,9 @@ else
     [Parameter] public EpisodeEditorModel? Model { get; set; }
 
     private record DurationKindVM(EpisodeEditorModel.DurationIntervalKind IntervalKind, string Description);
+
+    private bool _showDebt = false;
+    private bool _showOtherControlMethods = false;
 
     private DurationKindVM[] IntervalKinds = new[]
     {

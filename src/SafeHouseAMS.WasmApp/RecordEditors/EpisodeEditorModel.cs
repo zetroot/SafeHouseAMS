@@ -54,7 +54,7 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
 
         public bool WasJuvenile { get; set; } = false;
 
-
+        #region duration eeditor
         public int DurationLength
         {
             get => _durationLength;
@@ -66,20 +66,35 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
         }
         public enum DurationIntervalKind { Day, Month, Year }
         public DurationIntervalKind DurationKind { get; set; }
+        #endregion
+
+        #region control methods
+
+        public IReadOnlyList<EnumDetails<ControlMethodKind>> ControlMethodKinds { get; }
+        public IReadOnlyList<EnumDetails<DebtKind>> DebtKinds { get; }
+        public string OtherControlMethods { get; set; } = string.Empty;
+        #endregion
 
         public EpisodeEditorModel()
         {
             CseType = Enum.GetValues<CseType>()
                 .Where(x => x != BizLayer.ExploitationEpisodes.CseType.None)
-                .Select(x => new EnumDetails<CseType>(x, x.GetDescription())).ToList();
+                .Select(x => new EnumDetails<CseType>(x)).ToList();
             ForcedLabourType = Enum.GetValues<ForcedLabourType>()
                 .Where(x => x != BizLayer.ExploitationEpisodes.ForcedLabourType.None)
-                .Select(x => new EnumDetails<ForcedLabourType>(x, x.GetDescription())).ToList();
+                .Select(x => new EnumDetails<ForcedLabourType>(x)).ToList();
             ForcedMarriageKinds = Enum.GetValues<ForcedMarriageKind>()
-                .Select(x => new EnumDetails<ForcedMarriageKind>(x, x.GetDescription())).ToList();
+                .Select(x => new EnumDetails<ForcedMarriageKind>(x)).ToList();
             CriminalActivityKind = Enum.GetValues<CriminalActivityType>()
                 .Where(x => x != CriminalActivityType.None)
-                .Select(x => new EnumDetails<CriminalActivityType>(x, x.GetDescription())).ToList();
+                .Select(x => new EnumDetails<CriminalActivityType>(x)).ToList();
+
+            ControlMethodKinds = Enum.GetValues<ControlMethodKind>()
+                .Where(x => x != ControlMethodKind.None)
+                .Select(x => new EnumDetails<ControlMethodKind>(x)).ToList();
+            DebtKinds = Enum.GetValues<DebtKind>()
+                .Where(x => x != DebtKind.None)
+                .Select(x => new EnumDetails<DebtKind>(x)).ToList();
         }
     }
 
