@@ -216,38 +216,62 @@
             </div>
             <div class="row">
                 <div class="col">
-                @foreach (var item in Model.ControlMethodKinds)
-                {
-                    <div class="row">
-                        <div class="col">
-                            <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"
-                                            Change="@(selected =>{ switch (item.Item) { case ControlMethodKind.Debt: _showDebt = selected; break; case ControlMethodKind.Other: _showOtherControlMethods = selected; break; default: break; };})"/>
-                            <RadzenLabel Style="word-wrap: break-word" Text="@item.Description"/>
-                            @if (_showDebt && item.Item == ControlMethodKind.Debt)
-                            {
-                                <div class="row">
-                                    <div class="col" style="margin-left: 20%">
-                                        @foreach (var debt in Model.DebtKinds)
-                                        {
-                                            <div class="row">
-                                                <RadzenCheckBox TValue="bool" @bind-Value="@debt.Selected"/>
-                                                <RadzenLabel Text="@debt.Description"/>
-                                            </div>
-                                        }
+                    @foreach (var item in Model.ControlMethodKinds)
+                    {
+                        <div class="row">
+                            <div class="col">
+                                <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"
+                                                Change="@(selected =>{ switch (item.Item) { case ControlMethodKind.Debt: _showDebt = selected; break; case ControlMethodKind.Other: _showOtherControlMethods = selected; break; default: break; };})"/>
+                                <RadzenLabel Style="word-wrap: break-word" Text="@item.Description"/>
+                                @if (_showDebt && item.Item == ControlMethodKind.Debt)
+                                {
+                                    <div class="row">
+                                        <div class="col" style="margin-left: 20%">
+                                            @foreach (var debt in Model.DebtKinds)
+                                            {
+                                                <div class="row">
+                                                    <RadzenCheckBox TValue="bool" @bind-Value="@debt.Selected"/>
+                                                    <RadzenLabel Text="@debt.Description"/>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
-                                </div>
-                            }
-                            @if (_showOtherControlMethods && item.Item == ControlMethodKind.Other)
-                            {
-                                <div class="row">
-                                    <div class="col">
-                                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.OtherControlMethods"/>
+                                }
+                                @if (_showOtherControlMethods && item.Item == ControlMethodKind.Other)
+                                {
+                                    <div class="row">
+                                        <div class="col">
+                                            <RadzenTextArea style="width: 100%" @bind-Value="@Model.OtherControlMethods"/>
+                                        </div>
                                     </div>
-                                </div>
-                            }
+                                }
+                            </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <RadzenFieldset Text="Статус освобождения">
+                        @foreach (var item in Model.EscapeStatus)
+                        {
+                            <div class="row">
+                                <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"
+                                                Change="@(s =>
+                                                        {
+                                                            if (!s) return;
+                                                            if(item.Item == EscapeStatus.EscapeNeeded)
+                                                                ClearAllEscapedTypes();
+                                                            else
+                                                            {
+                                                                var escapeNeeded = Model.EscapeStatus.Single(x => x.Item == EscapeStatus.EscapeNeeded);
+                                                                escapeNeeded.Selected = false;
+                                                            }
+                                                        })"/>
+                                <RadzenLabel Text="@item.Description"/>
+                            </div>
+                        }
+                    </RadzenFieldset>
                 </div>
             </div>
         </div>
@@ -267,6 +291,14 @@ else
     private bool _showDebt = false;
     private bool _showOtherControlMethods = false;
 
+    private void ClearAllEscapedTypes()
+    {
+        if(Model is null) return;
+        foreach (var status in Model.EscapeStatus.Where(x => x.Item != EscapeStatus.EscapeNeeded))
+        {
+            status.Selected = false;
+        }
+    }
     private DurationKindVM[] IntervalKinds = new[]
     {
         new DurationKindVM(EpisodeEditorModel.DurationIntervalKind.Day, "Дней"),

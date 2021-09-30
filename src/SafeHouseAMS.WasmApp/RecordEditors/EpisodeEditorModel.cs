@@ -75,6 +75,8 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
         public string OtherControlMethods { get; set; } = string.Empty;
         #endregion
 
+        public IReadOnlyList<EnumDetails<EscapeStatus>> EscapeStatus { get; }
+
         public EpisodeEditorModel()
         {
             CseType = Enum.GetValues<CseType>()
@@ -95,6 +97,10 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
             DebtKinds = Enum.GetValues<DebtKind>()
                 .Where(x => x != DebtKind.None)
                 .Select(x => new EnumDetails<DebtKind>(x)).ToList();
+
+            EscapeStatus = Enum.GetValues<EscapeStatus>()
+                .Where(x => x != BizLayer.ExploitationEpisodes.EscapeStatus.None)
+                .Select(x => new EnumDetails<EscapeStatus>(x)).ToList();
         }
     }
 
