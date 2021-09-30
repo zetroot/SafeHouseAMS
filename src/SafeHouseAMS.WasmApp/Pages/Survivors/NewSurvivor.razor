@@ -1,5 +1,6 @@
 ﻿@page "/NewSurvivor"
 @using System.Threading
+@using SafeHouseAMS.BizLayer.ExploitationEpisodes
 @using SafeHouseAMS.BizLayer.LifeSituations
 @using SafeHouseAMS.BizLayer.LifeSituations.Commands
 @using SafeHouseAMS.BizLayer.Survivors
@@ -8,6 +9,7 @@
 @using SafeHouseAMS.WasmApp.RecordEditors
 @inject ISurvivorCatalogue _survivorCatalogue;
 @inject ILifeSituationDocumentsAggregate _documentsAggregate;
+@inject IEpisodesCatalogue _episodesCatalogue;
 @inject NotificationService _notificationService;
 @inject NavigationManager _navigationManager;
 
@@ -217,6 +219,11 @@
         if (_registrationStatusEditor?.BuildCommand(inquiryId) is {} registrationCmd)
             await _documentsAggregate.ApplyCommand(registrationCmd, CancellationToken.None);
 
+        foreach (var episode in episodes)
+        {
+            var cmd = episode.BuildCommand(survivorId);
+            await _episodesCatalogue.ApplyCommand(cmd, CancellationToken.None);
+        }
         _notificationService.Notify(new(){Severity = NotificationSeverity.Success, Summary = "Успешно сохранено"});
         _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
     }
