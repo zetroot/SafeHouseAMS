@@ -9,6 +9,7 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
 {
     public class EpisodeEditorModel
     {
+        #region contact reason description
         public bool Involvement { get; set; }
         public string InvolvementDescription { get; set; } = string.Empty;
 
@@ -44,6 +45,14 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
         public string DomesticViolenceDescription { get; set; } = string.Empty;
         public bool OtherViolence { get; set; }
         public string OtherViolenceDescription { get; set; } = string.Empty;
+        #endregion
+
+        public string Place { get; set; } = string.Empty;
+
+        public string InvolvementDescriptionText { get; set; } = string.Empty;
+
+        public bool WasJuvenile { get; set; } = false;
+
 
         public EpisodeEditorModel()
         {
