@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EnumDesriptor;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
+using SafeHouseAMS.BizLayer.ExploitationEpisodes.Commands;
 
 namespace SafeHouseAMS.WasmApp.RecordEditors
 {
@@ -101,6 +101,97 @@ namespace SafeHouseAMS.WasmApp.RecordEditors
             EscapeStatus = Enum.GetValues<EscapeStatus>()
                 .Where(x => x != BizLayer.ExploitationEpisodes.EscapeStatus.None)
                 .Select(x => new EnumDetails<EscapeStatus>(x)).ToList();
+        }
+
+        public CreateEpisode BuildCommand(Guid survivorId)
+        {
+            var contactReason = BuildContactReason();
+            var controlMethods = BuildControlMethods();
+            var duration = BuildDuration();
+            var escapeStatus = BuildEscapeStatus();
+            return new(Guid.NewGuid(), survivorId, contactReason, Place, InvolvementDescriptionText, WasJuvenile,
+            duration, controlMethods, escapeStatus);
+        }
+
+        private EscapeStatus BuildEscapeStatus() =>
+            EscapeStatus
+                .Where(x => x.Selected)
+                .Select(x => x.Item)
+                .Aggregate(BizLayer.ExploitationEpisodes.EscapeStatus.None, (acc, item) => acc | item);
+
+        private TimeSpan BuildDuration() =>
+            DurationKind switch
+            {
+                DurationIntervalKind.Day => TimeSpan.FromDays(DurationLength),
+                DurationIntervalKind.Month => TimeSpan.FromDays(DurationLength) * 30,
+                DurationIntervalKind.Year => TimeSpan.FromDays(DurationLength) * 365,
+                _ => throw new InvalidOperationException()
+            };
+
+        private ControlMethods BuildControlMethods()
+        {
+            var controlMethods = ControlMethodKinds
+                .Where(x => x.Selected)
+                .Select(x => x.Item)
+                .Aggregate(ControlMethodKind.None, (acc, item) => acc | item);
+            var debtKind = DebtKinds
+                .Where(x => x.Selected)
+                .Select(x => x.Item)
+                .Aggregate(DebtKind.None, (acc, item) => acc | item,
+                    r => controlMethods.HasFlag(ControlMethodKind.Debt) ? r : null as DebtKind?);
+            var otherControlKindDescr = controlMethods.HasFlag(ControlMethodKind.Other) ? OtherControlMethods : null;
+
+            return new(controlMethods, debtKind, otherControlKindDescr);
+        }
+
+        private ContactReason BuildContactReason()
+        {
+            var involvement = Involvement ? new DetailedContactReason(InvolvementDescription) : null;
+            DetailedContactReason<CseType>? cse = null;
+            if (Cse)
+            {
+                var cseType = CseType
+                    .Where(x => x.Selected)
+                    .Select(x => x.Item)
+                    .Aggregate(BizLayer.ExploitationEpisodes.CseType.None, (acc, item) => acc | item);
+                cse = new DetailedContactReason<CseType>(CseDescription, cseType);
+            }
+
+            DetailedContactReason<ForcedLabourType>? forcedLabour = null;
+            if (ForcedLabour)
+            {
+                var labourType = ForcedLabourType
+                    .Where(x => x.Selected)
+                    .Select(x => x.Item)
+                    .Aggregate(BizLayer.ExploitationEpisodes.ForcedLabourType.None, (acc, item) => acc | item);
+                forcedLabour = new DetailedContactReason<ForcedLabourType>(ForcedLabourDescription, labourType);
+            }
+
+            var forcedMarriage = ForcedMarriage ?
+                new DetailedContactReason<ForcedMarriageKind>(ForcedMarriageDescription, ForcedMarriageKind) : null;
+            var cre = Cre ? new DetailedContactReason(CreDescription) : null;
+            var begging = Begging ? new DetailedContactReason(BeggingDescription) : null;
+
+            DetailedContactReason<CriminalActivityType>? forcedCriminalActivity = null;
+            if (ForcedCriminalActivity)
+            {
+                var activityKind = CriminalActivityKind
+                    .Where(x => x.Selected)
+                    .Select(x => x.Item)
+                    .Aggregate(BizLayer.ExploitationEpisodes.CriminalActivityType.None, (acc, item) => acc | item);
+                forcedCriminalActivity =
+                    new DetailedContactReason<CriminalActivityType>(CriminalActivityDescription, activityKind);
+            }
+
+            var otherExploitation = OtherExploitationKind
+                ? new DetailedContactReason(OtherExploitationKindDescription)
+                : null;
+            var sexualViolence = SexualViolence ? new DetailedContactReason(SexualViolenceDescription) : null;
+            var domesticViolence = DomesticViolence ? new DetailedContactReason(DomesticViolenceDescription) : null;
+            var otherViolence = OtherViolence ? new DetailedContactReason(OtherViolenceDescription) : null;
+
+            return new(involvement, cse, forcedLabour, forcedMarriage, cre, begging, forcedCriminalActivity,
+            otherExploitation, sexualViolence, domesticViolence, otherViolence);
         }
     }
 
