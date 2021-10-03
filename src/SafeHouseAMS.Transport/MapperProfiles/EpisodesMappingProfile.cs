@@ -28,7 +28,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
             CreateMap<Protos.Models.ExploitationEpisodes.DetailedContactReason, DetailedContactReason>();
         }
 
-        private void MapDetailedContactReasons<T>() where T : Enum
+        private void MapDetailedContactReasons<T>() where T : struct, Enum
         {
             CreateMap<DetailedContactReason<T>, Protos.Models.ExploitationEpisodes.DetailedContactReasonTyped>();
             CreateMap<Protos.Models.ExploitationEpisodes.DetailedContactReasonTyped, DetailedContactReason<T>>();
