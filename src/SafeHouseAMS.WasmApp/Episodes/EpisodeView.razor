@@ -2,6 +2,7 @@
 @using Humanizer
 @using EnumDesriptor
 @using System.Text
+@using Humanizer.Localisation
 @if (Episode is not null)
 {
     <div class="container-fluid">
@@ -136,7 +137,7 @@
                 <div class="row">
                     <div class="col">
                         <RadzenLabel Style="text-decoration: underline" Text="Продолжительность:"/>
-                        <RadzenLabel Text="@Episode.Duration.Humanize()"/>
+                        <RadzenLabel Text="@Episode.Duration.Humanize(maxUnit: TimeUnit.Year)"/>
                     </div>
                 </div>
                 <div class="row">
@@ -173,6 +174,10 @@ else
 @code {
     [Parameter] public Episode? Episode { get; set; }
 
+    // private string GetDuration()
+    // {
+    //     if (Episode?.Duration is not {} duration) return string.Empty;
+    // }
     private string GetEscapeStatus()
     {
         if (Episode?.EscapeStatus is not {} es) return string.Empty;

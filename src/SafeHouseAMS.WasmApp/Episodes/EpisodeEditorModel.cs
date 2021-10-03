@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes.Commands;
@@ -123,8 +124,8 @@ namespace SafeHouseAMS.WasmApp.Episodes
             DurationKind switch
             {
                 DurationIntervalKind.Day => TimeSpan.FromDays(DurationLength),
-                DurationIntervalKind.Month => TimeSpan.FromDays(DurationLength) * 30,
-                DurationIntervalKind.Year => TimeSpan.FromDays(DurationLength) * 365,
+                DurationIntervalKind.Month => TimeSpan.FromDays(DurationLength * 31),
+                DurationIntervalKind.Year => TimeSpan.FromDays(DurationLength * 366),
                 _ => throw new InvalidOperationException()
             };
 
