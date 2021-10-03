@@ -1,4 +1,7 @@
 @using SafeHouseAMS.BizLayer.ExploitationEpisodes
+@using Humanizer
+@using EnumDesriptor
+@using System.Text
 @if (Episode is not null)
 {
     <div class="container-fluid">
@@ -108,6 +111,47 @@
                     </div>
                 }
             </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col">
+                        <RadzenLabel Style="text-decoration: underline" Text="Место (страна / город):"/>
+                        <RadzenLabel Text="@Episode.Place"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <RadzenLabel Style="text-decoration: underline" Text="Как и кем вовлечен_а:"/>
+                        <RadzenLabel Text="@Episode.InvolvementDescription"/>
+                    </div>
+                </div>
+                @if (Episode.WasJuvenile)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenCheckBox TValue="bool" Value="true" Disabled="true"/>
+                            <RadzenLabel Style="text-decoration: underline; color: red" Text="Былв несовершеннолетн_ей"/>
+                        </div>
+                    </div>
+                }
+                <div class="row">
+                    <div class="col">
+                        <RadzenLabel Style="text-decoration: underline" Text="Продолжительность:"/>
+                        <RadzenLabel Text="@Episode.Duration.Humanize()"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <RadzenLabel Style="text-decoration: underline" Text="Методы контроля:"/>
+                        <RadzenLabel Text="@GetControlMethods()"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <RadzenLabel Style="text-decoration: underline" Text="Статус освобождения:"/>
+                        <RadzenLabel Text="@GetEscapeStatus()"/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 }
@@ -128,4 +172,48 @@ else
 
 @code {
     [Parameter] public Episode? Episode { get; set; }
+
+    private string GetEscapeStatus()
+    {
+        if (Episode?.EscapeStatus is not {} es) return string.Empty;
+        return Enum.GetValues<EscapeStatus>().Where(x => x != EscapeStatus.None && es.HasFlag(x))
+            .Select(x => x.GetDescription())
+            .Aggregate(new StringBuilder(), (acc, item) =>
+            {
+                if (acc.Length > 0) acc.Append(", ");
+                acc.Append(item);
+                return acc;
+            }, sb => sb.ToString());
+    }
+
+    private string GetControlMethods()
+    {
+        if (Episode?.ControlMethods is not {} cm) return string.Empty;
+        var sb = new StringBuilder();
+        foreach (var candidate in Enum.GetValues<ControlMethodKind>()
+            .Where(x => x != ControlMethodKind.None))
+        {
+            if (!cm.Methods.HasFlag(candidate)) continue;
+            if (sb.Length > 0)
+                sb.Append(", ");
+
+            sb.Append(candidate.GetDescription());
+            if (candidate == ControlMethodKind.Debt && cm.DebtKind is {} debtKind)
+                sb.Append($"({GetDebtKind(debtKind)})");
+
+            if (candidate == ControlMethodKind.Other && !string.IsNullOrEmpty(cm.OtherDetails))
+                sb.Append($"({cm.OtherDetails})");
+        }
+        return sb.ToString();
+    }
+    private string GetDebtKind(DebtKind debtKind) =>
+        Enum.GetValues<DebtKind>().Where(x => x != DebtKind.None)
+            .Where(x => debtKind.HasFlag(x))
+            .Select(x => x.GetDescription())
+            .Aggregate(new StringBuilder(), (sb, item) =>
+            {
+                if (sb.Length > 0) sb.Append(", ");
+                sb.Append(item);
+                return sb;
+            }, sb => sb.ToString());
 }
