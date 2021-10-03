@@ -22,7 +22,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         public void LifeSituationDocumentCommand_RoundTrip_DoesNotChanges()
         {
             Arb.Register<NotNullStringsGenerators>();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Arb.Register<InquiryGenerators>();
             Arb.Register<RecordListGenerators>();
 

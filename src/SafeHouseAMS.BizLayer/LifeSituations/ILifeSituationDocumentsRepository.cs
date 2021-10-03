@@ -19,7 +19,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <param name="id">идентификатор документа</param>
         /// <param name="cancellationToken">токен отмены операции</param>
         /// <returns>Полученный документ по идентификатору</returns>
-        Task<LifeSituationDocument> GetSingleAsync(Guid id, CancellationToken cancellationToken);
+        Task<LifeSituationDocument?> GetSingleAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Получить все документы по пострадавшему

@@ -16,7 +16,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public Task<LifeSituationDocument> GetSingleAsync(Guid id, CancellationToken cancellationToken) =>
+        public Task<LifeSituationDocument?> GetSingleAsync(Guid id, CancellationToken cancellationToken) =>
             _repository.GetSingleAsync(id, cancellationToken);
 
         public async Task ApplyCommand(LifeSituationDocumentCommand command, CancellationToken cancellationToken)

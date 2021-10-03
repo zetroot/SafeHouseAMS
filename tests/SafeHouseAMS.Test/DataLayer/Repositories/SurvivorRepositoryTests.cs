@@ -21,7 +21,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         [Fact, UnitTest]
         public void Ctor_WhenDataContextIsNull_Throws() =>
             Assert.Throws<ArgumentNullException>(() => new SurvivorsRepository(null!, Mock.Of<IMapper>()));
-        
+
         [Fact, UnitTest]
         public void Ctor_WhenMapperIsNull_Throws() =>
             Assert.Throws<ArgumentNullException>(() => new SurvivorsRepository(new DataContext(new DbContextOptions<DataContext>()), null!));
@@ -31,14 +31,14 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             var cfg = new MapperConfiguration(c => c.AddMaps(typeof(SurvivorsRepository).Assembly));
             return new Mapper(cfg);
         }
-        
+
         private DataContext CreateInMemoryDatabase()
         {
             var connection = new SqliteConnection("Filename=:memory:");
             connection.Open();
             var dbctxOptsBuilder = new DbContextOptionsBuilder()
                 .UseLazyLoadingProxies()
-                .UseSqlite(connection, opt => 
+                .UseSqlite(connection, opt =>
                     opt.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
             var ctx = new DataContext(dbctxOptsBuilder.Options);
             ctx.Database.EnsureDeleted();
@@ -56,11 +56,11 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             new() {ID = Guid.NewGuid(), IsDeleted = true, Num = 2},
             new() {ID = Guid.NewGuid(), IsDeleted = false, Num = 3});
             await ctx.SaveChangesAsync();
-            
+
             var sut = new SurvivorsRepository(ctx, CreateMapper());
             //act
             var cnt = await sut.GetTotalCount();
-            
+
             //assert
             cnt.Should().Be(2);
         }
@@ -79,10 +79,10 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             var sut = new SurvivorsRepository(ctx, CreateMapper());
             var id = Guid.NewGuid();
             var time = DateTime.Now;
-            
+
             //act
             await sut.Create(id, isDeleted, time, time, name, sex, otherSex, new DateTime(1970, 01, 01), null);
-            
+
             //assert
             var foundRecord = await ctx.Survivors.SingleAsync(x => x.ID == id);
 
@@ -96,7 +96,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             foundRecord.BirthDateAccurate.Should().Be(new DateTime(1970,01,01));
             foundRecord.BirthDateCalculated.Should().BeNull();
         }
-        
+
         [Fact,IntegrationTest]
         public async Task Create_WhenCalled_IncrementsNumValue()
         {
@@ -114,7 +114,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
 
             //act
             await sut.Create(id, false, DateTime.Now, DateTime.Now, "name", SexEnum.Female, default, default, default);
-            
+
             //assert
             var foundRecord = await ctx.Survivors.SingleAsync(x => x.ID == id);
             foundRecord.Num.Should().Be(43);
@@ -134,14 +134,15 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             });
             await ctx.SaveChangesAsync();
             var sut = new SurvivorsRepository(ctx, CreateMapper());
-            
+
             //act
             var foundRecord = await sut.GetSingleAsync(id, CancellationToken.None);
-            
+
             //assert
-            foundRecord.ID.Should().Be(id);
+            foundRecord.Should().NotBeNull();
+            foundRecord?.ID.Should().Be(id);
         }
-        
+
         [Fact, IntegrationTest]
         public async Task GetSingleAsync_WhenRecordIsDeleted_Throws()
         {
@@ -157,11 +158,14 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             });
             await ctx.SaveChangesAsync();
             var sut = new SurvivorsRepository(ctx, CreateMapper());
-            
-            //act && assert
-            await Assert.ThrowsAnyAsync<Exception>(() => sut.GetSingleAsync(id, CancellationToken.None));
+
+            //act
+            var result = await sut.GetSingleAsync(id, CancellationToken.None);
+
+            //assert
+            result.Should().BeNull();
         }
-        
+
         [Fact, IntegrationTest]
         public async Task GetSingleAsync_WhenCancelled_ThrowsOperationCancelled()
         {
@@ -188,7 +192,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             );
             await ctx.SaveChangesAsync();
             var sut = new SurvivorsRepository(ctx, CreateMapper());
-            
+
             //act
             var result = new List<Survivor>();
             await foreach (var s in sut.GetCollection(1, 3, CancellationToken.None))
@@ -200,7 +204,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
                 .And.Contain(x => x.Num == 45)
                 .And.Contain(x => x.Num == 46);
         }
-        
+
         [Fact, IntegrationTest]
         public async Task GetCollection_WhenUnLimited_ReturnsNotDeletedRecords()
         {
@@ -216,7 +220,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             );
             await ctx.SaveChangesAsync();
             var sut = new SurvivorsRepository(ctx, CreateMapper());
-            
+
             //act
             var result = new List<Survivor>();
             await foreach (var s in sut.GetCollection(1, null, CancellationToken.None))

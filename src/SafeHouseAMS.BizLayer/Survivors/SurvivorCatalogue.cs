@@ -26,7 +26,7 @@ namespace SafeHouseAMS.BizLayer.Survivors
 
         public Task<int> GetTotalCount() => _repository.GetTotalCount();
 
-        public Task<Survivor> GetSingleAsync(Guid id, CancellationToken cancellationToken) =>
+        public Task<Survivor?> GetSingleAsync(Guid id, CancellationToken cancellationToken) =>
             _repository.GetSingleAsync(id, cancellationToken);
     }
 }

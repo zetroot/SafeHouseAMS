@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SafeHouseAMS.DataLayer.Models.ExploitationEpisodes;
 using SafeHouseAMS.DataLayer.Models.LifeSituations;
 using SafeHouseAMS.DataLayer.Models.Survivors;
 
@@ -10,7 +11,7 @@ namespace SafeHouseAMS.DataLayer
         public DbSet<SurvivorDAL> Survivors => Set<SurvivorDAL>();
         public DbSet<LifeSituationDocumentDAL> LifeSituationDocuments => Set<LifeSituationDocumentDAL>();
         public DbSet<BaseRecordDAL> Records => Set<BaseRecordDAL>();
-
+        public DbSet<EpisodeDAL> Episodes => Set<EpisodeDAL>();
 
         public DataContext(DbContextOptions options) : base(options)
         {
@@ -25,7 +26,7 @@ namespace SafeHouseAMS.DataLayer
 
             base.OnModelCreating(modelBuilder);
         }
-        
+
         /// <inheritdoc />
         public Task MigrateAsync() => Database.MigrateAsync();
     }

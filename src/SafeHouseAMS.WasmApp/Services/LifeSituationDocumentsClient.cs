@@ -30,11 +30,11 @@ namespace SafeHouseAMS.WasmApp.Services
             _logger = logger;
         }
 
-        public async Task<LifeSituationDocument> GetSingleAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<LifeSituationDocument?> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             var uuid = _mapper.Map<UUID>(id);
             var response = await _client.GetSingleAsync(uuid, new CallOptions(cancellationToken: cancellationToken));
-            return _mapper.Map<LifeSituationDocument>(response);
+            return _mapper.Map<LifeSituationDocument?>(response);
         }
 
         public async Task ApplyCommand(LifeSituationDocumentCommand command, CancellationToken cancellationToken)

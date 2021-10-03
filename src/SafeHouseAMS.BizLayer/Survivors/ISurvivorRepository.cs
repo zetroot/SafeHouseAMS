@@ -31,7 +31,7 @@ namespace SafeHouseAMS.BizLayer.Survivors
         /// <param name="id">идентификатор записи</param>
         /// <param name="cancellationToken">Токен отмены</param>
         /// <returns>Найденая запись</returns>
-        Task<Survivor> GetSingleAsync(Guid id, CancellationToken cancellationToken);
+        Task<Survivor?> GetSingleAsync(Guid id, CancellationToken cancellationToken);
 
         /// <summary>
         /// Получить коллекцию записей пострадавших
@@ -41,7 +41,7 @@ namespace SafeHouseAMS.BizLayer.Survivors
         /// <param name="cancellationToken">токен отмены операции</param>
         /// <returns>Асинхронная последовательность записей пострадавших</returns>
         IAsyncEnumerable<Survivor> GetCollection(int skip, int? take, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Получить общее количество записей в справочнике
         /// </summary>

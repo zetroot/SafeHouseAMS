@@ -19,7 +19,7 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         public void RoundTrip_DoesnotChangesItem()
         {
             var mapper = BuildMapper();
-            Arb.Register<LocalDateTimeGenerators>();
+            Arb.Register<DateTimeGenerators>();
             Prop.ForAll<RecordHistoryItem>(src =>
             {
                 var dto = mapper.Map<SafeHouseAMS.Transport.Protos.Models.LifeSituations.RecordHistoryItem>(src);

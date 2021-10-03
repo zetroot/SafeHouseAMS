@@ -1,13 +1,16 @@
 ﻿@page "/SurvivorDetails/{SurvivorID}"
 @using System.Threading
+@using SafeHouseAMS.BizLayer.ExploitationEpisodes
 @using SafeHouseAMS.BizLayer.LifeSituations
 @using SafeHouseAMS.BizLayer.LifeSituations.Documents
 @using SafeHouseAMS.BizLayer.LifeSituations.Records
 @using SafeHouseAMS.BizLayer.Survivors
 @using SafeHouseAMS.WasmApp.RecordViews
+@using SafeHouseAMS.WasmApp.Episodes
 
 @inject ISurvivorCatalogue _survivorCatalogue;
 @inject ILifeSituationDocumentsAggregate _documentsAggregate;
+@inject IEpisodesCatalogue _episodesAggregate;
 @inject NavigationManager _navigationManager;
 @inject ILogger<SurvivorDetails> _logger;
 
@@ -83,7 +86,23 @@
         </div>
     }
 
-    <SurvivorStateReportView StateReport="_report"/>
+    <SurvivorStateReportView StateReport="@_report"/>
+
+    @if (!_episodes.Any())
+    {
+        <p>Нет эпизодов для отображения</p>
+    }
+    else
+    {
+        <RadzenFieldset Text="Эпизоды" Style="margin-top: 5px">
+            @foreach (var episode in _episodes)
+            {
+                <div class="row">
+                    <EpisodeView Episode="@episode"/>
+                </div>
+            }
+        </RadzenFieldset>
+    }
 
     @if (!_documents.Any())
     {
@@ -146,6 +165,7 @@
     [Parameter] public string? SurvivorID { get; set; }
 
     private List<LifeSituationDocument> _documents = new();
+    private List<Episode> _episodes = new();
     private SurvivorStateReport? _report;
 
     protected override async Task OnParametersSetAsync()
@@ -154,9 +174,18 @@
         {
             _survivor = await _survivorCatalogue.GetSingleAsync(surId, CancellationToken.None);
             _report = await _documentsAggregate.GetSurvivorReport(surId, CancellationToken.None);
+
+            var epiCnt = 0;
+            await foreach (var episode in _episodesAggregate.GetAllBySurvivor(surId, CancellationToken.None))
+            {
+                _logger.LogInformation("Got episode {EpisodeCounter}", ++epiCnt);
+                _episodes.Add(episode);
+            }
+
+            var docCnt = 0;
             await foreach (var doc in _documentsAggregate.GetAllBySurvivor(surId, CancellationToken.None))
             {
-                _logger.LogInformation("Getting document");
+                _logger.LogInformation("Got document {DocumentCounter}", ++docCnt);
                 _documents.Add(doc);
             }
         }

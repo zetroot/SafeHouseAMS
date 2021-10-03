@@ -21,7 +21,7 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
                 default, default, default, default, default);
             var repoMock = new Mock<ISurvivorRepository>();
             repoMock.Setup(x => x.GetSingleAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(survivor));
+                .Returns(Task.FromResult<Survivor?>(survivor));
 
             var sut = new SurvivorCatalogue(repoMock.Object);
             var requestId = Guid.NewGuid();
@@ -46,7 +46,7 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
                 return Task.CompletedTask;
             }
         }
-        
+
         [Fact, UnitTest]
         public Task ApplyCommand_WhenCommandIsNull_Throws() =>
             Assert.ThrowsAsync<ArgumentNullException>(() =>
@@ -62,7 +62,7 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
 
             //act
             await sut.ApplyCommand(mockCmd, new());
-            
+
             //assert
             mockCmd.ApplyOnInvocationsCounter.Should().Be(1);
             mockCmd.LastUsedRepository.Should().BeSameAs(repoMock);
@@ -73,7 +73,7 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
             await Task.Yield();
             yield break;
         }
-        
+
         [Fact, UnitTest]
         public void GetCollection_WhenCalled_InvokesRepositoryAndReturnsItsAsyncEnum()
         {
@@ -85,12 +85,12 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
 
             //act
             var resultedEnum = sut.GetCollection(42, 54, CancellationToken.None);
-            
+
             //assert
             repoMock.Verify(x => x.GetCollection(42, 54, CancellationToken.None), Times.Once());
             resultedEnum.Should().BeSameAs(asyncEnum);
         }
-        
+
         [Fact, UnitTest]
         public async Task GetTotalCount_WhenCalled_InvokesRepositoryAndReturnsItsResult()
         {
@@ -101,7 +101,7 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
 
             //act
             var result = await sut.GetTotalCount();
-            
+
             //assert
             repoMock.Verify(x => x.GetTotalCount(), Times.Once());
             result.Should().Be(42);

@@ -1,0 +1,309 @@
+@using SafeHouseAMS.BizLayer.ExploitationEpisodes
+
+@if (Model is not null)
+{
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.Involvement"/>
+                    <RadzenLabel Text="Вовлечение" />
+                </div>
+                @if (Model.Involvement)
+                {
+                    <div class="col-md-8">
+                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.InvolvementDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.Cse"/>
+                    <RadzenLabel Text="КСЭ"/>
+                    @if (Model.Cse)
+                    {
+                        <div class="row">
+                            <div class="col" style="margin-left: 20%">
+                                @foreach (var item in Model.CseType)
+                                {
+                                    <div class="row">
+                                        <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"/>
+                                        <RadzenLabel Text="@item.Description"/>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (Model.Cse)
+                {
+                    <div class="col-md-8">
+                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.CseDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.ForcedLabour"/>
+                    <RadzenLabel Text="Принудительный труд" />
+                    @if (Model.ForcedLabour)
+                    {
+                        <div class="row">
+                            <div class="col" style="margin-left: 20%">
+                                @foreach (var item in Model.ForcedLabourType)
+                                {
+                                    <div class="row">
+                                        <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"/>
+                                        <RadzenLabel Text="@item.Description"/>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (Model.ForcedLabour)
+                {
+                    <div class="col-md-8">
+                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.ForcedLabourDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.ForcedMarriage"/>
+                    <RadzenLabel Text="Принудительный брак" />
+                    @if (Model.ForcedMarriage)
+                    {
+                        <div class="row">
+                            <div class="col" style="margin-left: 20%">
+                                <RadzenRadioButtonList @bind-Value=@Model.ForcedMarriageKind TValue="ForcedMarriageKind">
+                                    <Items>
+                                        @foreach (var item in Model.ForcedMarriageKinds)
+                                        {
+                                            <RadzenRadioButtonListItem Text="@item.Description" Value="@item.Item"/>
+                                        }
+                                    </Items>
+                                </RadzenRadioButtonList>
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (Model.ForcedMarriage)
+                {
+                    <div class="col-md-8">
+                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.ForcedMarriageDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.Cre"/>
+                    <RadzenLabel Text="КРЭ" />
+                </div>
+                @if (Model.Cre)
+                {
+                    <div class="col-md-8">
+                        <RadzenTextBox @bind-Value="@Model.CreDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.Begging"/>
+                    <RadzenLabel Text="Попрошайничество" />
+                </div>
+                @if (Model.Begging)
+                {
+                    <div class="col-md-8">
+                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.BeggingDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.ForcedCriminalActivity"/>
+                    <RadzenLabel Text="Принудительная криминальная активность" />
+                    @if (Model.ForcedCriminalActivity)
+                    {
+                        <div class="row">
+                            <div class="col" style="margin-left: 20%">
+                                @foreach (var item in Model.CriminalActivityKind)
+                                {
+                                    <div class="row">
+                                        <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"/>
+                                        <RadzenLabel Text="@item.Description"/>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+                @if (Model.ForcedCriminalActivity)
+                {
+                    <div class="col-md-6">
+                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.CriminalActivityDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.OtherExploitationKind"/>
+                    <RadzenLabel Text="Другой вид эксплуатации" />
+                </div>
+                @if (Model.OtherExploitationKind)
+                {
+                    <div class="col-md-8">
+                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.OtherExploitationKindDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.SexualViolence"/>
+                    <RadzenLabel Text="Сексуальное насилие" />
+                </div>
+                @if (Model.SexualViolence)
+                {
+                    <div class="col-md-8">
+                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.SexualViolenceDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.DomesticViolence"/>
+                    <RadzenLabel Text="Домашнее насилие" />
+                </div>
+                @if (Model.DomesticViolence)
+                {
+                    <div class="col-md-8">
+                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.DomesticViolenceDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@Model.OtherViolence"/>
+                    <RadzenLabel Text="Другой вид насилия" />
+                </div>
+                @if (Model.OtherViolence)
+                {
+                    <div class="col-md-8">
+                        <RadzenTextArea style="width: 100%" @bind-Value="@Model.OtherViolenceDescription" Placeholder="Укажите подробнее..."/>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <RadzenLabel Text="Место эксплуатации"/>
+                <RadzenTextBox style="width: 100%" Placeholder="Страна/город" @bind-Value="@Model.Place"/>
+            </div>
+            <div class="row">
+                <RadzenLabel Text="Вовлечен_а как и кем"/>
+                <RadzenTextArea style="width: 100%" Rows="5" @bind-Value="@Model.InvolvementDescriptionText"/>
+            </div>
+            <div class="row">
+                <RadzenCheckBox TValue="bool" @bind-Value="@Model.WasJuvenile"/>
+                <RadzenLabel Text="Был_а несовершеннолетней"></RadzenLabel>
+            </div>
+            <div class="row">
+                <RadzenLabel Style="margin-right: 5px" Text="Длительность"/>
+                <RadzenNumeric TValue="int" Min="0" Step="1" @bind-Value="@Model.DurationLength"/>
+
+                <RadzenDropDown style="width: min-content" Data="@_intervalKinds" @bind-Value="@Model.DurationKind" TextProperty="Description" ValueProperty="IntervalKind"/>
+            </div>
+            <div class="row">
+                <div class="col">
+                    @foreach (var item in Model.ControlMethodKinds)
+                    {
+                        <div class="row">
+                            <div class="col">
+                                <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"
+                                                Change="@(selected =>{ switch (item.Item) { case ControlMethodKind.Debt: _showDebt = selected; break; case ControlMethodKind.Other: _showOtherControlMethods = selected; break; default: break; };})"/>
+                                <RadzenLabel Style="word-wrap: break-word" Text="@item.Description"/>
+                                @if (_showDebt && item.Item == ControlMethodKind.Debt)
+                                {
+                                    <div class="row">
+                                        <div class="col" style="margin-left: 20%">
+                                            @foreach (var debt in Model.DebtKinds)
+                                            {
+                                                <div class="row">
+                                                    <RadzenCheckBox TValue="bool" @bind-Value="@debt.Selected"/>
+                                                    <RadzenLabel Text="@debt.Description"/>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                                @if (_showOtherControlMethods && item.Item == ControlMethodKind.Other)
+                                {
+                                    <div class="row">
+                                        <div class="col">
+                                            <RadzenTextArea style="width: 100%" @bind-Value="@Model.OtherControlMethods"/>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <RadzenFieldset Text="Статус освобождения">
+                        @foreach (var item in Model.EscapeStatus)
+                        {
+                            <div class="row">
+                                <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"
+                                                Change="@(s =>
+                                                        {
+                                                            if (!s) return;
+                                                            if(item.Item == EscapeStatus.EscapeNeeded)
+                                                                ClearAllEscapedTypes();
+                                                            else
+                                                            {
+                                                                var escapeNeeded = Model.EscapeStatus.Single(x => x.Item == EscapeStatus.EscapeNeeded);
+                                                                escapeNeeded.Selected = false;
+                                                            }
+                                                        })"/>
+                                <RadzenLabel Text="@item.Description"/>
+                            </div>
+                        }
+                    </RadzenFieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+}
+else
+{
+    <p>Не установлена модель</p>
+}
+
+@code {
+    [Parameter] public EpisodeEditorModel? Model { get; set; }
+
+    private record DurationKindVM(EpisodeEditorModel.DurationIntervalKind IntervalKind, string Description);
+
+    private bool _showDebt = false;
+    private bool _showOtherControlMethods = false;
+
+    private void ClearAllEscapedTypes()
+    {
+        if(Model is null) return;
+        foreach (var status in Model.EscapeStatus.Where(x => x.Item != EscapeStatus.EscapeNeeded))
+        {
+            status.Selected = false;
+        }
+    }
+    private DurationKindVM[] _intervalKinds =
+    {
+        new DurationKindVM(EpisodeEditorModel.DurationIntervalKind.Day, "Дней"),
+        new DurationKindVM(EpisodeEditorModel.DurationIntervalKind.Month, "Месяцев"),
+        new DurationKindVM(EpisodeEditorModel.DurationIntervalKind.Year, "Лет"),
+    };
+
+}

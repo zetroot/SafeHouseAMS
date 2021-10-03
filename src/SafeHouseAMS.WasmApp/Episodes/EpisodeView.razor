@@ -1,0 +1,224 @@
+@using SafeHouseAMS.BizLayer.ExploitationEpisodes
+@using Humanizer
+@using EnumDesriptor
+@using System.Text
+@using Humanizer.Localisation
+@if (Episode is not null)
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                @if(Episode.ContactReason.Involvement is {} involvement)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="Вовлечение"/>
+                            <RadzenLabel Text="@involvement.Details"/>
+                        </div>
+                    </div>
+                }
+                @if(Episode.ContactReason.Cse is {} cse)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="КСЭ"/>
+                            <RadzenLabel Style="font-style: italic" Text="@cse.GetTypeDescription()"/>
+                            <RadzenLabel Text="@cse.Details"/>
+                        </div>
+                    </div>
+                }
+                @if(Episode.ContactReason.ForcedLabour is {} forcedLabour)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="Принудительный труд"/>
+                            <RadzenLabel Style="font-style: italic" Text="@forcedLabour.GetTypeDescription()"/>
+                            <RadzenLabel Text="@forcedLabour.Details"/>
+                        </div>
+                    </div>
+                }
+                @if(Episode.ContactReason.ForcedMarriage is {} forcedMarriage)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="Принудительный брак"/>
+                            <RadzenLabel Style="font-style: italic" Text="@forcedMarriage.GetTypeDescription()"/>
+                            <RadzenLabel Text="@forcedMarriage.Details"/>
+                        </div>
+                    </div>
+                }
+                @if(Episode.ContactReason.Cre is {} cre)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="КРЭ"/>
+                            <RadzenLabel Text="@cre.Details"/>
+                        </div>
+                    </div>
+                }
+                @if(Episode.ContactReason.Begging is {} begging)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="Попрошайничество"/>
+                            <RadzenLabel Text="@begging.Details"/>
+                        </div>
+                    </div>
+                }
+                @if(Episode.ContactReason.ForcedCriminalActivity is {} forcedCriminalActivity)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="Принудительная криминальная активность"/>
+                            <RadzenLabel Style="font-style: italic" Text="@forcedCriminalActivity.GetTypeDescription()"/>
+                            <RadzenLabel Text="@forcedCriminalActivity.Details"/>
+                        </div>
+                    </div>
+                }
+                @if(Episode.ContactReason.OtherExploitationKind is {} otherExploitation)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="Другой вид эксплуатации"/>
+                            <RadzenLabel Text="@otherExploitation.Details"/>
+                        </div>
+                    </div>
+                }
+                @if(Episode.ContactReason.SexualViolence is {} sexualViolence)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="Сексуальное насилие"/>
+                            <RadzenLabel Text="@sexualViolence.Details"/>
+                        </div>
+                    </div>
+                }
+                @if(Episode.ContactReason.DomesticViolence is {} domesticViolence)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="Домашнее насилие"/>
+                            <RadzenLabel Text="@domesticViolence.Details"/>
+                        </div>
+                    </div>
+                }
+                @if(Episode.ContactReason.OtherViolenceKind is {} otherViolence)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenLabel Style="text-decoration: underline" Text="Другой вид насилия"/>
+                            <RadzenLabel Text="@otherViolence.Details"/>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col">
+                        <RadzenLabel Style="text-decoration: underline" Text="Место (страна / город):"/>
+                        <RadzenLabel Text="@Episode.Place"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <RadzenLabel Style="text-decoration: underline" Text="Как и кем вовлечен_а:"/>
+                        <RadzenLabel Text="@Episode.InvolvementDescription"/>
+                    </div>
+                </div>
+                @if (Episode.WasJuvenile)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenCheckBox TValue="bool" Value="true" Disabled="true"/>
+                            <RadzenLabel Style="text-decoration: underline; color: red" Text="Былв несовершеннолетн_ей"/>
+                        </div>
+                    </div>
+                }
+                <div class="row">
+                    <div class="col">
+                        <RadzenLabel Style="text-decoration: underline" Text="Продолжительность:"/>
+                        <RadzenLabel Text="@Episode.Duration.Humanize(maxUnit: TimeUnit.Year)"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <RadzenLabel Style="text-decoration: underline" Text="Методы контроля:"/>
+                        <RadzenLabel Text="@GetControlMethods()"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <RadzenLabel Style="text-decoration: underline" Text="Статус освобождения:"/>
+                        <RadzenLabel Text="@GetEscapeStatus()"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-info">
+                    <RadzenLabel Text="Информация по эпизоду загружается"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@code {
+    [Parameter] public Episode? Episode { get; set; }
+
+    // private string GetDuration()
+    // {
+    //     if (Episode?.Duration is not {} duration) return string.Empty;
+    // }
+    private string GetEscapeStatus()
+    {
+        if (Episode?.EscapeStatus is not {} es) return string.Empty;
+        return Enum.GetValues<EscapeStatus>().Where(x => x != EscapeStatus.None && es.HasFlag(x))
+            .Select(x => x.GetDescription())
+            .Aggregate(new StringBuilder(), (acc, item) =>
+            {
+                if (acc.Length > 0) acc.Append(", ");
+                acc.Append(item);
+                return acc;
+            }, sb => sb.ToString());
+    }
+
+    private string GetControlMethods()
+    {
+        if (Episode?.ControlMethods is not {} cm) return string.Empty;
+        var sb = new StringBuilder();
+        foreach (var candidate in Enum.GetValues<ControlMethodKind>()
+            .Where(x => x != ControlMethodKind.None))
+        {
+            if (!cm.Methods.HasFlag(candidate)) continue;
+            if (sb.Length > 0)
+                sb.Append(", ");
+
+            sb.Append(candidate.GetDescription());
+            if (candidate == ControlMethodKind.Debt && cm.DebtKind is {} debtKind)
+                sb.Append($"({GetDebtKind(debtKind)})");
+
+            if (candidate == ControlMethodKind.Other && !string.IsNullOrEmpty(cm.OtherDetails))
+                sb.Append($"({cm.OtherDetails})");
+        }
+        return sb.ToString();
+    }
+    private string GetDebtKind(DebtKind debtKind) =>
+        Enum.GetValues<DebtKind>().Where(x => x != DebtKind.None)
+            .Where(x => debtKind.HasFlag(x))
+            .Select(x => x.GetDescription())
+            .Aggregate(new StringBuilder(), (sb, item) =>
+            {
+                if (sb.Length > 0) sb.Append(", ");
+                sb.Append(item);
+                return sb;
+            }, sb => sb.ToString());
+}

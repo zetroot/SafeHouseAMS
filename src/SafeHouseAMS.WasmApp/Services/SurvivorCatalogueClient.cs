@@ -29,11 +29,11 @@ namespace SafeHouseAMS.WasmApp.Services
             _client = new SurvivorCatalogue.SurvivorCatalogueClient(channel);
         }
 
-        public async Task<Survivor> GetSingleAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<Survivor?> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             var uuid = _mapper.Map<UUID>(id);
             var response = await _client.GetSingleAsync(uuid, new CallOptions(cancellationToken: cancellationToken));
-            return _mapper.Map<Survivor>(response);
+            return _mapper.Map<Survivor?>(response);
         }
 
         public async Task ApplyCommand(SurvivorCommand command, CancellationToken cancellationToken)

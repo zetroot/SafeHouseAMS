@@ -18,8 +18,142 @@ namespace SafeHouseAMS.DataLayer.Migrations
             modelBuilder
                 .HasDefaultSchema("public")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.8")
+                .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.ExploitationEpisodes.EpisodeDAL", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasComment("Идентификатор записи");
+
+                    b.Property<bool>("Begging")
+                        .HasColumnType("boolean")
+                        .HasComment("Попрошайничество");
+
+                    b.Property<string>("ContactReasonDescriptions")
+                        .IsRequired()
+                        .HasColumnType("jsonb")
+                        .HasComment("Описания причины обращения");
+
+                    b.Property<int>("ControlMethods")
+                        .HasColumnType("integer")
+                        .HasComment("Методы контроля");
+
+                    b.Property<bool>("Cre")
+                        .HasColumnType("boolean")
+                        .HasComment("КРЭ");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone")
+                        .HasComment("Дата создания");
+
+                    b.Property<int>("CriminalActivityType")
+                        .HasColumnType("integer")
+                        .HasComment("вид принудительной криминальной деятельности");
+
+                    b.Property<bool>("Cse")
+                        .HasColumnType("boolean")
+                        .HasComment("КСЭ");
+
+                    b.Property<int>("CseType")
+                        .HasColumnType("integer")
+                        .HasComment("Тип КСЭ");
+
+                    b.Property<int?>("DebtKind")
+                        .HasColumnType("integer")
+                        .HasComment("Тип долговой кабалы");
+
+                    b.Property<bool>("DomesticViolence")
+                        .HasColumnType("boolean")
+                        .HasComment("Домашнее насилие");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("interval")
+                        .HasComment("Длительность эксплуатации");
+
+                    b.Property<int>("EscapeStatus")
+                        .HasColumnType("integer")
+                        .HasComment("Статус освобождения");
+
+                    b.Property<bool>("ForcedCriminalActivity")
+                        .HasColumnType("boolean")
+                        .HasComment("Принудительная криминальная деятельность");
+
+                    b.Property<bool>("ForcedLabour")
+                        .HasColumnType("boolean")
+                        .HasComment("Принудительный труд");
+
+                    b.Property<int>("ForcedLabourType")
+                        .HasColumnType("integer")
+                        .HasComment("Тип принкдительного труда");
+
+                    b.Property<bool>("ForcedMarriage")
+                        .HasColumnType("boolean")
+                        .HasComment("Принудительный брак");
+
+                    b.Property<int>("ForcedMarriageKind")
+                        .HasColumnType("integer")
+                        .HasComment("Статус принудительного брака");
+
+                    b.Property<bool>("Involvement")
+                        .HasColumnType("boolean")
+                        .HasComment("Обращение по причине вовлечения");
+
+                    b.Property<string>("InvolvementDescription")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Кем и как вовлекалась");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasComment("Признак удаленной записи");
+
+                    b.Property<DateTime>("LastEdit")
+                        .HasColumnType("timestamp without time zone")
+                        .HasComment("Дата последнего редактирования");
+
+                    b.Property<string>("OtherControlMethodDetails")
+                        .HasColumnType("text")
+                        .HasComment("Уточнение других методов контроля");
+
+                    b.Property<bool>("OtherExploitationKind")
+                        .HasColumnType("boolean")
+                        .HasComment("Другой вид эксплуатации");
+
+                    b.Property<bool>("OtherViolenceKind")
+                        .HasColumnType("boolean")
+                        .HasComment("Другой вид насилия");
+
+                    b.Property<string>("Place")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Место эксплуатации");
+
+                    b.Property<bool>("SexualViolence")
+                        .HasColumnType("boolean")
+                        .HasComment("Сексуальное насилие");
+
+                    b.Property<Guid>("SurvivorID")
+                        .HasColumnType("uuid")
+                        .HasComment("Идентификатор пострадавшего");
+
+                    b.Property<bool>("WasJuvenile")
+                        .HasColumnType("boolean")
+                        .HasComment("Несовершеннолетняя на момент вовлечения");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("SurvivorID");
+
+                    b.ToTable("Episodes");
+
+                    b
+                        .HasComment("Эпизоды эксплуатации");
+                });
 
             modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.BaseRecordDAL", b =>
                 {
@@ -186,11 +320,53 @@ namespace SafeHouseAMS.DataLayer.Migrations
                     b.HasDiscriminator().HasValue("EducationLevel");
                 });
 
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.MigrationStatusRecordDAL", b =>
+                {
+                    b.HasBaseType("SafeHouseAMS.DataLayer.Models.LifeSituations.BaseRecordDAL");
+
+                    b.HasDiscriminator().HasValue("MigrationStatus");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.RegistrationStatusRecordDAL", b =>
+                {
+                    b.HasBaseType("SafeHouseAMS.DataLayer.Models.LifeSituations.BaseRecordDAL");
+
+                    b.HasDiscriminator().HasValue("RegistrationStatus");
+                });
+
             modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.SpecialityRecordDAL", b =>
                 {
                     b.HasBaseType("SafeHouseAMS.DataLayer.Models.LifeSituations.BaseRecordDAL");
 
                     b.HasDiscriminator().HasValue("Speciality");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.ChildrenUpdateDAL", b =>
+                {
+                    b.HasBaseType("SafeHouseAMS.DataLayer.Models.LifeSituations.LifeSituationDocumentDAL");
+
+                    b.HasDiscriminator().HasValue("ChildrenUpdate");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.CitizenshipChangeDAL", b =>
+                {
+                    b.HasBaseType("SafeHouseAMS.DataLayer.Models.LifeSituations.LifeSituationDocumentDAL");
+
+                    b.HasDiscriminator().HasValue("CitizenshipChange");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.DomicileUpdateDAL", b =>
+                {
+                    b.HasBaseType("SafeHouseAMS.DataLayer.Models.LifeSituations.LifeSituationDocumentDAL");
+
+                    b.HasDiscriminator().HasValue("DomicileUpdate");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.EducationLevelUpdateDAL", b =>
+                {
+                    b.HasBaseType("SafeHouseAMS.DataLayer.Models.LifeSituations.LifeSituationDocumentDAL");
+
+                    b.HasDiscriminator().HasValue("EducationUpdate");
                 });
 
             modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.InquiryDAL", b =>
@@ -282,10 +458,42 @@ namespace SafeHouseAMS.DataLayer.Migrations
                     b.HasDiscriminator().HasValue("Inquiry");
                 });
 
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.MigrationStatusUpdateDAL", b =>
+                {
+                    b.HasBaseType("SafeHouseAMS.DataLayer.Models.LifeSituations.LifeSituationDocumentDAL");
+
+                    b.HasDiscriminator().HasValue("MigrationStatusUpdate");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.RegistrationStatusUpdateDAL", b =>
+                {
+                    b.HasBaseType("SafeHouseAMS.DataLayer.Models.LifeSituations.LifeSituationDocumentDAL");
+
+                    b.HasDiscriminator().HasValue("RegistrationStatusUpdate");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.SpecialitiesUpdateDAL", b =>
+                {
+                    b.HasBaseType("SafeHouseAMS.DataLayer.Models.LifeSituations.LifeSituationDocumentDAL");
+
+                    b.HasDiscriminator().HasValue("SpecialitiesUpdate");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.ExploitationEpisodes.EpisodeDAL", b =>
+                {
+                    b.HasOne("SafeHouseAMS.DataLayer.Models.Survivors.SurvivorDAL", "Survivor")
+                        .WithMany()
+                        .HasForeignKey("SurvivorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Survivor");
+                });
+
             modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.BaseRecordDAL", b =>
                 {
                     b.HasOne("SafeHouseAMS.DataLayer.Models.LifeSituations.LifeSituationDocumentDAL", "Document")
-                        .WithMany("Records")
+                        .WithMany("AllRecords")
                         .HasForeignKey("DocumentID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -306,7 +514,7 @@ namespace SafeHouseAMS.DataLayer.Migrations
 
             modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.LifeSituationDocumentDAL", b =>
                 {
-                    b.Navigation("Records");
+                    b.Navigation("AllRecords");
                 });
 #pragma warning restore 612, 618
         }
