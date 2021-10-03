@@ -1,7 +1,7 @@
 using System;
 using EnumDesriptor;
 
-namespace SafeHouseAMS.WasmApp.RecordEditors
+namespace SafeHouseAMS.WasmApp.Episodes
 {
     public class EnumDetails<T> where T : struct, Enum
     {

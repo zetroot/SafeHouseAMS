@@ -4,7 +4,7 @@ using System.Linq;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes.Commands;
 
-namespace SafeHouseAMS.WasmApp.RecordEditors
+namespace SafeHouseAMS.WasmApp.Episodes
 {
     public class EpisodeEditorModel
     {
