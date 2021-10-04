@@ -2,7 +2,7 @@
 <div class="container-fluid">
     <RadzenFieldset Text="Информация о детях">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-12">
                 <RadzenCheckBox TValue="bool" @bind-Value="@_hasChildren"/>
                 <RadzenLabel Text="Есть дети"/>
             </div>
@@ -21,6 +21,6 @@
     private bool _hasChildren;
     private string? _childrenDetails;
 
-    public SetChildren BuildCommand(Guid documentId) => 
+    public SetChildren BuildCommand(Guid documentId) =>
         new(documentId, _hasChildren, _childrenDetails);
 }
