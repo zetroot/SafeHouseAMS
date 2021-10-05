@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
-using SafeHouseAMS.BizLayer.ExploitationEpisodes.Commands;
 
 namespace SafeHouseAMS.WasmApp.Episodes
 {
-    public class EpisodeEditorModel
+    public abstract class EpisodeEditorBaseModel
     {
         private int _durationLength = 0;
 
@@ -78,7 +77,7 @@ namespace SafeHouseAMS.WasmApp.Episodes
 
         public IReadOnlyList<EnumDetails<EscapeStatus>> EscapeStatus { get; }
 
-        public EpisodeEditorModel()
+        protected EpisodeEditorBaseModel()
         {
             CseType = Enum.GetValues<CseType>()
                 .Where(x => x != BizLayer.ExploitationEpisodes.CseType.None)
@@ -104,23 +103,13 @@ namespace SafeHouseAMS.WasmApp.Episodes
                 .Select(x => new EnumDetails<EscapeStatus>(x)).ToList();
         }
 
-        public CreateEpisode BuildCommand(Guid survivorId)
-        {
-            var contactReason = BuildContactReason();
-            var controlMethods = BuildControlMethods();
-            var duration = BuildDuration();
-            var escapeStatus = BuildEscapeStatus();
-            return new(Guid.NewGuid(), survivorId, contactReason, Place, InvolvementDescriptionText, WasJuvenile,
-            duration, controlMethods, escapeStatus);
-        }
-
-        private EscapeStatus BuildEscapeStatus() =>
+        protected EscapeStatus BuildEscapeStatus() =>
             EscapeStatus
                 .Where(x => x.Selected)
                 .Select(x => x.Item)
                 .Aggregate(BizLayer.ExploitationEpisodes.EscapeStatus.None, (acc, item) => acc | item);
 
-        private TimeSpan BuildDuration() =>
+        protected TimeSpan BuildDuration() =>
             DurationKind switch
             {
                 DurationIntervalKind.Day => TimeSpan.FromDays(DurationLength),
@@ -129,7 +118,7 @@ namespace SafeHouseAMS.WasmApp.Episodes
                 _ => throw new InvalidOperationException()
             };
 
-        private ControlMethods BuildControlMethods()
+        protected ControlMethods BuildControlMethods()
         {
             var controlMethods = ControlMethodKinds
                 .Where(x => x.Selected)
@@ -145,7 +134,7 @@ namespace SafeHouseAMS.WasmApp.Episodes
             return new(controlMethods, debtKind, otherControlKindDescr);
         }
 
-        private ContactReason BuildContactReason()
+        protected ContactReason BuildContactReason()
         {
             var involvement = Involvement ? new DetailedContactReason(InvolvementDescription) : null;
             DetailedContactReason<CseType>? cse = null;

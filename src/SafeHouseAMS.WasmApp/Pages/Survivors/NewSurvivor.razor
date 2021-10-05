@@ -116,9 +116,9 @@
                         </RadzenTabsItem>
                         <RadzenTabsItem Text="Причины обрщения">
                             <div class="row">
-                                <button type="button" class="btn btn-outline-success" @onclick="@(() => episodes.Add(new()))">+</button>
+                                <button type="button" class="btn btn-outline-success" @onclick="@(() => _episodes.Add(new()))">+</button>
                             </div>
-                            @foreach (var episode in episodes)
+                            @foreach (var episode in _episodes)
                             {
                                 <div class="row">
                                     <EpisodeEditor Model="episode"/>
@@ -167,7 +167,7 @@
     private VulnerabilitiesEditorComponent? _vulnerabilitiesEditor;
     private MigrationStatusEditorComponent? _migrationStatusEditor;
     private RegistrationStatusEditorComponent? _registrationStatusEditor;
-    private readonly List<EpisodeEditorModel> episodes = new List<EpisodeEditorModel>();
+    private readonly List<EpisodeCreaterModel> _episodes = new ();
 
     private void CancelClick()
     {
@@ -220,7 +220,7 @@
         if (_registrationStatusEditor?.BuildCommand(inquiryId) is {} registrationCmd)
             await _documentsAggregate.ApplyCommand(registrationCmd, CancellationToken.None);
 
-        foreach (var episode in episodes)
+        foreach (var episode in _episodes)
         {
             var cmd = episode.BuildCommand(survivorId);
             await _episodesCatalogue.ApplyCommand(cmd, CancellationToken.None);
