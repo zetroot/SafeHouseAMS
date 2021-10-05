@@ -3,12 +3,20 @@
 @using EnumDesriptor
 @using System.Text
 @using Humanizer.Localisation
+@using SafeHouseAMS.WasmApp.Pages.ExploitationEpisodes
+@inject NavigationManager _navigationManager;
+
 @if (Episode is not null)
 {
     <div class="container-fluid">
         <div class="row">
+            <div class="col">
+                <RadzenButton Text="Редактировать" Click="@EditClick"/>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-6">
-                @if(Episode.ContactReason.Involvement is {} involvement)
+                @if (Episode.ContactReason.Involvement is {} involvement)
                 {
                     <div class="row">
                         <div class="col">
@@ -17,7 +25,7 @@
                         </div>
                     </div>
                 }
-                @if(Episode.ContactReason.Cse is {} cse)
+                @if (Episode.ContactReason.Cse is {} cse)
                 {
                     <div class="row">
                         <div class="col">
@@ -27,7 +35,7 @@
                         </div>
                     </div>
                 }
-                @if(Episode.ContactReason.ForcedLabour is {} forcedLabour)
+                @if (Episode.ContactReason.ForcedLabour is {} forcedLabour)
                 {
                     <div class="row">
                         <div class="col">
@@ -37,7 +45,7 @@
                         </div>
                     </div>
                 }
-                @if(Episode.ContactReason.ForcedMarriage is {} forcedMarriage)
+                @if (Episode.ContactReason.ForcedMarriage is {} forcedMarriage)
                 {
                     <div class="row">
                         <div class="col">
@@ -47,7 +55,7 @@
                         </div>
                     </div>
                 }
-                @if(Episode.ContactReason.Cre is {} cre)
+                @if (Episode.ContactReason.Cre is {} cre)
                 {
                     <div class="row">
                         <div class="col">
@@ -56,7 +64,7 @@
                         </div>
                     </div>
                 }
-                @if(Episode.ContactReason.Begging is {} begging)
+                @if (Episode.ContactReason.Begging is {} begging)
                 {
                     <div class="row">
                         <div class="col">
@@ -65,7 +73,7 @@
                         </div>
                     </div>
                 }
-                @if(Episode.ContactReason.ForcedCriminalActivity is {} forcedCriminalActivity)
+                @if (Episode.ContactReason.ForcedCriminalActivity is {} forcedCriminalActivity)
                 {
                     <div class="row">
                         <div class="col">
@@ -75,7 +83,7 @@
                         </div>
                     </div>
                 }
-                @if(Episode.ContactReason.OtherExploitationKind is {} otherExploitation)
+                @if (Episode.ContactReason.OtherExploitationKind is {} otherExploitation)
                 {
                     <div class="row">
                         <div class="col">
@@ -84,7 +92,7 @@
                         </div>
                     </div>
                 }
-                @if(Episode.ContactReason.SexualViolence is {} sexualViolence)
+                @if (Episode.ContactReason.SexualViolence is {} sexualViolence)
                 {
                     <div class="row">
                         <div class="col">
@@ -93,7 +101,7 @@
                         </div>
                     </div>
                 }
-                @if(Episode.ContactReason.DomesticViolence is {} domesticViolence)
+                @if (Episode.ContactReason.DomesticViolence is {} domesticViolence)
                 {
                     <div class="row">
                         <div class="col">
@@ -102,7 +110,7 @@
                         </div>
                     </div>
                 }
-                @if(Episode.ContactReason.OtherViolenceKind is {} otherViolence)
+                @if (Episode.ContactReason.OtherViolenceKind is {} otherViolence)
                 {
                     <div class="row">
                         <div class="col">
@@ -221,4 +229,11 @@ else
                 sb.Append(item);
                 return sb;
             }, sb => sb.ToString());
+
+
+    private Task EditClick()
+    {
+        _navigationManager.NavigateTo($"{nameof(EpisodeEditor)}/{Episode?.ID}");
+        return Task.CompletedTask;
+    }
 }
