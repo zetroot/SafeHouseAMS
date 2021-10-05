@@ -9,9 +9,11 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         public EpisodeCommandsMappingProfile()
         {
             MapCreateCommand();
+            MapUpdateCommand();
 
             MapCommandWrapper();
         }
+
         private void MapCommandWrapper()
         {
             CreateMap<EpisodeCommand, Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand>()
@@ -24,6 +26,10 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                             result.Create =
                                 ctx.Mapper.Map<Protos.Models.ExploitationEpisodes.Commands.CreateEpisode>(create);
                             break;
+                        case UpdateEpisode update:
+                            result.Update =
+                                ctx.Mapper.Map<Protos.Models.ExploitationEpisodes.Commands.UpdateEpisode>(update);
+                            break;
                         default:
                             throw new ArgumentException();
                     }
@@ -35,6 +41,8 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                 {
                     Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand.CommandOneofCase.Create =>
                         ctx.Mapper.Map<CreateEpisode>(src.Create),
+                    Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand.CommandOneofCase.Update =>
+                        ctx.Mapper.Map<UpdateEpisode>(src.Update),
                     _ => throw new ArgumentException()
                 });
         }
@@ -44,5 +52,12 @@ namespace SafeHouseAMS.Transport.MapperProfiles
             CreateMap<CreateEpisode, Protos.Models.ExploitationEpisodes.Commands.CreateEpisode>();
             CreateMap<Protos.Models.ExploitationEpisodes.Commands.CreateEpisode, CreateEpisode>();
         }
+
+        private void MapUpdateCommand()
+        {
+            CreateMap<UpdateEpisode, Protos.Models.ExploitationEpisodes.Commands.UpdateEpisode>();
+            CreateMap<Protos.Models.ExploitationEpisodes.Commands.UpdateEpisode, UpdateEpisode>();
+        }
+
     }
 }
