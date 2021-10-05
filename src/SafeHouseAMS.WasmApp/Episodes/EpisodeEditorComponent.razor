@@ -221,7 +221,7 @@
                         <div class="row">
                             <div class="col">
                                 <RadzenCheckBox TValue="bool" @bind-Value="item.Selected"
-                                                Change="@(selected =>{ switch (item.Item) { case ControlMethodKind.Debt: _showDebt = selected; break; case ControlMethodKind.Other: _showOtherControlMethods = selected; break; default: break; };})"/>
+                                                Change="@(selected =>{ switch (item.Item) { case ControlMethodKind.Debt: _showDebt = selected; break; case ControlMethodKind.Other: _showOtherControlMethods = selected; break; }})"/>
                                 <RadzenLabel Style="word-wrap: break-word" Text="@item.Description"/>
                                 @if (_showDebt && item.Item == ControlMethodKind.Debt)
                                 {
@@ -284,9 +284,9 @@ else
 }
 
 @code {
-    [Parameter] public EpisodeEditorModel? Model { get; set; }
+    [Parameter] public EpisodeEditorBaseModel? Model { get; set; }
 
-    private record DurationKindVM(EpisodeEditorModel.DurationIntervalKind IntervalKind, string Description);
+    private record DurationKindVM(EpisodeEditorBaseModel.DurationIntervalKind IntervalKind, string Description);
 
     private bool _showDebt = false;
     private bool _showOtherControlMethods = false;
@@ -301,9 +301,9 @@ else
     }
     private DurationKindVM[] _intervalKinds =
     {
-        new DurationKindVM(EpisodeEditorModel.DurationIntervalKind.Day, "Дней"),
-        new DurationKindVM(EpisodeEditorModel.DurationIntervalKind.Month, "Месяцев"),
-        new DurationKindVM(EpisodeEditorModel.DurationIntervalKind.Year, "Лет"),
+        new DurationKindVM(EpisodeEditorBaseModel.DurationIntervalKind.Day, "Дней"),
+        new DurationKindVM(EpisodeEditorBaseModel.DurationIntervalKind.Month, "Месяцев"),
+        new DurationKindVM(EpisodeEditorBaseModel.DurationIntervalKind.Year, "Лет"),
     };
 
 }

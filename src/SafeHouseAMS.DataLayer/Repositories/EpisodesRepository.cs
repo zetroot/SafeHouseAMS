@@ -38,6 +38,23 @@ namespace SafeHouseAMS.DataLayer.Repositories
             await _dataContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
+        public async Task Update(Guid entityID, DateTime editTimestamp,
+            ContactReason contactReason, string place, string involvement, bool wasJuvenile, TimeSpan duration, ControlMethods controlMethods, EscapeStatus escapeStatus)
+        {
+            var episode = await _dataContext.Episodes.SingleAsync(x => x.ID == entityID).ConfigureAwait(false);
+
+            episode.LastEdit = editTimestamp;
+            episode.Place = place;
+            episode.InvolvementDescription = involvement;
+            episode.WasJuvenile = wasJuvenile;
+            episode.Duration = duration;
+            episode.EscapeStatus = (int)escapeStatus;
+            episode.UpdateContactReason(contactReason);
+            episode.UpdateControlMethods(controlMethods);
+
+            await _dataContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+
         public async Task<Episode?> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             var item = await _dataContext.Episodes
