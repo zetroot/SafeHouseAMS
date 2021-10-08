@@ -1,5 +1,5 @@
 using System;
-using EnumDesriptor;
+using EnumDescriber;
 
 namespace SafeHouseAMS.WasmApp.Episodes
 {
