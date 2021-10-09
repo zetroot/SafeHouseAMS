@@ -10,6 +10,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         {
             MapCreateCommand();
             MapUpdateCommand();
+            MapDeleteCommand();
 
             MapCommandWrapper();
         }
@@ -30,6 +31,10 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                             result.Update =
                                 ctx.Mapper.Map<Protos.Models.ExploitationEpisodes.Commands.UpdateEpisode>(update);
                             break;
+                        case DeleteEpisode delete:
+                            result.Delete =
+                                ctx.Mapper.Map<Protos.Models.ExploitationEpisodes.Commands.DeleteEpisode>(delete);
+                            break;
                         default:
                             throw new ArgumentException();
                     }
@@ -43,6 +48,8 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                         ctx.Mapper.Map<CreateEpisode>(src.Create),
                     Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand.CommandOneofCase.Update =>
                         ctx.Mapper.Map<UpdateEpisode>(src.Update),
+                    Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand.CommandOneofCase.Delete =>
+                        ctx.Mapper.Map<DeleteEpisode>(src.Delete),
                     _ => throw new ArgumentException()
                 });
         }
@@ -57,6 +64,12 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         {
             CreateMap<UpdateEpisode, Protos.Models.ExploitationEpisodes.Commands.UpdateEpisode>();
             CreateMap<Protos.Models.ExploitationEpisodes.Commands.UpdateEpisode, UpdateEpisode>();
+        }
+
+        private void MapDeleteCommand()
+        {
+            CreateMap<DeleteEpisode, Protos.Models.ExploitationEpisodes.Commands.DeleteEpisode>();
+            CreateMap<Protos.Models.ExploitationEpisodes.Commands.DeleteEpisode, DeleteEpisode>();
         }
 
     }

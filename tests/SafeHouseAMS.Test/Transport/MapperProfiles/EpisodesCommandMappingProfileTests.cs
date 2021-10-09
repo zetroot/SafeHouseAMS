@@ -50,6 +50,23 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         }
 
         [Property]
+        public void DeleteEpisode_OnRoundTripMapping_DoesNotChanges()
+        {
+            Arb.Register<DateTimeGenerators>();
+            Arb.Register<NotNullStringsGenerators>();
+
+            var mapper = BuildMapper();
+            Prop.ForAll<DeleteEpisode>(src =>
+            {
+                var dto =
+                    mapper.Map<SafeHouseAMS.Transport.Protos.Models.ExploitationEpisodes.Commands.DeleteEpisode>(src);
+                var result = mapper.Map<DeleteEpisode>(dto);
+
+                result.Should().BeEquivalentTo(src);
+            }).QuickCheckThrowOnFailure();
+        }
+
+        [Property]
         public void EpisodeCommand_OnRoundTripMapping_DoesNotChanges()
         {
             Arb.Register<DateTimeGenerators>();
@@ -58,7 +75,8 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
             var commandsArb = Gen
                 .OneOf(
                     Arb.From<CreateEpisode>().Generator.Select(x => x as EpisodeCommand),
-                    Arb.From<UpdateEpisode>().Generator.Select(x => x as EpisodeCommand)
+                    Arb.From<UpdateEpisode>().Generator.Select(x => x as EpisodeCommand),
+                    Arb.From<DeleteEpisode>().Generator.Select(x => x as EpisodeCommand)
                 )
                 .ToArbitrary();
 
