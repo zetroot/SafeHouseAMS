@@ -59,6 +59,7 @@ namespace SafeHouseAMS.DataLayer.Repositories
         {
             var item = await _dataContext.Episodes
                 .Include(x => x.Survivor)
+                .Where(x => !x.IsDeleted)
                 .SingleOrDefaultAsync(x => x.ID == id, cancellationToken).ConfigureAwait(false);
             return _mapper.Map<Episode>(item);
         }
