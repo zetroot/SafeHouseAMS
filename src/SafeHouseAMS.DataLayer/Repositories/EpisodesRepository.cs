@@ -71,5 +71,15 @@ namespace SafeHouseAMS.DataLayer.Repositories
             await foreach (var item in episodes.WithCancellation(cancellationToken))
                 yield return _mapper.Map<Episode>(item);
         }
+
+        public async Task Delete(Guid episodeId)
+        {
+            var episode =
+                await _dataContext.Episodes.SingleOrDefaultAsync(x => x.ID == episodeId).ConfigureAwait(false);
+            if (episode is null)
+                throw new ArgumentException($"По такому идентификатору записей не найдено - {episodeId}");
+            episode.IsDeleted = true;
+            await _dataContext.SaveChangesAsync();
+        }
     }
 }
