@@ -11,6 +11,7 @@
 @inject IEpisodesCatalogue _episodesCatalogue;
 @inject NotificationService _notificationService;
 @inject ILogger<EpisodeView> _logger;
+@inject DialogService _dialogService;
 
 @if (Episode is not null)
 {
@@ -257,6 +258,11 @@ else
     private async Task DeleteClick()
     {
         if (Episode is null) return;
+
+        var dialogResult = await _dialogService.Confirm("Удалить запись? Эта операция не может быть отменена.", "Удаление эпизода",
+            new ConfirmOptions{OkButtonText = "Удалить", CancelButtonText = "Отмена"});
+        if(dialogResult != true) return;
+
         var deletingCmd = new DeleteEpisode(Episode.ID);
         try
         {
