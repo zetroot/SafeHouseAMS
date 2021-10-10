@@ -2,6 +2,7 @@
 @using System.Threading
 @using SafeHouseAMS.BizLayer.ExploitationEpisodes
 @using SafeHouseAMS.BizLayer.LifeSituations
+@using SafeHouseAMS.BizLayer.LifeSituations.Commands
 @using SafeHouseAMS.BizLayer.LifeSituations.Documents
 @using SafeHouseAMS.BizLayer.LifeSituations.Records
 @using SafeHouseAMS.BizLayer.Survivors
@@ -13,6 +14,7 @@
 @inject IEpisodesCatalogue _episodesAggregate;
 @inject NavigationManager _navigationManager;
 @inject ILogger<SurvivorDetails> _logger;
+@inject NotificationService _notificationService;
 
 <h3>Карточка пострадавшего</h3>
 <div class="container-fluid">
@@ -152,6 +154,7 @@
                                     break;
                             }
                         </a>
+                        <RadzenButton Icon="delete_outline" Click="@(async () => await DeleteDocumentAction(doc.ID))"></RadzenButton>
                     </div>
                 </div>
             }
@@ -167,6 +170,21 @@
     private List<LifeSituationDocument> _documents = new();
     private List<Episode> _episodes = new();
     private SurvivorStateReport? _report;
+
+    private async Task DeleteDocumentAction(Guid documentId)
+    {
+        try
+        {
+            var cmd = new DeleteDocument(documentId);
+            await _documentsAggregate.ApplyCommand(cmd, CancellationToken.None);
+            _notificationService.Notify(NotificationSeverity.Success, "Запись удалена", "Обновите страницу для обновления информации");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to delete document with id = {DocumentIdentifier}", documentId);
+            _notificationService.Notify(NotificationSeverity.Error, "Ошибка удаления");
+        }
+    }
 
     protected override async Task OnParametersSetAsync()
     {
