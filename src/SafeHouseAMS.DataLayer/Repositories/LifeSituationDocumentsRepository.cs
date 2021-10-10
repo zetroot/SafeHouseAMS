@@ -371,5 +371,14 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 .Select(x => new RecordHistoryItem(x.DocumentDate, x.ID))
                 .AsAsyncEnumerable();
         }
+
+        public async Task DeleteDocument(Guid entityID)
+        {
+            var document =
+                await _context.LifeSituationDocuments.SingleOrDefaultAsync(x => x.ID == entityID).ConfigureAwait(false);
+            if (document is null) throw new ArgumentException($"Не найден документ по идентификатору ID = {entityID}");
+            document.IsDeleted = true;
+            await _context.SaveChangesAsync();
+        }
     }
 }

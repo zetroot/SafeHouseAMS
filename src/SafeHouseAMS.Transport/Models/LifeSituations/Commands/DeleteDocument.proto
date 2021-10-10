@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.LifeSituations.Commands";
+
+import "Models/Common/UUID.proto";
+
+message DeleteDocument{
+  UUID EntityID = 1;
+}

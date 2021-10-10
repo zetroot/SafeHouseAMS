@@ -13,6 +13,7 @@ import "Models/LifeSituations/Commands/SetMigrationStatus.proto";
 import "Models/LifeSituations/Commands/SetRegistrationStatus.proto";
 import "Models/LifeSituations/Commands/SetCitizenship.proto";
 import "Models/LifeSituations/Commands/CreateRecordUpdateDocument.proto";
+import "Models/LifeSituations/Commands/DeleteDocument.proto";
 
 message LifeSituationDocumentCommand{
   oneof Command {
@@ -27,5 +28,6 @@ message LifeSituationDocumentCommand{
     SetRegistrationStatus SetRegistrationStatus = 10;
     SetCitizenship SetCitizenship = 11;
     CreateRecordUpdateDocument CreateRecordUpdateDocument = 12;
+    DeleteDocument DeleteDocument = 13;
   }
 }
