@@ -184,5 +184,11 @@ namespace SafeHouseAMS.BizLayer.LifeSituations
         /// <returns>Асинхронная последовательность элементов истории изменения статуса</returns>
         IAsyncEnumerable<RecordHistoryItem> GetRecordHistory<T>(Guid survivorId, CancellationToken cancellationToken)
             where T : BaseRecord;
+
+        /// <summary>
+        /// удалить доумент
+        /// </summary>
+        /// <param name="entityID">идентификатор документа</param>
+        Task DeleteDocument(Guid entityID);
     }
 }
