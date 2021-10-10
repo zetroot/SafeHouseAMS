@@ -20,8 +20,10 @@ namespace SafeHouseAMS.Transport.MapperProfiles
             MapAddMigrationStatus();
             MapAddRegistrationStatus();
             MapCreateCreateRecordUpdateCommand();
+            MapDeleteDocumentCommand();
             MapCommandsWrapper();
         }
+
         private void MapCreateCreateRecordUpdateCommand()
         {
             CreateMap<CreateRecordUpdateDocument<ChildrenRecord>,
@@ -137,6 +139,10 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                             result.CreateRecordUpdateDocument =
                                 ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>(createDocument);
                              break;
+                        case DeleteDocument deleteDocument:
+                            result.DeleteDocument =
+                                ctx.Mapper.Map<Protos.Models.LifeSituations.Commands.DeleteDocument>(deleteDocument);
+                            break;
                     }
                     return result;
                 });
@@ -155,6 +161,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetMigrationStatus => ctx.Mapper.Map<SetMigrationStatus>(src.SetMigrationStatus),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.SetRegistrationStatus => ctx.Mapper.Map<SetRegistrationStatus>(src.SetRegistrationStatus),
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.CreateRecordUpdateDocument => ctx.Mapper.Map<CreateDocument>(src.CreateRecordUpdateDocument),
+                    Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.DeleteDocument => ctx.Mapper.Map<DeleteDocument>(src.DeleteDocument),
                     _ => throw new InvalidOperationException()
                 });
         }
@@ -197,6 +204,11 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         {
             CreateMap<AddEducationLevel, Protos.Models.LifeSituations.Commands.AddEducationLevel>();
             CreateMap<Protos.Models.LifeSituations.Commands.AddEducationLevel, AddEducationLevel>();
+        }
+        private void MapDeleteDocumentCommand()
+        {
+            CreateMap<DeleteDocument, Protos.Models.LifeSituations.Commands.DeleteDocument>();
+            CreateMap<Protos.Models.LifeSituations.Commands.DeleteDocument, DeleteDocument>();
         }
     }
 }
