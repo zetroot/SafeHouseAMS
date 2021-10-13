@@ -15,7 +15,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.11" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
