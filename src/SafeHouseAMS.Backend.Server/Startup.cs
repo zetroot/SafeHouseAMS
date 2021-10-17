@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +8,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Okta.AspNetCore;
 using SafeHouseAMS.Backend.Server.Services;
 using SafeHouseAMS.BizLayer;
 using SafeHouseAMS.DataLayer;
@@ -55,15 +55,11 @@ namespace SafeHouseAMS.Backend.Server
                 .AddLettuceEncrypt()
                 .PersistDataToDirectory(new DirectoryInfo(certPath), certPass);
 #endif
-            services.AddAuthentication(options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opts =>
                 {
-                    options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
-                    options.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
-                    options.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
-                })
-                .AddOktaWebApi(new OktaWebApiOptions()
-                {
-                    OktaDomain = Configuration["Okta:OktaDomain"],
+                    Configuration.Bind("oidc", opts);
+                    opts.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                 });
 
             services.AddAuthorization();
@@ -76,8 +72,7 @@ namespace SafeHouseAMS.Backend.Server
             services.AddGrpc();
             services.AddResponseCompression(opts =>
             {
-                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                new[] {"application/octet-stream"});
+                opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] {"application/octet-stream"});
             });
             services.AddCors(options =>
             {

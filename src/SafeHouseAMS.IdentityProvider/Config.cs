@@ -10,17 +10,25 @@ namespace SafeHouseAMS.IdentityProvider
     public static class Config
     {
         public static IEnumerable<IdentityResource> IdentityResources =>
-                   new IdentityResource[]
-                   {
+           new IdentityResource[]
+           {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                   };
+           };
+
+        public static IEnumerable<ApiResource> Apis =>
+            new ApiResource[]
+            {
+                new ("appdataapi", "Scope for all application data")
+                {
+                    Scopes = {"appdata"}
+                }
+            };
 
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("scope1"),
-                new ApiScope("scope2"),
+                new("appdata")
             };
 
         public static IEnumerable<Client> Clients =>
@@ -33,7 +41,7 @@ namespace SafeHouseAMS.IdentityProvider
                     RequirePkce = true,
                     RequireClientSecret = false,
                     AllowedCorsOrigins = {"https://localhost:5001"},
-                    AllowedScopes = {"openid", "profile"},
+                    AllowedScopes = {"openid", "profile", "appdata"},
                     RedirectUris = {"https://localhost:5001/authentication/login-callback"},
                     PostLogoutRedirectUris = {"https://localhost:5001"},
                     Enabled = true

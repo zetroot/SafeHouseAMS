@@ -50,7 +50,9 @@ namespace SafeHouseAMS.WasmApp
             var backendUri = configuration.GetValue<string>("Backend");
             services.AddHttpClient("amsAPI", client => client.BaseAddress = new Uri(backendUri))
                 .AddHttpMessageHandler(_ => new GrpcWebHandler(GrpcWebMode.GrpcWebText))
-                .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationMessageHandler>().ConfigureHandler(new[] {backendUri}));
+                .AddHttpMessageHandler(sp =>
+                    sp.GetRequiredService<AuthorizationMessageHandler>()
+                        .ConfigureHandler(new[] { backendUri }, new []{"appdata"}));
 
             services.AddScoped(sp =>
                 {
