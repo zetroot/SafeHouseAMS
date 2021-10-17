@@ -44,10 +44,7 @@ namespace SafeHouseAMS.WasmApp
                 .AddAuthorizationCore()
                 .AddOidcAuthentication(options =>
                 {
-                    options.ProviderOptions.Authority = configuration.GetValue<string>("Okta:Authority");
-                    options.ProviderOptions.ClientId = configuration.GetValue<string>("Okta:ClientId");
-
-                    options.ProviderOptions.ResponseType = "code";
+                    configuration.Bind("oidc", options.ProviderOptions);
                 });
 
             var backendUri = configuration.GetValue<string>("Backend");
