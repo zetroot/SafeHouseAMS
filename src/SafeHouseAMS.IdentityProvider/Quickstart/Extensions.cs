@@ -3,7 +3,7 @@ using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc;
 using SafeHouseAMS.IdentityProvider.Quickstart.Account;
 
-namespace IdentityServerHost.Quickstart.UI
+namespace SafeHouseAMS.IdentityProvider.Quickstart
 {
     public static class Extensions
     {

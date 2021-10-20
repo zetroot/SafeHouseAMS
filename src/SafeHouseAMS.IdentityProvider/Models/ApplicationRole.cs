@@ -8,6 +8,5 @@ namespace SafeHouseAMS.IdentityProvider.Models
     /// </summary>
     public class ApplicationRole : IdentityRole<Guid>
     {
-
     }
 }

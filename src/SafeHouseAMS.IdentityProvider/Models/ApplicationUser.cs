@@ -9,5 +9,4 @@ namespace SafeHouseAMS.IdentityProvider.Models
     public class ApplicationUser : IdentityUser<Guid>
     {
     }
-
 }

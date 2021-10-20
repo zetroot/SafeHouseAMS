@@ -1,5 +1,4 @@
-﻿using IdentityServer4;
-using SafeHouseAMS.IdentityProvider.Data;
+﻿using SafeHouseAMS.IdentityProvider.Data;
 using SafeHouseAMS.IdentityProvider.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
