@@ -22,10 +22,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.11" />
   </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Device\Success.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Device\UserCodeCapture.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Device\UserCodeConfirmation.cshtml" />
-  </ItemGroup>
 </Project>
