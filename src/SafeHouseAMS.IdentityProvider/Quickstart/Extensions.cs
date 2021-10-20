@@ -1,6 +1,7 @@
 using System;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc;
+using SafeHouseAMS.IdentityProvider.Quickstart.Account;
 
 namespace IdentityServerHost.Quickstart.UI
 {
