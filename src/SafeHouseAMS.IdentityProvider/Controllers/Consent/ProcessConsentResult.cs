@@ -4,7 +4,7 @@
 
 using IdentityServer4.Models;
 
-namespace SafeHouseAMS.IdentityProvider.Quickstart.Consent
+namespace SafeHouseAMS.IdentityProvider.Controllers.Consent
 {
     public class ProcessConsentResult
     {

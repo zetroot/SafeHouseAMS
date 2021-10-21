@@ -1,9 +1,9 @@
 using System;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc;
-using SafeHouseAMS.IdentityProvider.Quickstart.Account;
+using SafeHouseAMS.IdentityProvider.Controllers.Account;
 
-namespace SafeHouseAMS.IdentityProvider.Quickstart
+namespace SafeHouseAMS.IdentityProvider.Controllers
 {
     public static class Extensions
     {

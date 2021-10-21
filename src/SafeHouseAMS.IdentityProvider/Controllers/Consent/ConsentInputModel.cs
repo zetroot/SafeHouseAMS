@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace SafeHouseAMS.IdentityProvider.Quickstart.Consent
+namespace SafeHouseAMS.IdentityProvider.Controllers.Consent
 {
     public class ConsentInputModel
     {

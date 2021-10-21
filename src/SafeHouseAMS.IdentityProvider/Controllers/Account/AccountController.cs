@@ -11,8 +11,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SafeHouseAMS.IdentityProvider.Models;
+using SafeHouseAMS.IdentityProvider.Controllers;
+using SafeHouseAMS.IdentityProvider.Controllers.Account;
 
-namespace SafeHouseAMS.IdentityProvider.Quickstart.Account
+namespace SafeHouseAMS.IdentityProvider.Controllers.Account
 {
     [SecurityHeaders]
     [AllowAnonymous]

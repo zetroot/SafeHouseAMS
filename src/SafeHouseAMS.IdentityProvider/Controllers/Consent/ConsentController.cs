@@ -13,8 +13,9 @@ using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SafeHouseAMS.IdentityProvider.Controllers;
 
-namespace SafeHouseAMS.IdentityProvider.Quickstart.Consent
+namespace SafeHouseAMS.IdentityProvider.Controllers.Consent
 {
     /// <summary>
     /// This controller processes the consent UI

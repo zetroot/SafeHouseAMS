@@ -5,7 +5,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace SafeHouseAMS.IdentityProvider.Quickstart
+namespace SafeHouseAMS.IdentityProvider.Controllers
 {
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {

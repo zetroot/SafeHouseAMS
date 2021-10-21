@@ -8,8 +8,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SafeHouseAMS.IdentityProvider.Controllers;
 
-namespace SafeHouseAMS.IdentityProvider.Quickstart.Home
+namespace SafeHouseAMS.IdentityProvider.Controllers.Home
 {
     [SecurityHeaders]
     [AllowAnonymous]
