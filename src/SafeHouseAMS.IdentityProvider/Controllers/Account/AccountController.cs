@@ -11,8 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SafeHouseAMS.IdentityProvider.Models;
-using SafeHouseAMS.IdentityProvider.Controllers;
-using SafeHouseAMS.IdentityProvider.Controllers.Account;
 
 namespace SafeHouseAMS.IdentityProvider.Controllers.Account
 {
@@ -281,6 +279,9 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.Account
                     var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp);
                     if (providerSupportsSignout)
                     {
+                        // if there's no current logout context, we need to create one
+                        // this captures necessary info from the current logged in user
+                        // before we signout and redirect away to the external IdP for signout
                         vm.LogoutId ??= await _interaction.CreateLogoutContextAsync();
                     }
                 }
