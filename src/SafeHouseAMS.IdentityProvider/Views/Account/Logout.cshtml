@@ -2,14 +2,14 @@
 
 <div class="logout-page">
     <div class="lead">
-        <h1>Logout</h1>
-        <p>Would you like to logut of IdentityServer?</p>
+        <h1>Выход</h1>
+        <p>Вы уверены что хотите выйти?</p>
     </div>
 
     <form asp-action="Logout">
         <input type="hidden" name="logoutId" value="@Model.LogoutId"  />
         <div class="form-group">
-            <button class="btn btn-primary">Yes</button>
+            <button class="btn btn-primary">Да</button>
         </div>
     </form>
 </div>
