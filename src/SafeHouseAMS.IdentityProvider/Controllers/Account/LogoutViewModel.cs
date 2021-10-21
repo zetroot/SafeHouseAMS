@@ -1,12 +1,10 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-
-
-namespace IdentityServerHost.Quickstart.UI
+namespace SafeHouseAMS.IdentityProvider.Controllers.Account
 {
-    public class RedirectViewModel
+    public class LogoutViewModel : LogoutInputModel
     {
-        public string RedirectUrl { get; set; }
+        public bool ShowLogoutPrompt { get; set; } = true;
     }
 }
