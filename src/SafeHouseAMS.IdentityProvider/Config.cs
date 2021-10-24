@@ -4,6 +4,7 @@
 
 using IdentityServer4.Models;
 using System.Collections.Generic;
+using IdentityServer4;
 
 namespace SafeHouseAMS.IdentityProvider
 {
@@ -22,7 +23,8 @@ namespace SafeHouseAMS.IdentityProvider
                 new ("appdataapi", "Scope for all application data")
                 {
                     Scopes = {"appdata"}
-                }
+                },
+                new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -45,6 +47,11 @@ namespace SafeHouseAMS.IdentityProvider
                     RedirectUris = {"https://localhost:5001/authentication/login-callback"},
                     PostLogoutRedirectUris = {"https://localhost:5001"},
                     Enabled = true
+                },
+                new Client
+                {
+                    ClientId= "api",
+                    AllowedScopes = { IdentityServerConstants.LocalApi.ScopeName },
                 }
             };
     }

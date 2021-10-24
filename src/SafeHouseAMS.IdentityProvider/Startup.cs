@@ -32,6 +32,8 @@ namespace SafeHouseAMS.IdentityProvider
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddLocalApiAuthentication();
+
             var builder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
