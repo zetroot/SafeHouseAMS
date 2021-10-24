@@ -46,7 +46,59 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
                 return Ok();
             }
 
-            return BadRequest(string.Join(", ", creationResult.Errors.Select(error => $"{error.Code}: {error.Description}")));
+            return BadRequest(SerializeErrors(creationResult));
+        }
+
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> Update([FromRoute] string userId, [FromBody] UpdateUserRequestModel request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            bool shouldUpdateProfile = false;
+            if (!string.IsNullOrEmpty(request.Email))
+            {
+                user.Email = request.Email;
+                shouldUpdateProfile = true;
+            }
+            if (!string.IsNullOrEmpty(request.FirstName))
+            {
+                user.FirstName = request.FirstName;
+                shouldUpdateProfile = true;
+            }
+            if (!string.IsNullOrEmpty(request.LastName))
+            {
+                user.LastName = request.LastName;
+                shouldUpdateProfile = true;
+            }
+
+            if (shouldUpdateProfile)
+            {
+                var updateResult = await _userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded)
+                {
+                    return BadRequest(SerializeErrors(updateResult));
+                }
+            }
+
+            if (!string.IsNullOrEmpty(request.NewPassword))
+            {
+                var changePasswordResult = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+                if (!changePasswordResult.Succeeded)
+                {
+                    return BadRequest(SerializeErrors(changePasswordResult));
+                }
+            }
+
+            return Ok();
         }
 
         [HttpDelete("{userId}")]
@@ -60,7 +112,7 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
             ApplicationUser userToDelete = await _userManager.FindByIdAsync(userId);
             if (userToDelete is null)
             {
-                return BadRequest("User is not found");
+                return NotFound();
             }
 
             IdentityResult creationResult = await _userManager.DeleteAsync(userToDelete);
@@ -69,7 +121,10 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
                 return Ok();
             }
 
-            return BadRequest(string.Join(", ", creationResult.Errors.Select(error => $"{error.Code}: {error.Description}")));
+            return BadRequest(SerializeErrors(creationResult));
         }
+
+        private static string SerializeErrors(IdentityResult creationResult)
+            => string.Join(", ", creationResult.Errors.Select(error => $"{error.Code}: {error.Description}"));
     }
 }
