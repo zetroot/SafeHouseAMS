@@ -26,4 +26,8 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Diagnostics\Index.cshtml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\API" />
+  </ItemGroup>
 </Project>

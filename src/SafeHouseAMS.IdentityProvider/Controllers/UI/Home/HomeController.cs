@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SafeHouseAMS.IdentityProvider.Controllers;
 
-namespace SafeHouseAMS.IdentityProvider.Controllers.Home
+namespace SafeHouseAMS.IdentityProvider.Controllers.UI.Home
 {
     [SecurityHeaders]
     [AllowAnonymous]

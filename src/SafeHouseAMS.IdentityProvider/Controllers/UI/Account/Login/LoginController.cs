@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SafeHouseAMS.IdentityProvider.Models;
 
-namespace SafeHouseAMS.IdentityProvider.Controllers.Account.Login
+namespace SafeHouseAMS.IdentityProvider.Controllers.UI.Account.Login
 {
     [SecurityHeaders]
     [AllowAnonymous]

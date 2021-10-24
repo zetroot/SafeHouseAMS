@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace SafeHouseAMS.IdentityProvider.Controllers.Consent
+namespace SafeHouseAMS.IdentityProvider.Controllers.UI.Consent
 {
     public class ConsentViewModel : ConsentInputModel
     {

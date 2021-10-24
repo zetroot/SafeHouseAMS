@@ -3,7 +3,7 @@
 
 using IdentityServer4.Models;
 
-namespace SafeHouseAMS.IdentityProvider.Controllers.Home
+namespace SafeHouseAMS.IdentityProvider.Controllers.UI.Home
 {
     public class ErrorViewModel
     {

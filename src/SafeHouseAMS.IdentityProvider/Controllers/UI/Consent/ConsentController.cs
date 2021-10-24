@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SafeHouseAMS.IdentityProvider.Controllers;
 
-namespace SafeHouseAMS.IdentityProvider.Controllers.Consent
+namespace SafeHouseAMS.IdentityProvider.Controllers.UI.Consent
 {
     /// <summary>
     /// This controller processes the consent UI
