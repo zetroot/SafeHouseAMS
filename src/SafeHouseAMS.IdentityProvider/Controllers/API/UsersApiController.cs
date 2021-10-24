@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using IdentityServer4;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,7 +20,7 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterUserRequestModel request)
+        public async Task<IActionResult> Register([FromBody]RegisterUserRequestModel request)
         {
             if (!ModelState.IsValid)
             {
@@ -30,11 +31,17 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
             {
                 Email = request.Email,
                 FirstName = request.FirstName,
-                LastName = request.LastName
+                LastName = request.LastName,
+                UserName = $"{request.FirstName}_{request.LastName}"
             };
             // TODO: Hash passwords
-            await _userManager.CreateAsync(user, request.Password);
-            return Ok();
+            IdentityResult creationResult = await _userManager.CreateAsync(user, request.Password);
+            if (creationResult.Succeeded)
+            {
+                return Ok();
+            }
+
+            return BadRequest(string.Join(", ", creationResult.Errors.Select(error => $"{error.Code}: {error.Description}")));
         }
     }
 }

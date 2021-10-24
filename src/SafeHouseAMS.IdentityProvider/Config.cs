@@ -30,7 +30,8 @@ namespace SafeHouseAMS.IdentityProvider
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new("appdata")
+                new("appdata"),
+                new(IdentityServerConstants.LocalApi.ScopeName)
             };
 
         public static IEnumerable<Client> Clients =>
@@ -50,8 +51,10 @@ namespace SafeHouseAMS.IdentityProvider
                 },
                 new Client
                 {
-                    ClientId= "api",
-                    AllowedScopes = { IdentityServerConstants.LocalApi.ScopeName },
+                    ClientId = "api",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AllowedScopes = { IdentityServerConstants.LocalApi.ScopeName }
                 }
             };
     }
