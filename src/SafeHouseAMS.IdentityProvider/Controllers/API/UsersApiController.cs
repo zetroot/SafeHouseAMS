@@ -34,7 +34,6 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
                 LastName = request.LastName,
                 UserName = $"{request.FirstName}_{request.LastName}"
             };
-            // TODO: Hash passwords
             IdentityResult creationResult = await _userManager.CreateAsync(user, request.Password);
             if (creationResult.Succeeded)
             {
