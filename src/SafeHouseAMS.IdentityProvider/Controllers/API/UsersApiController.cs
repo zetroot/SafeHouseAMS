@@ -57,45 +57,20 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
                 return BadRequest(ModelState);
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
+            ApplicationUser user = await _userManager.FindByIdAsync(userId);
             if (user is null)
             {
                 return NotFound();
             }
 
-            bool shouldUpdateProfile = false;
-            if (!string.IsNullOrEmpty(request.Email))
+            try
             {
-                user.Email = request.Email;
-                shouldUpdateProfile = true;
+                await HandleUserProfileUpdateAsync(user, request);
+                await HandlePasswordUpdateAsync(user, request);
             }
-            if (!string.IsNullOrEmpty(request.FirstName))
+            catch (CustomException exception)
             {
-                user.FirstName = request.FirstName;
-                shouldUpdateProfile = true;
-            }
-            if (!string.IsNullOrEmpty(request.LastName))
-            {
-                user.LastName = request.LastName;
-                shouldUpdateProfile = true;
-            }
-
-            if (shouldUpdateProfile)
-            {
-                var updateResult = await _userManager.UpdateAsync(user);
-                if (!updateResult.Succeeded)
-                {
-                    return BadRequest(SerializeErrors(updateResult));
-                }
-            }
-
-            if (!string.IsNullOrEmpty(request.NewPassword))
-            {
-                var changePasswordResult = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-                if (!changePasswordResult.Succeeded)
-                {
-                    return BadRequest(SerializeErrors(changePasswordResult));
-                }
+                return BadRequest(exception.Message);
             }
 
             return Ok();
@@ -122,6 +97,47 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
             }
 
             return BadRequest(SerializeErrors(creationResult));
+        }
+
+        private async Task HandleUserProfileUpdateAsync(ApplicationUser user, UpdateUserRequestModel request)
+        {
+            bool shouldUpdateProfile = false;
+            if (!string.IsNullOrEmpty(request.Email))
+            {
+                user.Email = request.Email;
+                shouldUpdateProfile = true;
+            }
+            if (!string.IsNullOrEmpty(request.FirstName))
+            {
+                user.FirstName = request.FirstName;
+                shouldUpdateProfile = true;
+            }
+            if (!string.IsNullOrEmpty(request.LastName))
+            {
+                user.LastName = request.LastName;
+                shouldUpdateProfile = true;
+            }
+
+            if (shouldUpdateProfile)
+            {
+                var updateResult = await _userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded)
+                {
+                    throw new CustomException(SerializeErrors(updateResult));
+                }
+            }
+        }
+
+        private async Task HandlePasswordUpdateAsync(ApplicationUser user, UpdateUserRequestModel request)
+        {
+            if (!string.IsNullOrEmpty(request.NewPassword))
+            {
+                var changePasswordResult = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+                if (!changePasswordResult.Succeeded)
+                {
+                    throw new CustomException(SerializeErrors(changePasswordResult));
+                }
+            }
         }
 
         private static string SerializeErrors(IdentityResult creationResult)
