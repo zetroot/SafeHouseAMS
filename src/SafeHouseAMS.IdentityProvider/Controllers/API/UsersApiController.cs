@@ -68,7 +68,7 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
                 await HandleUserProfileUpdateAsync(user, request);
                 await HandlePasswordUpdateAsync(user, request);
             }
-            catch (CustomException exception)
+            catch (FailedUserUpdateException exception)
             {
                 return BadRequest(exception.Message);
             }
@@ -123,7 +123,7 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
                 var updateResult = await _userManager.UpdateAsync(user);
                 if (!updateResult.Succeeded)
                 {
-                    throw new CustomException(SerializeErrors(updateResult));
+                    throw new FailedUserUpdateException(SerializeErrors(updateResult));
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace SafeHouseAMS.IdentityProvider.Controllers.API
                 var changePasswordResult = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
                 if (!changePasswordResult.Succeeded)
                 {
-                    throw new CustomException(SerializeErrors(changePasswordResult));
+                    throw new FailedUserUpdateException(SerializeErrors(changePasswordResult));
                 }
             }
         }
