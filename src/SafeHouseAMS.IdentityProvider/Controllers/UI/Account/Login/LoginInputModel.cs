@@ -4,7 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace SafeHouseAMS.IdentityProvider.Controllers.Account
+namespace SafeHouseAMS.IdentityProvider.Controllers.UI.Account.Login
 {
     public class LoginInputModel
     {

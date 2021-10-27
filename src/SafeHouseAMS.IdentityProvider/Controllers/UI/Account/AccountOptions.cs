@@ -4,7 +4,7 @@
 
 using System;
 
-namespace SafeHouseAMS.IdentityProvider.Controllers.Account
+namespace SafeHouseAMS.IdentityProvider.Controllers.UI.Account
 {
     public class AccountOptions
     {

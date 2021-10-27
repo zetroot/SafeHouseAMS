@@ -1,7 +1,7 @@
 using System;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc;
-using SafeHouseAMS.IdentityProvider.Controllers.Account;
+using SafeHouseAMS.IdentityProvider.Controllers.UI.Account;
 
 namespace SafeHouseAMS.IdentityProvider.Controllers
 {

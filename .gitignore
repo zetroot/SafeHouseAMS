@@ -8,3 +8,4 @@ riderModule.iml
 *.DotSettings.user
 Logs/
 **\.env*
+**\tempkey.jwk

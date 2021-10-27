@@ -1,11 +1,10 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-
-namespace SafeHouseAMS.IdentityProvider.Controllers.Account
+namespace SafeHouseAMS.IdentityProvider.Controllers.UI.Account
 {
-    public class LogoutInputModel
+    public class RedirectViewModel
     {
-        public string LogoutId { get; set; }
+        public string RedirectUrl { get; set; }
     }
 }
