@@ -42,9 +42,6 @@
 
   <ItemGroup>
     <Protobuf Include="..\SafeHouseAMS.Transport\Services\**\*.proto" GrpcServices="Client" ProtoRoot="..\SafeHouseAMS.Transport" />
-    <Protobuf Update="..\SafeHouseAMS.Transport\Services\UserCatalogue.proto">
-      <Link>Services\UserCatalogue.proto</Link>
-    </Protobuf>
   </ItemGroup>
   
   <ItemGroup>

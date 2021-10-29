@@ -1,6 +1,11 @@
-﻿<div class="container-fluid">
+﻿@using SafeHouseAMS.BizLayer.Users
+@using SafeHouseAMS.BizLayer.Users.Commands
+@inject NavigationManager _navigationManager;
+@inject IUserCatalogue _userCatalogue;
+
+<div class="container-fluid">
     <h4>Добавить нового пользователя</h4>
-    <RadzenTemplateForm Context="AddNewUserFormContext" TItem="PageModel" Data="@_pageModel" Submit="@SubmitForm">
+    <RadzenTemplateForm Context="_" TItem="PageModel" Data="@_pageModel" Submit="@SubmitForm">
         <table>
             <tr>
                 <th><RadzenLabel Text="Email: "/></th>
@@ -16,30 +21,52 @@
             </tr>
         </table>
         <div class="buttons-holder">
-            <button type="submit" class="btn btn-success">Добавить</button>
-            <button type="reset" class="btn btn-warning" @onclick="@CancelClick">Отмена</button>
+            <button type="submit" class="btn btn-success" disabled="@_pageModel.IsLoading">Добавить</button>
+            <button type="reset" class="btn btn-warning" disabled="@_pageModel.IsLoading" @onclick="@CancelClick">Отмена</button>
         </div>
     </RadzenTemplateForm>
+    @if (_pageModel.IsLoading)
+    {
+        <div class="message-holder">
+            <p>@_pageModel.Message</p>
+        </div>
+    }
 </div>
 
 @code
 {
+    private const string LoadingMessage = "Loading...";
+
     private class PageModel
     {
         public string Email { get; set; } = string.Empty;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
+        public bool IsLoading => Message == LoadingMessage;
     }
 
     private PageModel _pageModel = new PageModel();
 
     private void SubmitForm()
     {
-        throw new NotImplementedException();
+        _pageModel.Message = LoadingMessage;
+        _userCatalogue.CreateAsync(new CreateUserCommand(Guid.Empty, _pageModel.Email, _pageModel.FirstName, _pageModel.LastName))
+            .ContinueWith(result =>
+            {
+                if (result.IsFaulted)
+                {
+                    _pageModel.Message = result.Exception?.Message ?? string.Empty;
+                }
+                else
+                {
+                    _pageModel.Message = "Added successfully";
+                }
+            });
     }
 
     private void CancelClick()
     {
-        throw new NotImplementedException();
+        _navigationManager.NavigateTo("/");
     }
 }

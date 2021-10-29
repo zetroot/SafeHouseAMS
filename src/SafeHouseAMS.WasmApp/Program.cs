@@ -14,6 +14,7 @@ using Radzen;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
+using SafeHouseAMS.BizLayer.Users;
 using SafeHouseAMS.Transport;
 using SafeHouseAMS.WasmApp.Services;
 using Serilog;
@@ -67,6 +68,7 @@ namespace SafeHouseAMS.WasmApp
             services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogueClient>();
             services.TryAddTransient<ILifeSituationDocumentsAggregate, LifeSituationDocumentsClient>();
             services.TryAddTransient<IEpisodesCatalogue, EpisodesCatalogueClient>();
+            services.TryAddTransient<IUserCatalogue, UserCatalogueClient>();
 
             services.AddScoped<DialogService>()
                 .AddScoped<NotificationService>()

@@ -26,7 +26,7 @@ namespace SafeHouseAMS.Backend.Server.Services
         public override Task<Empty> Create(CreateUserRequest request, ServerCallContext context)
         {
             var command = new CreateUserCommand(_guidGenerator.Generate(), request.Email, request.FirstName, request.LastName);
-            _userCatalogue.Create(command);
+            _userCatalogue.CreateAsync(command);
             return Task.FromResult(new Empty());
         }
     }

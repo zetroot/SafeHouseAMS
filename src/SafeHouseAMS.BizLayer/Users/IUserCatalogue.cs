@@ -12,6 +12,6 @@ namespace SafeHouseAMS.BizLayer.Users
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        Task Create(CreateUserCommand command);
+        Task CreateAsync(CreateUserCommand command);
     }
 }
