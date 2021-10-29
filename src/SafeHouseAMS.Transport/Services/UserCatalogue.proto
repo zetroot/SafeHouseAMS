@@ -1,0 +1,10 @@
+﻿syntax = "proto3";
+package safehouse.ams.services;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Services";
+
+import "Models/Users/CreateUserRequest.proto";
+import "google/protobuf/empty.proto";
+
+service UserCatalogue {
+  rpc Create(models.CreateUserRequest) returns (google.protobuf.Empty);
+}

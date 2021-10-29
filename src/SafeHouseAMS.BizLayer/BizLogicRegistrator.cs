@@ -27,6 +27,7 @@ namespace SafeHouseAMS.BizLayer
             services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogue>();
             services.TryAddTransient<ILifeSituationDocumentsAggregate, LifeSituationDocumentsAggregate>();
             services.TryAddTransient<IEpisodesCatalogue, EpisodesCatalogue>();
+            services.TryAddTransient<IGuidGenerator, GuidGenerator>();
             return services;
         }
     }
