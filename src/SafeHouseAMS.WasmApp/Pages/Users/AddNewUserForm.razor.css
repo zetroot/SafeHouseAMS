@@ -1,0 +1,7 @@
+﻿.buttons-holder {
+    margin-top: 10px;
+}
+
+.buttons-holder > button {
+    margin-right: 20px;
+}
