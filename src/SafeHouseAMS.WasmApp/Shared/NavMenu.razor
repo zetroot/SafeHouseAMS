@@ -1,5 +1,6 @@
 ﻿@using SafeHouseAMS.WasmApp.Pages.Survivors
 @using SafeHouseAMS.WasmApp.Pages
+@using SafeHouseAMS.WasmApp.Pages.Users
 <div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Безопасный Дом - СУП</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -22,6 +23,11 @@
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="@nameof(SurvivorCatalogue)">
                 <span class="oi oi-person" aria-hidden="true"></span> Каталог пострадавших
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="@nameof(Users)">
+                <span class="oi oi-person" aria-hidden="true"></span> Пользователи
             </NavLink>
         </li>
     </ul>

@@ -1,0 +1,45 @@
+﻿<div class="container-fluid">
+    <h4>Добавить нового пользователя</h4>
+    <RadzenTemplateForm Context="AddNewUserFormContext" TItem="PageModel" Data="@_pageModel" Submit="@SubmitForm">
+        <table>
+            <tr>
+                <th><RadzenLabel Text="Email: "/></th>
+                <th><RadzenTextBox @bind-Value="@_pageModel.Email"/></th>
+            </tr>
+            <tr>
+                <th><RadzenLabel Text="Имя:"/></th>
+                <th><RadzenTextBox @bind-Value="@_pageModel.FirstName"/></th>
+            </tr>
+            <tr>
+                <th><RadzenLabel Text="Фамилия:"/></th>
+                <th><RadzenTextBox @bind-Value="@_pageModel.LastName"/></th>
+            </tr>
+        </table>
+        <div>
+            <button type="submit" class="btn btn-success">Добавить</button>
+            <button type="reset" class="btn btn-warning" @onclick="@CancelClick">Отмена</button>
+        </div>
+    </RadzenTemplateForm>
+</div>
+
+@code
+{
+    private class PageModel
+    {
+        public string Email { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+    }
+
+    private PageModel _pageModel = new PageModel();
+
+    private void SubmitForm()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void CancelClick()
+    {
+        throw new NotImplementedException();
+    }
+}
