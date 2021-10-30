@@ -42,18 +42,18 @@ namespace SafeHouseAMS.WasmApp
         {
             services
                 .AddAuthorizationCore()
-                .AddOidcAuthentication(opts =>
+                .AddOidcAuthentication(options =>
                 {
-                    configuration.Bind("oidc", opts.ProviderOptions);
-                    opts.ProviderOptions.ResponseMode = "query";
+                    configuration.Bind("oidc", options.ProviderOptions);
+                    options.ProviderOptions.DefaultScopes.Add("backend_api");
+                    //options.ProviderOptions.ResponseMode = "query";
                 });
 
             var backendUri = configuration.GetValue<string>("Backend");
             services.AddHttpClient("amsAPI", client => client.BaseAddress = new Uri(backendUri))
                 .AddHttpMessageHandler(_ => new GrpcWebHandler(GrpcWebMode.GrpcWebText))
-                .AddHttpMessageHandler(sp =>
-                    sp.GetRequiredService<AuthorizationMessageHandler>()
-                        .ConfigureHandler(new[] {backendUri}, new []{"backend_api"}));
+                .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationMessageHandler>()
+                    .ConfigureHandler(new[] { backendUri }, new[] { "backend_api" }));
 
             services.AddScoped(sp =>
                 {
