@@ -42,7 +42,11 @@ namespace SafeHouseAMS.WasmApp
         {
             services
                 .AddAuthorizationCore()
-                .AddOidcAuthentication(configuration.Bind);
+                .AddOidcAuthentication(opts =>
+                {
+                    configuration.Bind("oidc", opts.ProviderOptions);
+                    opts.ProviderOptions.ResponseMode = "query";
+                });
 
             var backendUri = configuration.GetValue<string>("Backend");
             services.AddHttpClient("amsAPI", client => client.BaseAddress = new Uri(backendUri))
