@@ -59,7 +59,8 @@ namespace SafeHouseAMS.Backend.Server
                 .AddJwtBearer(opts =>
                 {
                     Configuration.Bind("oidc", opts);
-                    opts.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                    opts.TokenValidationParameters.ValidateAudience = false;
+                    //opts.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                 });
 
             services.AddAuthorization();

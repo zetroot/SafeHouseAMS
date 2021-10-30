@@ -1,4 +1,8 @@
 ﻿@page "/profile"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject IAccessTokenProvider _tokenProvider;
+@inject ILogger<Profile> _logger;
+
 <AuthorizeView>
     <Authorized>
         <h3>Profile</h3>
@@ -25,3 +29,22 @@
         You are not signed in!
     </NotAuthorized>
 </AuthorizeView>
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await _tokenProvider.RequestAccessToken();
+
+        _logger.LogInformation("token status: {0}", token.Status);
+        _logger.LogInformation("token redirect url: {0}", token.RedirectUrl);
+        token.TryGetToken(out var realToken);
+        if (realToken is not null)
+        {
+            _logger.LogInformation("real token: {0}", realToken.Value);
+            _logger.LogInformation("real token expires: {0}", realToken.Expires);
+            _logger.LogInformation("real token granted scopes: {0}", realToken.GrantedScopes.Aggregate((a,b) => $"{a}, {b}"));
+        }
+        await base.OnInitializedAsync();
+    }
+}

@@ -45,14 +45,15 @@ namespace SafeHouseAMS.WasmApp
                 .AddOidcAuthentication(options =>
                 {
                     configuration.Bind("oidc", options.ProviderOptions);
+                    options.ProviderOptions.DefaultScopes.Add("backend_api");
+                    options.ProviderOptions.ResponseMode = "fragment";
                 });
 
             var backendUri = configuration.GetValue<string>("Backend");
             services.AddHttpClient("amsAPI", client => client.BaseAddress = new Uri(backendUri))
                 .AddHttpMessageHandler(_ => new GrpcWebHandler(GrpcWebMode.GrpcWebText))
-                .AddHttpMessageHandler(sp =>
-                    sp.GetRequiredService<AuthorizationMessageHandler>()
-                        .ConfigureHandler(new[] { backendUri }, new []{"appdata"}));
+                .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationMessageHandler>()
+                    .ConfigureHandler(new[] { backendUri }, new[] { "backend_api" }));
 
             services.AddScoped(sp =>
                 {
@@ -88,4 +89,5 @@ namespace SafeHouseAMS.WasmApp
             builderLogging.AddSerilog();
         }
     }
+
 }
