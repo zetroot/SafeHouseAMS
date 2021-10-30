@@ -42,18 +42,14 @@ namespace SafeHouseAMS.WasmApp
         {
             services
                 .AddAuthorizationCore()
-                .AddOidcAuthentication(options =>
-                {
-                    options.ProviderOptions.Authority = configuration.GetValue<string>("Okta:Authority");
-                    options.ProviderOptions.ClientId = configuration.GetValue<string>("Okta:ClientId");
-
-                    options.ProviderOptions.ResponseType = "code";
-                });
+                .AddOidcAuthentication(configuration.Bind);
 
             var backendUri = configuration.GetValue<string>("Backend");
             services.AddHttpClient("amsAPI", client => client.BaseAddress = new Uri(backendUri))
                 .AddHttpMessageHandler(_ => new GrpcWebHandler(GrpcWebMode.GrpcWebText))
-                .AddHttpMessageHandler(sp => sp.GetRequiredService<AuthorizationMessageHandler>().ConfigureHandler(new[] {backendUri}));
+                .AddHttpMessageHandler(sp =>
+                    sp.GetRequiredService<AuthorizationMessageHandler>()
+                        .ConfigureHandler(new[] {backendUri}, new []{"backend_api"}));
 
             services.AddScoped(sp =>
                 {
