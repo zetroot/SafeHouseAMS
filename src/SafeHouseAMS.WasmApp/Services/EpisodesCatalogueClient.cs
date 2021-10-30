@@ -15,44 +15,53 @@ using SafeHouseAMS.Transport.Protos.Services;
 
 namespace SafeHouseAMS.WasmApp.Services
 {
-    internal class EpisodesCatalogueClient : IEpisodesCatalogue
+    internal class EpisodesCatalogueClient : GrpcClientBase, IEpisodesCatalogue
     {
         private readonly EpisodesCatalogue.EpisodesCatalogueClient _client;
         private readonly IMapper _mapper;
-        [SuppressMessage("ReSharper", "NotAccessedField.Local")]
-        private readonly ILogger<EpisodesCatalogueClient> _logger;
 
-        public EpisodesCatalogueClient(GrpcChannel channel, IMapper mapper, ILogger<EpisodesCatalogueClient> logger)
+        public EpisodesCatalogueClient(GrpcChannel channel, IMapper mapper, ILogger<EpisodesCatalogueClient> logger) :
+            base(logger)
         {
             _mapper = mapper;
-            _logger = logger;
             _client = new EpisodesCatalogue.EpisodesCatalogueClient(channel);
         }
 
-        public async Task<Episode?> GetSingleAsync(Guid id, CancellationToken cancellationToken)
-        {
-            var uuid = _mapper.Map<UUID>(id);
-            var response = await _client.GetSingleAsync(uuid, new CallOptions(cancellationToken: cancellationToken));
-            return _mapper.Map<Episode?>(response);
-        }
+        public Task<Episode?> GetSingleAsync(Guid id, CancellationToken cancellationToken) =>
+            CallHandler(async () =>
+            {
+                var uuid = _mapper.Map<UUID>(id);
+                var response = await _client.GetSingleAsync(uuid, new CallOptions(cancellationToken: cancellationToken));
+                return _mapper.Map<Episode?>(response);
+            }, default);
 
-        public async Task ApplyCommand(EpisodeCommand command, CancellationToken cancellationToken)
-        {
-            var request = _mapper.Map<Transport.Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand>(command);
-            await _client.ApplyCommandAsync(request, new CallOptions(cancellationToken: cancellationToken));
-        }
+        public Task ApplyCommand(EpisodeCommand command, CancellationToken cancellationToken) =>
+            CallHandler(async () =>
+            {
+                var request =
+                    _mapper.Map<Transport.Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand>(command);
+                await _client.ApplyCommandAsync(request, new CallOptions(cancellationToken: cancellationToken));
+            });
 
         public async IAsyncEnumerable<Episode> GetAllBySurvivor(Guid survivorId,
             [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var requestSurvivorId = _mapper.Map<UUID>(survivorId);
-            using var streamingCall =
-                _client.GetAllBySurvivor(requestSurvivorId, new CallOptions(cancellationToken: cancellationToken));
-
-            while (await streamingCall.ResponseStream.MoveNext())
+            var buffer = new List<Episode>();
+            await CallHandler(async () =>
             {
-                var chunk = streamingCall.ResponseStream.Current;
-                yield return _mapper.Map<Episode>(chunk);
+                using var streamingCall =
+                    _client.GetAllBySurvivor(requestSurvivorId, new CallOptions(cancellationToken: cancellationToken));
+
+                while (await streamingCall.ResponseStream.MoveNext())
+                {
+                    var chunk = streamingCall.ResponseStream.Current;
+                    buffer.Add(_mapper.Map<Episode>(chunk));
+                }
+            });
+            foreach (var item in buffer)
+            {
+                yield return item;
             }
         }
     }
