@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.Users";
+
+message CreateUserRequest {
+  string Email = 1;
+  string FirstName = 2;
+  string LastName = 3;
+}

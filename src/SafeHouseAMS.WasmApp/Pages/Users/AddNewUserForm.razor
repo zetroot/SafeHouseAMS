@@ -1,0 +1,75 @@
+﻿@using SafeHouseAMS.BizLayer.Users
+@using SafeHouseAMS.BizLayer.Users.Commands
+@using System.Threading
+@inject NavigationManager _navigationManager;
+@inject IUserCatalogue _userCatalogue;
+
+<div class="container-fluid">
+    <h4>Добавить нового пользователя</h4>
+    <RadzenTemplateForm Context="_" TItem="PageModel" Data="@_pageModel" Submit="@SubmitForm">
+        <table>
+            <tr>
+                <th><RadzenLabel Text="Email: "/></th>
+                <th><RadzenTextBox @bind-Value="@_pageModel.Email"/></th>
+            </tr>
+            <tr>
+                <th><RadzenLabel Text="Имя:"/></th>
+                <th><RadzenTextBox @bind-Value="@_pageModel.FirstName"/></th>
+            </tr>
+            <tr>
+                <th><RadzenLabel Text="Фамилия:"/></th>
+                <th><RadzenTextBox @bind-Value="@_pageModel.LastName"/></th>
+            </tr>
+        </table>
+        <div class="buttons-holder">
+            <button type="submit" class="btn btn-success" disabled="@_pageModel.IsLoading">Добавить</button>
+            <button type="reset" class="btn btn-warning" disabled="@_pageModel.IsLoading" @onclick="@CancelClick">Отмена</button>
+        </div>
+    </RadzenTemplateForm>
+    @if (!string.IsNullOrEmpty(_pageModel.Message))
+    {
+        <div class="message-holder">
+            <p>@_pageModel.Message</p>
+        </div>
+    }
+</div>
+
+@code
+{
+    private const string LoadingMessage = "Loading...";
+
+    private class PageModel
+    {
+        public string Email { get; set; } = string.Empty;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Message { get; set; } = string.Empty;
+        public bool IsLoading => Message == LoadingMessage;
+    }
+
+    private PageModel _pageModel = new PageModel();
+
+    private void SubmitForm()
+    {
+        _pageModel.Message = LoadingMessage;
+        _userCatalogue.CreateAsync(new CreateUserCommand(Guid.Empty, _pageModel.Email, _pageModel.FirstName, _pageModel.LastName), CancellationToken.None)
+            .ContinueWith(result =>
+            {
+                if (result.IsFaulted)
+                {
+                    _pageModel.Message = result.Exception?.Message ?? string.Empty;
+                    Console.WriteLine(result.Exception?.InnerException?.StackTrace);
+                }
+                else
+                {
+                    _pageModel.Message = "Added successfully";
+                }
+                StateHasChanged();
+            });
+    }
+
+    private void CancelClick()
+    {
+        _navigationManager.NavigateTo("/");
+    }
+}

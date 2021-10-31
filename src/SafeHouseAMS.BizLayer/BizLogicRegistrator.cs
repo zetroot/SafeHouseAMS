@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
+using SafeHouseAMS.BizLayer.Users;
 
 namespace SafeHouseAMS.BizLayer
 {
@@ -27,6 +28,8 @@ namespace SafeHouseAMS.BizLayer
             services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogue>();
             services.TryAddTransient<ILifeSituationDocumentsAggregate, LifeSituationDocumentsAggregate>();
             services.TryAddTransient<IEpisodesCatalogue, EpisodesCatalogue>();
+            services.TryAddTransient<IGuidGenerator, GuidGenerator>();
+            services.TryAddTransient<IUserCatalogue, UserCatalogue>();
             return services;
         }
     }

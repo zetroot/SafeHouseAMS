@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SafeHouseAMS.IdentityProvider.Controllers.UI.Account.Login;
 
 namespace SafeHouseAMS.IdentityProvider
 {
@@ -43,6 +44,7 @@ namespace SafeHouseAMS.IdentityProvider
 
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 options.EmitStaticAudienceClaim = true;
+                options.UserInteraction.LoginUrl = $"/{nameof(LoginController).Replace("Controller", string.Empty)}/{nameof(LoginController.Login)}";
             })
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 .AddInMemoryApiResources(Config.Apis)

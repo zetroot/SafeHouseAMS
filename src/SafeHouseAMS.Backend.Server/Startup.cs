@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using SafeHouseAMS.Backend.Server.IdentityProvider.Repositories;
 using SafeHouseAMS.Backend.Server.Services;
 using SafeHouseAMS.BizLayer;
+using SafeHouseAMS.BizLayer.Users;
 using SafeHouseAMS.DataLayer;
 using SafeHouseAMS.Transport;
 #if !DEBUG
@@ -85,6 +88,9 @@ namespace SafeHouseAMS.Backend.Server
                         .WithExposedHeaders("Grpc-Status", "Grpc-Message", "Grpc-Encoding", "Grpc-Accept-Encoding");
                 });
             });
+            services.AddHttpClient();
+            services.TryAddTransient<IUserRepository, UserRepository>();
+            services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Startup).Assembly));
         }
 
         /// <summary>
@@ -111,6 +117,7 @@ namespace SafeHouseAMS.Backend.Server
             {
                 endpoints.MapGrpcService<SurvivorCatalogueService>().EnableGrpcWeb();
                 endpoints.MapGrpcService<LifeSituationDocumentsCatalogueService>().EnableGrpcWeb();
+                endpoints.MapGrpcService<UserCatalogueService>().EnableGrpcWeb();
                 endpoints.MapGrpcService<EpisodesCatalogueService>().EnableGrpcWeb();
 
                 endpoints.MapGet("/", async context =>
