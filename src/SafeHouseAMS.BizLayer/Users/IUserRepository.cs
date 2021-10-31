@@ -13,6 +13,6 @@ namespace SafeHouseAMS.BizLayer.Users
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-        public Task Create(CreateUserCommand command);
+        public Task CreateAsync(CreateUserCommand command);
     }
 }

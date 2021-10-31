@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
@@ -24,11 +23,11 @@ namespace SafeHouseAMS.Backend.Server.Services
             _guidGenerator = guidGenerator;
         }
 
-        public override Task<Empty> Create(CreateUserRequest request, ServerCallContext context)
+        public override async Task<Empty> Create(CreateUserRequest request, ServerCallContext context)
         {
             var command = new CreateUserCommand(_guidGenerator.Generate(), request.Email, request.FirstName, request.LastName);
-            _userCatalogue.CreateAsync(command, context.CancellationToken);
-            return Task.FromResult(new Empty());
+            await _userCatalogue.CreateAsync(command, context.CancellationToken);
+            return new Empty();
         }
     }
 }

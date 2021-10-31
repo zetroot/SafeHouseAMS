@@ -36,7 +36,7 @@ namespace SafeHouseAMS.BizLayer.Users.Commands
 
         internal override async Task ApplyOn(IUserRepository repository)
         {
-            await repository.Create(this);
+            await repository.CreateAsync(this);
         }
     }
 }
