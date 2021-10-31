@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using SafeHouseAMS.BizLayer.Users.Commands;
 
 namespace SafeHouseAMS.BizLayer.Users
@@ -10,8 +11,9 @@ namespace SafeHouseAMS.BizLayer.Users
     {
         /// <summary>
         /// </summary>
-        /// <param name="command"></param>
+        /// <param name="command">Command to create a user</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
-        Task CreateAsync(CreateUserCommand command);
+        Task CreateAsync(CreateUserCommand command, CancellationToken cancellationToken);
     }
 }

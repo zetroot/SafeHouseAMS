@@ -1,5 +1,6 @@
 ﻿@using SafeHouseAMS.BizLayer.Users
 @using SafeHouseAMS.BizLayer.Users.Commands
+@using System.Threading
 @inject NavigationManager _navigationManager;
 @inject IUserCatalogue _userCatalogue;
 
@@ -25,7 +26,7 @@
             <button type="reset" class="btn btn-warning" disabled="@_pageModel.IsLoading" @onclick="@CancelClick">Отмена</button>
         </div>
     </RadzenTemplateForm>
-    @if (_pageModel.IsLoading)
+    @if (!string.IsNullOrEmpty(_pageModel.Message))
     {
         <div class="message-holder">
             <p>@_pageModel.Message</p>
@@ -51,17 +52,19 @@
     private void SubmitForm()
     {
         _pageModel.Message = LoadingMessage;
-        _userCatalogue.CreateAsync(new CreateUserCommand(Guid.Empty, _pageModel.Email, _pageModel.FirstName, _pageModel.LastName))
+        _userCatalogue.CreateAsync(new CreateUserCommand(Guid.Empty, _pageModel.Email, _pageModel.FirstName, _pageModel.LastName), CancellationToken.None)
             .ContinueWith(result =>
             {
                 if (result.IsFaulted)
                 {
                     _pageModel.Message = result.Exception?.Message ?? string.Empty;
+                    Console.WriteLine(result.Exception?.InnerException?.StackTrace);
                 }
                 else
                 {
                     _pageModel.Message = "Added successfully";
                 }
+                StateHasChanged();
             });
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
@@ -26,7 +27,7 @@ namespace SafeHouseAMS.Backend.Server.Services
         public override Task<Empty> Create(CreateUserRequest request, ServerCallContext context)
         {
             var command = new CreateUserCommand(_guidGenerator.Generate(), request.Email, request.FirstName, request.LastName);
-            _userCatalogue.CreateAsync(command);
+            _userCatalogue.CreateAsync(command, context.CancellationToken);
             return Task.FromResult(new Empty());
         }
     }
