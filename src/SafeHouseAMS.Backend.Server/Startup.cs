@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -55,15 +56,12 @@ namespace SafeHouseAMS.Backend.Server
                 .AddLettuceEncrypt()
                 .PersistDataToDirectory(new DirectoryInfo(certPath), certPass);
 #endif
-            services.AddAuthentication(options =>
+            services.
+                AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opts =>
                 {
-                    options.DefaultAuthenticateScheme = OktaDefaults.ApiAuthenticationScheme;
-                    options.DefaultChallengeScheme = OktaDefaults.ApiAuthenticationScheme;
-                    options.DefaultSignInScheme = OktaDefaults.ApiAuthenticationScheme;
-                })
-                .AddOktaWebApi(new OktaWebApiOptions()
-                {
-                    OktaDomain = Configuration["Okta:OktaDomain"],
+                    Configuration.Bind("oidc", opts);
+                    opts.TokenValidationParameters.ValidateAudience = false;
                 });
 
             services.AddAuthorization();
