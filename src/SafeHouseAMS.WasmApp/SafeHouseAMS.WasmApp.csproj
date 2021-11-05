@@ -46,10 +46,9 @@
   <ItemGroup>
     <Protobuf Include="..\SafeHouseAMS.Transport\Services\**\*.proto" GrpcServices="Client" ProtoRoot="..\SafeHouseAMS.Transport" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\SafeHouseAMS.BizLayer\SafeHouseAMS.BizLayer.csproj" />
-    <ProjectReference Include="..\SafeHouseAMS.DataLayer\SafeHouseAMS.DataLayer.csproj" />
     <ProjectReference Include="..\SafeHouseAMS.Transport\SafeHouseAMS.Transport.csproj" />
   </ItemGroup>
 

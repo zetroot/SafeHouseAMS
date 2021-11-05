@@ -1,0 +1,22 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src
+COPY ["src/SafeHouseAMS.BizLayer/SafeHouseAMS.BizLayer.csproj", "SafeHouseAMS.BizLayer/"]
+COPY ["src/SafeHouseAMS.Transport/SafeHouseAMS.Transport.csproj", "SafeHouseAMS.Transport/"]
+COPY ["src/SafeHouseAMS.WasmApp/SafeHouseAMS.WasmApp.csproj", "SafeHouseAMS.WasmApp/"]
+RUN dotnet restore "/src/SafeHouseAMS.WasmApp/SafeHouseAMS.WasmApp.csproj"
+
+COPY ["src/", "."]
+WORKDIR "/src/SafeHouseAMS.WasmApp"
+RUN dotnet build "SafeHouseAMS.WasmApp.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "SafeHouseAMS.WasmApp.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
