@@ -1,0 +1,35 @@
+name: buld-n-test
+on:
+  workflow_call:
+    inputs:
+      send_testcoverage:
+        description: 'should this workflow collect and send test coverage statistics'
+        type: boolean
+        default: false
+        required: true
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get sources
+        uses: actions/checkout@v2
+
+      - name: Setup .NET 5.0 SDK
+        uses: actions/setup-dotnet@v1.8.2
+        with:
+          dotnet-version: 5.0.x
+
+      - name: restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      # тестирование со сборкой результатов покрытия по конфигурации в файле по умолчанию
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal --collect:"XPlat code coverage" --settings coverlet.runsettings
+
+      # публикация результатов покрытия тестами на code-cov
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2.1.0
+        if: ${{ inputs.send_testcoverage }}
