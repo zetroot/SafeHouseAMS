@@ -7,12 +7,12 @@ on:
 
 jobs:
   build:
-    uses: zetroot/SafehouseAMS/.github/workflows/build_job.yml@v1
+    uses: zetroot/SafehouseAMS/.github/workflows/build_job.yml@master
     with:
       send_testcoverage: false
 
   build_images:
-    uses: zetroot/SafehouseAMS/.github/workflows/docker_build.yml@v1
+    uses: zetroot/SafehouseAMS/.github/workflows/docker_build.yml@master
     with:
       version: 'staging'
 
