@@ -11,8 +11,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  BACKEND_IMAGE_NAME: ${{ github.repository }}.back
-  FORNTEND_IMAGE_NAME: ${{ github.repository }}.front
+  BACKEND_IMAGE_NAME: 'zetroot/safehouseams.back'
+  FRONTEND_IMAGE_NAME: 'zetroot/safehouseams.front'
 
 jobs:
   backend:
