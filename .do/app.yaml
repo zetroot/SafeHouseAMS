@@ -1,11 +1,17 @@
+domains:
+  - domain: crm.dev-maca.ca
+    type: PRIMARY
+    zone: dev-maca.ca
 name: safehouse-ams
+region: blr
 static_sites:
-  - name: safehouse-ams-wasm
-    github:
-      repo: zetroot/SafeHouseAMS
-      branch: master
-      deploy_on_push: false
+  - catchall_document: index.html
     dockerfile_path: Dockerfile.wasm
-    output_dir: /app/wwwroot
+    github:
+      branch: master
+      repo: zetroot/SafeHouseAMS
     index_document: index.html
-    catchall_document: index.html
+    name: safehouse-ams-wasm
+    output_dir: /app/wwwroot
+    routes:
+      - path: /
