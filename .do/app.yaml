@@ -1,0 +1,11 @@
+name: safehouse-ams
+static_sites:
+  - name: safehouse-ams-wasm
+    github:
+      repo: zetroot/SafeHouseAMS
+      branch: master
+      deploy_on_push: false
+    dockerfile_path: Dockerfile.wasm
+    output_dir: /app/wwwroot
+    index_document: index.html
+    catchall_document: index.html

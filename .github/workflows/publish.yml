@@ -11,40 +11,53 @@ jobs:
     with:
       send_testcoverage: false
 
-  build_images:
-#    needs:
-#      - build
+  build-images:
+    needs:
+      - build
     uses: zetroot/SafehouseAMS/.github/workflows/docker_build.yml@master
     with:
       version: 'staging'
 
-#  deploy-image-on-server:
-#    runs-on: ubuntu-latest
-#    needs:
-#      - build-and-publish-image
-#
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v2
-#
-#      - name: copy file via ssh
-#        uses: appleboy/scp-action@master
-#        with:
-#          host: ${{ secrets.SERVER_SSH_HOST }}
-#          username: ${{ secrets.SERVER_SSH_USER }}
-#          key: ${{ secrets.SERVER_SSH_KEY }}
-#          source: "docker-compose.yaml"
-#          target: "./"
-#          overwrite: true
-#
-#      - name: restart docker
-#        uses: cross-the-world/ssh-pipeline@master
-#        with:
-#          host: ${{ secrets.SERVER_SSH_HOST }}
-#          user: ${{ secrets.SERVER_SSH_USER }}
-#          key: ${{ secrets.SERVER_SSH_KEY }}
-#          connect_timeout: 10s
-#          script: |
-#            docker-compose stop &&
-#            docker-compose pull &&
-#            docker-compose up -d
+  deploy-image-on-server:
+    runs-on: ubuntu-latest
+    needs:
+      - build-images
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: copy file via ssh
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_SSH_HOST }}
+          username: ${{ secrets.SERVER_SSH_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "docker-compose.yaml"
+          target: "./"
+          overwrite: true
+
+      - name: restart docker
+        uses: cross-the-world/ssh-pipeline@master
+        with:
+          host: ${{ secrets.SERVER_SSH_HOST }}
+          user: ${{ secrets.SERVER_SSH_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          connect_timeout: 10s
+          script: |
+            docker-compose stop &&
+            docker-compose pull &&
+            docker-compose up -d
+
+  deploy-app-to-do:
+    runs-on: ubuntu-latest
+    needs:
+      - build-images
+
+    steps:
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_ACCESS_TOKEN }}
+      - name: trigger deployment
+        run: doctl app cd ${{ secrets.DO_APP_ID}}
