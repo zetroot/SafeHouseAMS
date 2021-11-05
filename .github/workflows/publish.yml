@@ -5,111 +5,76 @@ on:
 
   workflow_dispatch:
 
-env:
-  REGISTRY: ghcr.io
-  BACKEND_IMAGE_NAME: ${{ github.repository }}.back
-  FORNTEND_IMAGE_NAME: ${{ github.repository }}.front
-
 jobs:
   build:
     uses: zetroot/SafehouseAMS/.github/workflows/build_job.yml@v1
     with:
       send_testcoverage: false
 
-  publish-wasm:
-    runs-on: ubuntu-latest
-    needs:
-      - build
-    steps:
-      - name: Checkout 🛎️
-        uses: actions/checkout@v2.3.1
+  build_images:
+    uses: zetroot/SafehouseAMS/.github/workflows/docker_build.yml@v1
+    with:
+      version: 'staging'
 
-      - name: download wasm artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: artifact
-          path: artifact/
+#  publish-wasm:
+#    runs-on: ubuntu-latest
+#    needs:
+#      - build
+#    steps:
+#      - name: Checkout 🛎️
+#        uses: actions/checkout@v2.3.1
+#
+#      - name: download wasm artifact
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: artifact
+#          path: artifact/
+#
+#      - name: Display structure of downloaded files
+#        run: ls -R
+#
+#    # добавить файл .nojekyll чтобы отвязаться от правила Jekyll по игнорированию путей начинающихся с нижнего подчеркивания. Это критично важно для blazor
+#      - name: Add .nojekyll file
+#        run: touch artifact/wwwroot/.nojekyll
+#
+#      # copy index.html to 404.html to serve the same file when a file is not found
+#      - name: copy index.html to 404.html
+#        run: cp artifact/wwwroot/index.html artifact/wwwroot/404.html
+#
+#      # наконец, закоммитить результаты в ветку gh-pages
+#      - name: Commit wwwroot to GitHub Pages
+#        uses: JamesIves/github-pages-deploy-action@4.1.5
+#        with:
+#          BRANCH: gh-pages
+#          FOLDER: artifact/wwwroot
 
-      - name: Display structure of downloaded files
-        run: ls -R
-
-    # добавить файл .nojekyll чтобы отвязаться от правила Jekyll по игнорированию путей начинающихся с нижнего подчеркивания. Это критично важно для blazor
-      - name: Add .nojekyll file
-        run: touch artifact/wwwroot/.nojekyll
-
-      # copy index.html to 404.html to serve the same file when a file is not found
-      - name: copy index.html to 404.html
-        run: cp artifact/wwwroot/index.html artifact/wwwroot/404.html
-
-      # наконец, закоммитить результаты в ветку gh-pages
-      - name: Commit wwwroot to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.1.5
-        with:
-          BRANCH: gh-pages
-          FOLDER: artifact/wwwroot
-
-  build-and-publish-image:
-    runs-on: ubuntu-latest
-
-    needs:
-      - build
-
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Log in to the Container registry
-        uses: docker/login-action@v1.10.0
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v3.6.0
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2.7.0
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-  deploy-image-on-server:
-    runs-on: ubuntu-latest
-    needs:
-      - build-and-publish-image
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: copy file via ssh
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SERVER_SSH_HOST }}
-          username: ${{ secrets.SERVER_SSH_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "docker-compose.yaml"
-          target: "./"
-          overwrite: true
-
-      - name: restart docker
-        uses: cross-the-world/ssh-pipeline@master
-        with:
-          host: ${{ secrets.SERVER_SSH_HOST }}
-          user: ${{ secrets.SERVER_SSH_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          connect_timeout: 10s
-          script: |
-            docker-compose stop &&
-            docker-compose pull &&
-            docker-compose up -d
+#  deploy-image-on-server:
+#    runs-on: ubuntu-latest
+#    needs:
+#      - build-and-publish-image
+#
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v2
+#
+#      - name: copy file via ssh
+#        uses: appleboy/scp-action@master
+#        with:
+#          host: ${{ secrets.SERVER_SSH_HOST }}
+#          username: ${{ secrets.SERVER_SSH_USER }}
+#          key: ${{ secrets.SERVER_SSH_KEY }}
+#          source: "docker-compose.yaml"
+#          target: "./"
+#          overwrite: true
+#
+#      - name: restart docker
+#        uses: cross-the-world/ssh-pipeline@master
+#        with:
+#          host: ${{ secrets.SERVER_SSH_HOST }}
+#          user: ${{ secrets.SERVER_SSH_USER }}
+#          key: ${{ secrets.SERVER_SSH_KEY }}
+#          connect_timeout: 10s
+#          script: |
+#            docker-compose stop &&
+#            docker-compose pull &&
+#            docker-compose up -d
