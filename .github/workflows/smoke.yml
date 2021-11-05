@@ -36,6 +36,6 @@ jobs:
       uses: codecov/codecov-action@v2.1.0
 
   smoke_2:
-    uses: zetroot/SafehouseAMS/.github/workflows/build_job.yml@v1
+    uses: zetroot/SafehouseAMS/.github/workflows/build_job.yml@master
     with:
       send_testcoverage: true
