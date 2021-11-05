@@ -12,6 +12,8 @@ jobs:
       send_testcoverage: false
 
   build_images:
+#    needs:
+#      - build
     uses: zetroot/SafehouseAMS/.github/workflows/docker_build.yml@master
     with:
       version: 'staging'
