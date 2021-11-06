@@ -87,8 +87,8 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
                     var citizenship = ctx.Mapper.Map<CitizenshipRecord>(src.Citizenship);
                     var domicile = ctx.Mapper.Map<DomicileRecord>(src.Domicile);
                     var hasChildren = ctx.Mapper.Map<ChildrenRecord>(src.HasChildren);
-                    var educations = src.EducationLevel.Select(ctx.Mapper.Map<EducationLevelRecord>);
-                    var specialities = src.Specialities.Select(ctx.Mapper.Map<SpecialityRecord>);
+                    var educations = src.EducationLevel.Select(ctx.Mapper.Map<EducationLevelRecord>).ToList();
+                    var specialities = src.Specialities.Select(ctx.Mapper.Map<SpecialityRecord>).ToList();
 
                     var migrationStatus = ctx.Mapper.Map<MigrationStatusRecord>(src.MigrationStatus);
                     var registrationStatus = ctx.Mapper.Map<RegistrationStatusRecord>(src.RegistrationStatus);

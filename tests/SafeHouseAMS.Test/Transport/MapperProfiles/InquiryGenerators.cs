@@ -22,18 +22,18 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         private static Gen<IInquirySource> forwardPersonGen = Arb.From<ForwardedByPerson>().Generator.Select(x => x as IInquirySource);
         private static Gen<IInquirySource> forwardOrganizationGen = Arb.From<ForwardedByOrganization>().Generator.Select(x => x as IInquirySource);
 
-        public static Arbitrary<IEnumerable<IInquirySource>> InquirySourcesArb => Gen
-            .OneOf(selfInquriyGen, forwardSurvivorGen, forwardPersonGen, forwardOrganizationGen).ListOf().Select(x => x.AsEnumerable()).ToArbitrary();
-        
-        public static Arbitrary<IEnumerable<Vulnerability>> Vulnerabilities => Gen
+        public static Arbitrary<IReadOnlyCollection<IInquirySource>> InquirySourcesArb => Gen
+            .OneOf(selfInquriyGen, forwardSurvivorGen, forwardPersonGen, forwardOrganizationGen).ListOf().Select(x => x.ToList() as IReadOnlyCollection<IInquirySource>).ToArbitrary();
+
+        public static Arbitrary<IReadOnlyCollection<Vulnerability>> Vulnerabilities => Gen
             .Sequence(addictionGen, childhoodViolenceGen, homelessGen, migrationGen, orphExpGen, otherGen, healthGen)
-            .Select(x => x.Where(y => y is not null).Select(y => y!))
+            .Select(x => x.Where(y => y is not null).Select(y => y!).ToList() as IReadOnlyCollection<Vulnerability>)
             .ToArbitrary();
 
-        public static Arbitrary<IEnumerable<EducationLevelRecord>> EducationLevels => Arb.From<EducationLevelRecord>().Generator.ListOf().Select(x => x.AsEnumerable()).ToArbitrary();
-        public static Arbitrary<IEnumerable<SpecialityRecord>> Specialities => Arb.From<SpecialityRecord>().Generator.ListOf().Select(x => x.AsEnumerable()).ToArbitrary();
-        public static Arbitrary<IEnumerable<DomicileRecord>> Domiciles => Arb.From<DomicileRecord>().Generator.ListOf().Select(x => x.AsEnumerable()).ToArbitrary();
-        public static Arbitrary<IEnumerable<ChildrenRecord>> Childrens => Arb.From<ChildrenRecord>().Generator.ListOf().Select(x => x.AsEnumerable()).ToArbitrary();
-        public static Arbitrary<IEnumerable<CitizenshipRecord>> Citizenship => Arb.From<CitizenshipRecord>().Generator.ListOf().Select(x => x.AsEnumerable()).ToArbitrary();
+        public static Arbitrary<IReadOnlyCollection<EducationLevelRecord>> EducationLevels => Arb.From<EducationLevelRecord>().Generator.ListOf().Select(x => x.ToList() as IReadOnlyCollection<EducationLevelRecord>).ToArbitrary();
+        public static Arbitrary<IReadOnlyCollection<SpecialityRecord>> Specialities => Arb.From<SpecialityRecord>().Generator.ListOf().Select(x => x.ToList() as IReadOnlyCollection<SpecialityRecord>).ToArbitrary();
+        public static Arbitrary<IReadOnlyCollection<DomicileRecord>> Domiciles => Arb.From<DomicileRecord>().Generator.ListOf().Select(x => x.ToList() as IReadOnlyCollection<DomicileRecord>).ToArbitrary();
+        public static Arbitrary<IReadOnlyCollection<ChildrenRecord>> Childrens => Arb.From<ChildrenRecord>().Generator.ListOf().Select(x => x.ToList() as IReadOnlyCollection<ChildrenRecord>).ToArbitrary();
+        public static Arbitrary<IReadOnlyCollection<CitizenshipRecord>> Citizenship => Arb.From<CitizenshipRecord>().Generator.ListOf().Select(x => x.ToList() as IReadOnlyCollection<CitizenshipRecord>).ToArbitrary();
     }
 }
