@@ -25,9 +25,17 @@ namespace SafeHouseAMS.Test.Transport.MapperProfiles
         public static Arbitrary<IReadOnlyCollection<IInquirySource>> InquirySourcesArb => Gen
             .OneOf(selfInquriyGen, forwardSurvivorGen, forwardPersonGen, forwardOrganizationGen).ListOf().Select(x => x.ToList() as IReadOnlyCollection<IInquirySource>).ToArbitrary();
 
+        public static Arbitrary<IEnumerable<IInquirySource>> InquirySourcesEnumerable => Gen
+            .OneOf(selfInquriyGen, forwardSurvivorGen, forwardPersonGen, forwardOrganizationGen).ListOf().Select(x => x.AsEnumerable()).ToArbitrary();
+
         public static Arbitrary<IReadOnlyCollection<Vulnerability>> Vulnerabilities => Gen
             .Sequence(addictionGen, childhoodViolenceGen, homelessGen, migrationGen, orphExpGen, otherGen, healthGen)
             .Select(x => x.Where(y => y is not null).Select(y => y!).ToList() as IReadOnlyCollection<Vulnerability>)
+            .ToArbitrary();
+
+        public static Arbitrary<IEnumerable<Vulnerability>> VulnerabilitiesEnumerable => Gen
+            .Sequence(addictionGen, childhoodViolenceGen, homelessGen, migrationGen, orphExpGen, otherGen, healthGen)
+            .Select(x => x.Where(y => y is not null).Select(y => y!).AsEnumerable())
             .ToArbitrary();
 
         public static Arbitrary<IReadOnlyCollection<EducationLevelRecord>> EducationLevels => Arb.From<EducationLevelRecord>().Generator.ListOf().Select(x => x.ToList() as IReadOnlyCollection<EducationLevelRecord>).ToArbitrary();
