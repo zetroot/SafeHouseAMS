@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using SafeHouseAMS.BizLayer.Survivors;
 
 namespace SafeHouseAMS.BizLayer.AssistanceRequests
@@ -11,7 +12,12 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests
     /// <param name="Created">Дата создания</param>
     /// <param name="LastEdit">Дата последнего редактирования</param>
     /// <param name="Survivor">Пострадавший к которому относится запрос</param>
+    /// <param name="AssistanceKind">вид запроса помощи</param>
+    /// <param name="Details">Дополнительное описание запроса помощи</param>
     /// <param name="IsAccomplished">Признак выполненного запроса</param>
-    public abstract record AssistanceRequest(Guid ID, bool IsDeleted, DateTime Created, DateTime LastEdit,
-        Survivor Survivor, bool IsAccomplished) : BaseDomainModel(ID, IsDeleted, Created, LastEdit);
+    /// <param name="AssistanceActs">Акты оказания помощи</param>
+    public record AssistanceRequest(Guid ID, bool IsDeleted, DateTime Created, DateTime LastEdit,
+        Survivor Survivor, AssistanceKind AssistanceKind, string Details, bool IsAccomplished,
+        IReadOnlyCollection<AssistanceAct> AssistanceActs) :
+        BaseDomainModel(ID, IsDeleted, Created, LastEdit);
 }
