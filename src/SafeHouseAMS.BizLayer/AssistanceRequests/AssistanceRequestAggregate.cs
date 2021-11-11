@@ -20,7 +20,7 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests
         /// <inheritdoc />
         public Task ApplyCommand(AssistanceRequestCommand command, CancellationToken cancellationToken)
         {
-            return command.ApplyOn(_repository)
+            return command.ApplyOn(_repository);
         }
     }
 }
