@@ -37,7 +37,7 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests.Commands
             Details = details;
         }
 
-        internal override async Task ApplyOn(IAssistanceRequestsRepository repository)
+        internal override Task ApplyOn(IAssistanceRequestsRepository repository)
         {
             throw new NotImplementedException();
         }

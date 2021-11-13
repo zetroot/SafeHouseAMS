@@ -12,7 +12,17 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests
     {
         private readonly IAssistanceRequestsRepository _repository;
 
-        public async Task<AssistanceRequest?> GetSingleAsync(Guid id, CancellationToken cancellationToken)
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="repository">репозиторий</param>
+        public AssistanceRequestAggregate(IAssistanceRequestsRepository repository)
+        {
+            _repository = repository;
+        }
+
+        /// <inheritdoc />
+        public Task<AssistanceRequest?> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
