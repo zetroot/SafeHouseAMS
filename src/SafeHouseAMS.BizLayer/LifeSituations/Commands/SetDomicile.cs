@@ -111,7 +111,6 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
             OtherRelativesDetails = otherRelativesDetails;
             WithOtherPeople = otherPeopleDetails != null;
             OtherPeopleDetails = otherPeopleDetails;
-            LivingPlaceComment = livingPlaceComment;
         }
 
         internal override Task ApplyOn(ILifeSituationDocumentsRepository repository)

@@ -24,7 +24,7 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Commands
         /// <exception cref="ArgumentNullException">если вместо коллекции был null</exception>
         public SetVulnerabilities(Guid entityID, IEnumerable<Vulnerability> vulnerabilities) : base(entityID)
         {
-            Vulnerabilities = vulnerabilities.ToList() ?? throw new ArgumentNullException(nameof(vulnerabilities));
+            Vulnerabilities = vulnerabilities.ToList();
         }
 
         internal override async Task ApplyOn(ILifeSituationDocumentsRepository repository)
