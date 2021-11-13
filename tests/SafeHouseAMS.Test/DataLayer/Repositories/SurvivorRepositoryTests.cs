@@ -35,7 +35,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetTotalCount_WhenCalled_DoesntCountDeleted()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             await ctx.Survivors.AddRangeAsync(new SurvivorDAL {ID = Guid.NewGuid(), IsDeleted = true, Num = 4},
             new() {ID = Guid.NewGuid(), IsDeleted = false, Num = 1},
             new() {ID = Guid.NewGuid(), IsDeleted = true, Num = 2},
@@ -60,7 +60,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task Create_WhenCalled_ActuallyAddsNewRecord(bool isDeleted, string name, SexEnum sex, string? otherSex)
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var sut = new SurvivorsRepository(ctx, CreateMapper());
             var id = Guid.NewGuid();
             var time = DateTime.Now;
@@ -86,7 +86,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task Create_WhenCalled_IncrementsNumValue()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             await ctx.Survivors.AddAsync(new()
             {
                 ID = Guid.NewGuid(),
@@ -110,7 +110,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         {
             //arrange
             var id = Guid.NewGuid();
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             await ctx.Survivors.AddAsync(new()
             {
                 ID = id,
@@ -133,7 +133,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         {
             //arrange
             var id = Guid.NewGuid();
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             await ctx.Survivors.AddAsync(new()
             {
                 ID = id,
@@ -155,7 +155,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetSingleAsync_WhenCancelled_ThrowsOperationCancelled()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var sut = new SurvivorsRepository(ctx, CreateMapper());
             var ct = new CancellationToken(true);
             //act && assert
@@ -166,7 +166,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetCollection_WhenLimited_ReturnsNotDeletedRecords()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             await ctx.Survivors.AddRangeAsync(
             new SurvivorDAL {ID = Guid.NewGuid(), IsDeleted = true, Num = 42, Name = "", LastEdit = DateTime.Now-TimeSpan.FromMinutes(5)},
             new () {ID = Guid.NewGuid(), IsDeleted = false, Num = 43, Name = "",LastEdit = DateTime.Now-TimeSpan.FromMinutes(4)},
@@ -194,7 +194,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetCollection_WhenUnLimited_ReturnsNotDeletedRecords()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             await ctx.Survivors.AddRangeAsync(
             new SurvivorDAL {ID = Guid.NewGuid(), IsDeleted = true, Num = 42, Name = "", LastEdit = DateTime.Now-TimeSpan.FromMinutes(5)},
             new () {ID = Guid.NewGuid(), IsDeleted = false, Num = 43, Name = "",LastEdit = DateTime.Now-TimeSpan.FromMinutes(4)},

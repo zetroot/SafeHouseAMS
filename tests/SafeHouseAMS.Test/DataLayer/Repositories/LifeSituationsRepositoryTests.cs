@@ -44,7 +44,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         {
             //arrange
             var id = Guid.NewGuid();
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var survivorId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = survivorId, Num = 42, Name = "name"});
             await ctx.LifeSituationDocuments.AddAsync(new InquiryDAL {ID = id, SurvivorID = survivorId});
@@ -66,7 +66,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         {
             //arrange
             var id = Guid.NewGuid();
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var survivorId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = survivorId, Num = 42, Name = "name"});
@@ -85,7 +85,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetSingleAsync_WhenCancelled_ThrowsOperationCancelled()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var sut = new LifeSituationDocumentsRepository(ctx, CreateMapper());
             var ct = new CancellationToken(true);
             //act && assert
@@ -96,7 +96,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task CreateInquiry_WhenCalled_ActuallyAddsNewRecord()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();
@@ -141,7 +141,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetAllbySurvivor_WhenCalled_ReturnsOnlyForSelectedSurvivor()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             var surId2 = Guid.NewGuid();
@@ -222,7 +222,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
             where TRecordDAL : BaseRecordDAL
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -246,7 +246,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetCitizenshipsCompletions_WhenCalled_ReturnsCollectionFromAllRecords()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -294,7 +294,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task SetWorkingExperience_WhenCalled_SavesWorkingExperienceInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -320,7 +320,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task SetAddiction_WhenCalled_SetsAddictionInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -347,7 +347,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task ClearAddiction_WhenCalled_ClearsAddictionInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -373,7 +373,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task SetHomeless_WhenCalled_SetsHomelessInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -398,7 +398,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task ClearHomeless_WhenCalled_ClearsHomelessInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -423,7 +423,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task SetMigration_WhenCalled_SetsMigrationInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -448,7 +448,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task ClearMigration_WhenCalled_ClearsMigrationInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -473,7 +473,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task SetChildhoodViolence_WhenCalled_SetsChildhoodViolenceInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -498,7 +498,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task ClearChildhoodViolence_WhenCalled_ClearsChildhoodViolenceInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -523,7 +523,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task SetOrphanageExperience_WhenCalled_SetsOrphanageExperienceInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -548,7 +548,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task ClearOrphanageExperience_WhenCalled_ClearsOrphanageExperienceInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -573,7 +573,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task SetOther_WhenCalled_SetsOtherInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -600,7 +600,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task ClearOther_WhenCalled_ClearsOtherInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -626,7 +626,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task SetHealthStatus_WhenCalled_SetsHealthStatusInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -653,7 +653,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task ClearHealthStatus_WhenCalled_ClearsHealthStatusInInquiry()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -686,7 +686,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task CreateRecordUpdateDocument_WhenCalled_AddsNewDocument(Type recordType, Type documentType)
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
 
             var surId1 = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId1, Num = 42, Name = "ololo"});
@@ -718,7 +718,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetSurvivorReport_WhenCalled_CatchesCorrectOneSingleRecord()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();
@@ -754,7 +754,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetSurvivorReport_WhenCalled_CatchesCorrectTwoSingleRecord()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();
@@ -805,7 +805,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetSurvivorReport_WhenCalled_CatchesCorrectMultiRecords()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();
@@ -867,7 +867,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForChildren()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();
@@ -902,7 +902,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForCitizenship()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();
@@ -937,7 +937,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForDomicile()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();
@@ -972,7 +972,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForMigration()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();
@@ -1007,7 +1007,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForRegistration()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();
@@ -1042,7 +1042,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForEducation()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();
@@ -1080,7 +1080,7 @@ namespace SafeHouseAMS.Test.DataLayer.Repositories
         public async Task GetRecordHistory_WhenCalled_GetsCorrrectHistoryForSpeciality()
         {
             //arrange
-            await using var ctx = InMemDbHelper.CreateInMemoryDatabase();
+            await using var ctx = TestHelper.CreateInMemoryDatabase();
             var surId = Guid.NewGuid();
             await ctx.Survivors.AddAsync(new() {ID = surId, Num = 42, Name = "ololo"});
             await ctx.SaveChangesAsync();

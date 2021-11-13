@@ -27,8 +27,8 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests.Commands
         /// ctor
         /// </summary>
         /// <param name="entityID">идентификатор запроса помощи</param>
-        /// <param name="survivorID">идентификатор постардавшего</param>
-        /// <param name="kind">вид запрошиваемой помощи</param>
+        /// <param name="survivorID">идентификатор пострадавшего</param>
+        /// <param name="kind">вид запрашиваемой помощи</param>
         /// <param name="details">дополнительная информация по запросу</param>
         public Create(Guid entityID, Guid survivorID, AssistanceKind kind, string details) : base(entityID)
         {
@@ -37,9 +37,7 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests.Commands
             Details = details;
         }
 
-        internal override Task ApplyOn(IAssistanceRequestsRepository repository)
-        {
-            throw new NotImplementedException();
-        }
+        internal override Task ApplyOn(IAssistanceRequestsRepository repository) =>
+            repository.CreateAssistanceRequest(EntityID, false, DateTime.Now, DateTime.Now, SurvivorID, Kind, Details, false);
     }
 }

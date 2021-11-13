@@ -24,7 +24,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
         public async Task DeleteCommand_WhenApplied_MakesDocumentInvisibleToGetSingle()
         {
             //arrange
-            var dbContext = InMemDbHelper.CreateInMemoryDatabase();
+            var dbContext = TestHelper.CreateInMemoryDatabase();
             var repo = new LifeSituationDocumentsRepository(dbContext, CreateMapper());
             var bizLogic = new LifeSituationDocumentsAggregate(repo);
 
@@ -50,7 +50,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
         public async Task DeleteCommand_WhenApplied_MakesDocumentInvisibleToGetAllBySurvivor()
         {
             //arrange
-            var dbContext = InMemDbHelper.CreateInMemoryDatabase();
+            var dbContext = TestHelper.CreateInMemoryDatabase();
             var repo = new LifeSituationDocumentsRepository(dbContext, CreateMapper());
             var bizLogic = new LifeSituationDocumentsAggregate(repo);
 
