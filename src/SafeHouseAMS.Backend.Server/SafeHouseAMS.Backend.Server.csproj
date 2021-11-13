@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <WarningLevel>9999</WarningLevel>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <Nullable>enable</Nullable>
@@ -15,7 +15,7 @@
           <Link>Services\LifeSituationDocumentsCatalogue.proto</Link>
         </Protobuf>
     </ItemGroup>
-    
+
     <ItemGroup>
         <PackageReference Include="Google.Protobuf" Version="3.19.1" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
@@ -46,5 +46,5 @@
         <Link>Dockerfile.dev</Link>
       </Content>
     </ItemGroup>
-    
+
 </Project>
