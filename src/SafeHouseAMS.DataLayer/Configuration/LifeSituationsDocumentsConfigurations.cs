@@ -4,24 +4,17 @@ using SafeHouseAMS.DataLayer.Models.LifeSituations;
 
 namespace SafeHouseAMS.DataLayer.Configuration
 {
-    internal class LifeSituationsDocumentConfiguration : IEntityTypeConfiguration<LifeSituationDocumentDAL>
+    internal class LifeSituationsDocumentConfiguration : BaseDalEntityConfiguration<LifeSituationDocumentDAL>
     {
 
-        public void Configure(EntityTypeBuilder<LifeSituationDocumentDAL> builder)
+        public override void Configure(EntityTypeBuilder<LifeSituationDocumentDAL> builder)
         {
+            base.Configure(builder);
             builder.ToTable("LifeSituationDocuments").HasComment("Документы изменения жизненных ситуаций");
 
-            builder.Property(x => x.ID).HasComment("Идентификатор записи - ПК");
-            builder.Property(x => x.IsDeleted).HasComment("Признак удалённой записи");
-            builder.Property(x => x.Created).HasComment("Дата-время создания записи");
-            builder.Property(x => x.LastEdit).HasComment("Дата-время последнего редактирования записи");
             builder.Property(x => x.DocumentDate).HasComment("Дата документа");
             builder.Property(x => x.SurvivorID).HasComment("Внешний ключ - пострадавший к которому относится запись");
 
-            builder.HasKey(x => x.ID);
-            builder.HasIndex(x => x.IsDeleted).IsUnique(false);
-            builder.HasIndex(x => x.Created).IsUnique(false);
-            builder.HasIndex(x => x.LastEdit).IsUnique(false);
             builder.HasIndex(x => x.DocumentDate).IsUnique(false);
 
             builder
