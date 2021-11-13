@@ -39,6 +39,17 @@ internal class AssistanceRequestsRepository : IAssistanceRequestsRepository
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
+    public async Task CreateAssistanceAct(Guid id, bool isDeleted, DateTime created, DateTime lastEdit,
+        Guid requestId, string details, decimal workHours, decimal money)
+    {
+        await _context.AssistanceActs.AddAsync(new()
+        {
+            ID = id, IsDeleted = isDeleted, Created = created, LastEdit = lastEdit,
+            RequestID = requestId, Details = details, WorkHours = workHours, Money = money
+        }).ConfigureAwait(false);
+        await _context.SaveChangesAsync().ConfigureAwait(false);
+    }
+
     public async IAsyncEnumerable<AssistanceRequest> GetAllBySurvivor(Guid survivorId,
         [EnumeratorCancellation] CancellationToken cancellationToken)
     {

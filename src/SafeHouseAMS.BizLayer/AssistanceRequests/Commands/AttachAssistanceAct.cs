@@ -44,9 +44,7 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests.Commands
             Money = money;
         }
 
-        internal override Task ApplyOn(IAssistanceRequestsRepository repository)
-        {
-            throw new NotImplementedException();
-        }
+        internal override Task ApplyOn(IAssistanceRequestsRepository repository) =>
+            repository.CreateAssistanceAct(ActID, false, DateTime.Now, DateTime.Now, EntityID, Details, WorkHours, Money);
     }
 }

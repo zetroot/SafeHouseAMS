@@ -40,5 +40,20 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests
         /// <param name="cancellationToken">токен отмены</param>
         /// <returns></returns>
         IAsyncEnumerable<AssistanceRequest> GetAllBySurvivor(Guid survivorId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// добавить новый акт оказания помощи
+        /// </summary>
+        /// <param name="id">идентификатор создаваемой записи</param>
+        /// <param name="isDeleted">признак удалённой записи</param>
+        /// <param name="created">дата создания</param>
+        /// <param name="lastEdit">дата последнего редактирования</param>
+        /// <param name="requestId">идентификатор запроса оказания помощи</param>
+        /// <param name="details">дополнительная информация по оказанной помощи</param>
+        /// <param name="workHours">потрачено часов</param>
+        /// <param name="money">потрачено денег</param>
+        /// <returns></returns>
+        Task CreateAssistanceAct(Guid id, bool isDeleted, DateTime created, DateTime lastEdit,
+            Guid requestId, string details, decimal workHours, decimal money);
     }
 }

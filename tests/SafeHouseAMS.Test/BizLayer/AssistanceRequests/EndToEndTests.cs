@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.AspNetCore.Http.Features;
 using SafeHouseAMS.BizLayer.AssistanceRequests;
 using SafeHouseAMS.BizLayer.AssistanceRequests.Commands;
 using SafeHouseAMS.DataLayer.Repositories;
@@ -42,5 +41,41 @@ public class EndToEndTests
         request.IsDeleted.Should().BeFalse();
         request.AssistanceActs.Should().BeEmpty();
         request.AssistanceKind.Should().Be(AssistanceKind.Accomodation);
+    }
+
+    [Fact, IntegrationTest]
+    public async Task AttachAssistanceAct_Always_AddsAssistanceActToRequest()
+    {
+        //arrange
+        var surId = Guid.NewGuid();
+        var reqId = Guid.NewGuid();
+        await using var context = TestHelper.CreateInMemoryDatabase();
+        await context.Survivors.AddAsync(new() { ID = surId, Num = 42}).ConfigureAwait(false);
+        await context.AssistanceRequests
+            .AddAsync(new() { ID = reqId, SurvivorID = surId, AssistanceKind = (int)AssistanceKind.Accomodation })
+            .ConfigureAwait(false);
+        await context.SaveChangesAsync().ConfigureAwait(false);
+
+        const decimal money = 2;
+        const decimal workHours = 1;
+        const string actDetails = "act details";
+        var sut = new AttachAssistanceAct(reqId, Guid.NewGuid(), actDetails, workHours, money);
+
+        var repo = new AssistanceRequestsRepository(context, TestHelper.CreateMapper());
+        var aggregate = new AssistanceRequestAggregate(repo);
+
+        //act
+        await aggregate.ApplyCommand(sut, CancellationToken.None).ConfigureAwait(false);
+        var request = await aggregate.GetSingleAsync(sut.EntityID, CancellationToken.None);
+
+        //assert
+        Debug.Assert(request != null, nameof(request) + " != null");
+        request.AssistanceActs.Should().SatisfyRespectively(x =>
+        {
+            x.ID.Should().Be(sut.ActID);
+            x.Details.Should().Be(actDetails);
+            x.Money.Should().Be(money);
+            x.WorkHours.Should().Be(workHours);
+        });
     }
 }
