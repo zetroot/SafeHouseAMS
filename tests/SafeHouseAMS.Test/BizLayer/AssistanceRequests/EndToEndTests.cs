@@ -22,7 +22,7 @@ public class EndToEndTests
         await context.Survivors.AddAsync(new() { ID = surId, Num = 42}).ConfigureAwait(false);
         await context.SaveChangesAsync().ConfigureAwait(false);
 
-        var sut = new Create(Guid.NewGuid(), surId, AssistanceKind.Accomodation, "request details");
+        var sut = new CreateAssistanceRequest(Guid.NewGuid(), surId, AssistanceKind.Accomodation, "request details");
 
         var repo = new AssistanceRequestsRepository(context, TestHelper.CreateMapper());
         var aggregate = new AssistanceRequestAggregate(repo);

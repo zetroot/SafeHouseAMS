@@ -6,7 +6,7 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests.Commands
     /// <summary>
     /// Команда создания запроса помощи
     /// </summary>
-    public class Create : AssistanceRequestCommand
+    public class CreateAssistanceRequest : AssistanceRequestCommand
     {
         /// <summary>
         /// Идентификатор пострадавшего
@@ -30,7 +30,7 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests.Commands
         /// <param name="survivorID">идентификатор пострадавшего</param>
         /// <param name="kind">вид запрашиваемой помощи</param>
         /// <param name="details">дополнительная информация по запросу</param>
-        public Create(Guid entityID, Guid survivorID, AssistanceKind kind, string details) : base(entityID)
+        public CreateAssistanceRequest(Guid entityID, Guid survivorID, AssistanceKind kind, string details) : base(entityID)
         {
             SurvivorID = survivorID;
             Kind = kind;
