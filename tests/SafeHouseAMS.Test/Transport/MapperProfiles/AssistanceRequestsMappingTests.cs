@@ -87,6 +87,28 @@ public class AssistanceRequestsMappingTests
             result.Should().BeEquivalentTo(src);
         }).QuickCheckThrowOnFailure();
     }
+
+    [Property]
+    public void AssistanceRequestCommand_OnRoundTripMapping_DoesNotChanges()
+    {
+        Arb.Register<NotNullStringsGenerators>();
+
+        var commandsArb = Gen
+            .OneOf(Arb.From<CreateAssistanceRequest>().Generator.Select(x => x as AssistanceRequestCommand),
+                Arb.From<AttachAssistanceAct>().Generator.Select(x => x as AssistanceRequestCommand))
+            .ToArbitrary();
+
+        var mapper = BuildMapper();
+        Prop.ForAll(commandsArb, src =>
+        {
+            var dto =
+                mapper.Map<SafeHouseAMS.Transport.Protos.Models.AssistanceRequests.Commands.AssistanceRequestCommand>(src);
+            var result = mapper.Map<AssistanceRequestCommand>(dto);
+
+            result.Should().BeOfType(src.GetType());
+            result.Should().BeEquivalentTo(src, opt => opt.RespectingRuntimeTypes());
+        }).QuickCheckThrowOnFailure();
+    }
 }
 
 public class AssistanceActListGenerators

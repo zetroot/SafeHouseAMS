@@ -20,7 +20,7 @@ message AttachAssistanceAct{
   Decimal Money = 5;
 }
 
-message EpisodeCommand {
+message AssistanceRequestCommand {
   oneof Command {
     CreateAssistanceRequest CreateRequest = 1;
     AttachAssistanceAct AttachAct = 2;
