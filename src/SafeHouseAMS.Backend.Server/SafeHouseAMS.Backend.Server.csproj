@@ -14,6 +14,9 @@
         <Protobuf Update="..\SafeHouseAMS.Transport\Services\LifeSituationDocumentsCatalogue.proto">
           <Link>Services\LifeSituationDocumentsCatalogue.proto</Link>
         </Protobuf>
+        <Protobuf Update="..\SafeHouseAMS.Transport\Services\AssistanceRequestsCatalogue.proto">
+          <Link>Services\AssistanceRequestsCatalogue.proto</Link>
+        </Protobuf>
     </ItemGroup>
 
     <ItemGroup>

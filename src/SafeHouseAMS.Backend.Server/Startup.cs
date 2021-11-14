@@ -115,6 +115,7 @@ namespace SafeHouseAMS.Backend.Server
                 endpoints.MapGrpcService<SurvivorCatalogueService>().EnableGrpcWeb();
                 endpoints.MapGrpcService<LifeSituationDocumentsCatalogueService>().EnableGrpcWeb();
                 endpoints.MapGrpcService<EpisodesCatalogueService>().EnableGrpcWeb();
+                endpoints.MapGrpcService<AssistanceRequestsCatalogueService>().EnableGrpcWeb();
 
                 endpoints.MapGet("/", async context =>
                 {
