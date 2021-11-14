@@ -9,19 +9,6 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
     public class SurvivorTests
     {
         [Fact, UnitTest]
-        public void Ctor_WhenNameIsNull_Throws() =>
-            Assert.Throws<ArgumentNullException>(() => new Survivor(default,
-                default,
-                default,
-                default,
-                null!,
-                default,
-                default,
-                default,
-                default,
-                default));
-
-        [Fact, UnitTest]
         public void Ctor_Always_SetsProps()
         {
             //arrange
@@ -34,10 +21,10 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
             const string otherSex = "OTHER";
             var dobAccurate = new DateTime(1970, 04, 12, 0, 0, 0);
             var dobCalc = new DateTime(1990, 12, 27, 0, 0, 0);
-            
+
             //act
             var sut = new Survivor(id, false, createdAt, lastEdit, name, num, sex, otherSex, dobAccurate, dobCalc);
-            
+
             //assert
             sut.ID.Should().Be(id);
             sut.IsDeleted.Should().BeFalse();
@@ -65,7 +52,7 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
                 "name", 42,
                 sex, otherSex,
                 default,default);
-            
+
             //assert
             sut.SexDisplay.Should().Be(displaySex);
         }
@@ -78,11 +65,11 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
                 "name", 42,
                 SexEnum.Female, null,
                 new (),null);
-            
+
             //assert
             sut.Age.Should().NotBeNull();
         }
-        
+
         [Fact, UnitTest]
         public void Age_WhenCalculatedDobIsNotNull_NotNull()
         {
@@ -91,11 +78,11 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
                 "name", 42,
                 SexEnum.Female, null,
                 null,new());
-            
+
             //assert
             sut.Age.Should().NotBeNull();
         }
-        
+
         [Fact, UnitTest]
         public void Age_WhenAllDobsAreNull_IsNull()
         {
@@ -104,7 +91,7 @@ namespace SafeHouseAMS.Test.BizLayer.Survivors
                 "name", 42,
                 SexEnum.Female, null,
                 null,null);
-            
+
             //assert
             sut.Age.Should().BeNull();
         }

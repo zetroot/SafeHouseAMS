@@ -1,5 +1,7 @@
 ﻿@page "/SurvivorDetails/{SurvivorID}"
 @using System.Threading
+@using EnumDescriber
+@using SafeHouseAMS.BizLayer.AssistanceRequests
 @using SafeHouseAMS.BizLayer.ExploitationEpisodes
 @using SafeHouseAMS.BizLayer.LifeSituations
 @using SafeHouseAMS.BizLayer.LifeSituations.Commands
@@ -12,6 +14,7 @@
 @inject ISurvivorCatalogue _survivorCatalogue;
 @inject ILifeSituationDocumentsAggregate _documentsAggregate;
 @inject IEpisodesCatalogue _episodesAggregate;
+@inject IAssistanceRequestAggregate _requestAggregate;
 @inject NavigationManager _navigationManager;
 @inject ILogger<SurvivorDetails> _logger;
 @inject NotificationService _notificationService;
@@ -160,6 +163,36 @@
             }
         </RadzenFieldset>
     }
+
+    <RadzenFieldset Text="Запросы помощи">
+        <div class="row">
+            <div class="col">
+                <RadzenButton Icon="add_circle_outline" Click="@(() => _navigationManager.NavigateTo($"/CreateRequest/{SurvivorID}"))"/>
+            </div>
+        </div>
+        @if (!_requests.Any())
+        {
+            <RadzenLabel Text="У пострадавшего нет запросов помощи"/>
+        }
+        else
+        {
+            @foreach (var request in _requests)
+            {
+                <div class="row" style="margin-top: 5px">
+                    <div class="col-md-2">
+                        <RadzenLabel Text="@request.Created.ToString("G")"/>
+                    </div>
+                    <div class="col-md-4">
+                        <RadzenLabel Text="@request.AssistanceKind.GetDescription()"/>
+                    </div>
+                    <div class="col-md-4">
+                        <RadzenLabel Text="Работ выполнено: "/>
+                        <RadzenLabel Text="@request.AssistanceActs.Count.ToString()"/>
+                    </div>
+                </div>
+            }
+        }
+    </RadzenFieldset>
 </div>
 
 @code {
@@ -170,6 +203,7 @@
     private List<LifeSituationDocument> _documents = new();
     private List<Episode> _episodes = new();
     private SurvivorStateReport? _report;
+    private List<AssistanceRequest> _requests = new();
 
     private async Task DeleteDocumentAction(Guid documentId)
     {
@@ -205,6 +239,13 @@
             {
                 _logger.LogInformation("Got document {DocumentCounter}", ++docCnt);
                 _documents.Add(doc);
+            }
+
+            var reqCnt = 0;
+            await foreach (var request in _requestAggregate.GetAllBySurvivor(surId, CancellationToken.None))
+            {
+                _logger.LogInformation("Got request {RequestsCounter}", ++reqCnt);
+                _requests.Add(request);
             }
         }
         await base.OnParametersSetAsync();

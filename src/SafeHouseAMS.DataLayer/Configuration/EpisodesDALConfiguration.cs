@@ -4,17 +4,13 @@ using SafeHouseAMS.DataLayer.Models.ExploitationEpisodes;
 
 namespace SafeHouseAMS.DataLayer.Configuration
 {
-    internal class EpisodesDALConfiguration : IEntityTypeConfiguration<EpisodeDAL>
+    internal class EpisodesDALConfiguration : BaseDalEntityConfiguration<EpisodeDAL>
     {
 
-        public void Configure(EntityTypeBuilder<EpisodeDAL> builder)
+        public override void Configure(EntityTypeBuilder<EpisodeDAL> builder)
         {
+            base.Configure(builder);
             builder.ToTable("Episodes").HasComment("Эпизоды эксплуатации");
-
-            builder.Property(x => x.ID).HasComment("Идентификатор записи");
-            builder.Property(x => x.IsDeleted).HasComment("Признак удаленной записи");
-            builder.Property(x => x.Created).HasComment("Дата создания");
-            builder.Property(x => x.LastEdit).HasComment("Дата последнего редактирования");
 
             builder.Property(x => x.SurvivorID).HasComment("Идентификатор пострадавшего");
             builder.Property(x => x.Involvement).HasComment("Обращение по причине вовлечения");
@@ -47,9 +43,6 @@ namespace SafeHouseAMS.DataLayer.Configuration
                 .WithMany()
                 .HasForeignKey(x => x.SurvivorID)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasKey(x => x.ID);
-            builder.HasIndex(x => x.IsDeleted);
         }
     }
 }

@@ -1,0 +1,7 @@
+syntax = "proto3";
+package safehouse.ams;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.Common";
+
+message Decimal {
+  repeated int32 bits = 1;
+}

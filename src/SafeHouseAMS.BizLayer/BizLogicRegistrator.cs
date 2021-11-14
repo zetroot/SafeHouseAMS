@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SafeHouseAMS.BizLayer.AssistanceRequests;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
@@ -27,6 +28,7 @@ namespace SafeHouseAMS.BizLayer
             services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogue>();
             services.TryAddTransient<ILifeSituationDocumentsAggregate, LifeSituationDocumentsAggregate>();
             services.TryAddTransient<IEpisodesCatalogue, EpisodesCatalogue>();
+            services.TryAddTransient<IAssistanceRequestAggregate, AssistanceRequestAggregate>();
             return services;
         }
     }

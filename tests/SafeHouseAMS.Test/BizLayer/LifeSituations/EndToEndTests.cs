@@ -3,11 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.LifeSituations.Commands;
-using SafeHouseAMS.DataLayer;
 using SafeHouseAMS.DataLayer.Models.LifeSituations;
 using SafeHouseAMS.DataLayer.Repositories;
 using Xunit;
@@ -23,25 +20,11 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
             return new Mapper(cfg);
         }
 
-        private DataContext CreateInMemoryDatabase()
-        {
-            var connection = new SqliteConnection("Filename=:memory:");
-            connection.Open();
-            var dbctxOptsBuilder = new DbContextOptionsBuilder()
-                .UseLazyLoadingProxies()
-                .UseSqlite(connection, opt =>
-                    opt.MigrationsAssembly(typeof(DataContext).Assembly.FullName));
-            var ctx = new DataContext(dbctxOptsBuilder.Options);
-            ctx.Database.EnsureDeleted();
-            ctx.Database.EnsureCreated();
-            return ctx;
-        }
-
         [Fact, IntegrationTest]
         public async Task DeleteCommand_WhenApplied_MakesDocumentInvisibleToGetSingle()
         {
             //arrange
-            var dbContext = CreateInMemoryDatabase();
+            var dbContext = TestHelper.CreateInMemoryDatabase();
             var repo = new LifeSituationDocumentsRepository(dbContext, CreateMapper());
             var bizLogic = new LifeSituationDocumentsAggregate(repo);
 
@@ -67,7 +50,7 @@ namespace SafeHouseAMS.Test.BizLayer.LifeSituations
         public async Task DeleteCommand_WhenApplied_MakesDocumentInvisibleToGetAllBySurvivor()
         {
             //arrange
-            var dbContext = CreateInMemoryDatabase();
+            var dbContext = TestHelper.CreateInMemoryDatabase();
             var repo = new LifeSituationDocumentsRepository(dbContext, CreateMapper());
             var bizLogic = new LifeSituationDocumentsAggregate(repo);
 

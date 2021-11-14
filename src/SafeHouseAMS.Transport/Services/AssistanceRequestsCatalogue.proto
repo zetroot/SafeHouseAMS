@@ -1,0 +1,15 @@
+syntax = "proto3";
+package safehouse.ams.services;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Services";
+
+import "Models/Common/UUID.proto";
+import "google/protobuf/empty.proto";
+import "Models/AssistanceRequests/AssistanceRequest.proto";
+import "Models/AssistanceRequests/AssistanceRequestCommands.proto";
+
+service AssistanceRequestCatalogue {
+  rpc GetSingle (UUID) returns (models.AssistanceRequest);
+  rpc ApplyCommand (models.AssistanceRequestCommand) returns (google.protobuf.Empty);
+
+  rpc GetAllBySurvivor (UUID) returns (stream models.AssistanceRequest);
+}

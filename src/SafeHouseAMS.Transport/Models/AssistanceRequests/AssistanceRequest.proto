@@ -1,0 +1,31 @@
+syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.AssistanceRequests";
+
+import "Models/Common/UUID.proto";
+import "Models/Common/Decimal.proto";
+import "Models/Survivors/Survivor.proto";
+import "google/protobuf/timestamp.proto";
+
+message AssistanceRequest {
+  safehouse.ams.UUID ID = 1;
+  bool IsDeleted = 2;
+  google.protobuf.Timestamp Created = 3;
+  google.protobuf.Timestamp LastEdit = 4;
+
+  Survivor Survivor = 5;
+  int32 AssistanceKind = 6;
+  string Details = 7;
+  bool IsAccomplished = 8;
+  repeated AssistanceAct AssistanceActs = 9;
+}
+
+message AssistanceAct {
+  safehouse.ams.UUID ID = 1;
+  bool IsDeleted = 2;
+  google.protobuf.Timestamp Created = 3;
+  google.protobuf.Timestamp LastEdit = 4;
+  string Details = 5;
+  safehouse.ams.Decimal WorkHours = 6;
+  safehouse.ams.Decimal Money = 7;
+}

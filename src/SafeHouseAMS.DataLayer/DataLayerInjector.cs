@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using SafeHouseAMS.BizLayer.AssistanceRequests;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
@@ -25,23 +26,24 @@ namespace SafeHouseAMS.DataLayer
         {
             if (services is null) throw new ArgumentNullException(nameof(services));
             if (configuration is null) throw new ArgumentNullException(nameof(configuration));
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-            var inmemoryConncetionString = configuration.GetConnectionString("inMemory");
+            var inMemoryConnectionString = configuration.GetConnectionString("inMemory");
 
-            if (!string.IsNullOrWhiteSpace(inmemoryConncetionString))
+            if (!string.IsNullOrWhiteSpace(inMemoryConnectionString))
             {
                 services.AddDbContext<DataContext>(opt =>
                     opt
                         .UseLazyLoadingProxies()
                         .EnableSensitiveDataLogging()
-                        .UseInMemoryDatabase(inmemoryConncetionString),
+                        .UseInMemoryDatabase(inMemoryConnectionString),
                 ServiceLifetime.Singleton,
                 ServiceLifetime.Singleton);
 
                 services.AddScoped<IDatabaseMigrator, DataContext>(_ =>
                 {
                     var optionsBuilder = new DbContextOptionsBuilder();
-                    optionsBuilder.EnableSensitiveDataLogging().UseInMemoryDatabase(inmemoryConncetionString);
+                    optionsBuilder.EnableSensitiveDataLogging().UseInMemoryDatabase(inMemoryConnectionString);
                     return new DataContext(optionsBuilder.Options);
                 });
             }
@@ -63,6 +65,7 @@ namespace SafeHouseAMS.DataLayer
             services.TryAddScoped<ISurvivorRepository, SurvivorsRepository>();
             services.TryAddScoped<ILifeSituationDocumentsRepository, LifeSituationDocumentsRepository>();
             services.TryAddScoped<IEpisodesRepository, EpisodesRepository>();
+            services.TryAddScoped<IAssistanceRequestsRepository, AssistanceRequestsRepository>();
             return services;
         }
     }

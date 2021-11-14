@@ -9,34 +9,14 @@ namespace SafeHouseAMS.BizLayer.LifeSituations.Documents
     /// Документ обновляющий сразу коллекцию записей
     /// </summary>
     /// <typeparam name="T">тип записи</typeparam>
-    public class MultiRecordsUpdate<T> : LifeSituationDocument
-    {
-        /// <summary>
-        /// добавленные записи
-        /// </summary>
-        public IReadOnlyCollection<T> Records { get; }
-
-        /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name="id">идентификатор записи</param>
-        /// <param name="isDeleted">признак удалённой записи</param>
-        /// <param name="created">дата создания записи</param>
-        /// <param name="lastEdit">дата последнего изменения записи</param>
-        /// <param name="documentDate">дата документа</param>
-        /// <param name="survivor">пострадавший, к которому относится этот документ</param>
-        /// <param name="records">собственно запись обновляемая в документе</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public MultiRecordsUpdate(Guid id,
-            bool isDeleted,
-            DateTime created,
-            DateTime lastEdit,
-            DateTime documentDate,
-            Survivor survivor,
-            IEnumerable<T> records) :
-            base(id, isDeleted, created, lastEdit, documentDate, survivor)
-        {
-            Records = records.ToList() ?? throw new ArgumentNullException(nameof(records));
-        }
-    }
+    /// <param name="ID">идентификатор записи</param>
+    /// <param name="IsDeleted">признак удалённой записи</param>
+    /// <param name="Created">дата создания записи</param>
+    /// <param name="LastEdit">дата последнего изменения записи</param>
+    /// <param name="DocumentDate">дата документа</param>
+    /// <param name="Survivor">пострадавший, к которому относится этот документ</param>
+    /// <param name="Records">собственно запись обновляемая в документе</param>
+    public record MultiRecordsUpdate<T>(Guid ID, bool IsDeleted, DateTime Created, DateTime LastEdit,
+        DateTime DocumentDate, Survivor Survivor, IReadOnlyCollection<T> Records) :
+        LifeSituationDocument(ID, IsDeleted, Created, LastEdit, DocumentDate, Survivor);
 }

@@ -18,8 +18,114 @@ namespace SafeHouseAMS.DataLayer.Migrations
             modelBuilder
                 .HasDefaultSchema("public")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.10")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.AssistanceRequests.AssistanceActDAL", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasComment("Идентификатор записи");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone")
+                        .HasComment("Дата создания");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Дополнительная информация по этому акту помощи");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasComment("Признак удаленной записи");
+
+                    b.Property<DateTime>("LastEdit")
+                        .HasColumnType("timestamp without time zone")
+                        .HasComment("Дата последнего редактирования");
+
+                    b.Property<decimal>("Money")
+                        .HasColumnType("numeric")
+                        .HasComment("Потрачено денег");
+
+                    b.Property<Guid>("RequestID")
+                        .HasColumnType("uuid")
+                        .HasComment("Идентификатор запроса помощи");
+
+                    b.Property<decimal>("WorkHours")
+                        .HasColumnType("numeric")
+                        .HasComment("Потрачено часов");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Created");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LastEdit");
+
+                    b.HasIndex("RequestID");
+
+                    b.ToTable("AssistanceActs");
+
+                    b
+                        .HasComment("Акты оказания помощи");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.AssistanceRequests.AssistanceRequestDAL", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasComment("Идентификатор записи");
+
+                    b.Property<int>("AssistanceKind")
+                        .HasColumnType("integer")
+                        .HasComment("Тип запрашиваемой помощи");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone")
+                        .HasComment("Дата создания");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasComment("Дополнительная информация по запросу");
+
+                    b.Property<bool>("IsAccomplished")
+                        .HasColumnType("boolean")
+                        .HasComment("Признак выполненного запроса");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasComment("Признак удаленной записи");
+
+                    b.Property<DateTime>("LastEdit")
+                        .HasColumnType("timestamp without time zone")
+                        .HasComment("Дата последнего редактирования");
+
+                    b.Property<Guid>("SurvivorID")
+                        .HasColumnType("uuid")
+                        .HasComment("Идентификатор пострадавшего");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("Created");
+
+                    b.HasIndex("IsAccomplished");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LastEdit");
+
+                    b.HasIndex("SurvivorID");
+
+                    b.ToTable("AssistanceRequests");
+
+                    b
+                        .HasComment("Запросы помощи");
+                });
 
             modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.ExploitationEpisodes.EpisodeDAL", b =>
                 {
@@ -145,7 +251,11 @@ namespace SafeHouseAMS.DataLayer.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("Created");
+
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LastEdit");
 
                     b.HasIndex("SurvivorID");
 
@@ -192,11 +302,11 @@ namespace SafeHouseAMS.DataLayer.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasComment("Идентификатор записи - ПК");
+                        .HasComment("Идентификатор записи");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone")
-                        .HasComment("Дата-время создания записи");
+                        .HasComment("Дата создания");
 
                     b.Property<DateTime>("DocumentDate")
                         .HasColumnType("timestamp without time zone")
@@ -208,11 +318,11 @@ namespace SafeHouseAMS.DataLayer.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
-                        .HasComment("Признак удалённой записи");
+                        .HasComment("Признак удаленной записи");
 
                     b.Property<DateTime>("LastEdit")
                         .HasColumnType("timestamp without time zone")
-                        .HasComment("Дата-время последнего редактирования записи");
+                        .HasComment("Дата последнего редактирования");
 
                     b.Property<Guid>("SurvivorID")
                         .HasColumnType("uuid")
@@ -285,6 +395,12 @@ namespace SafeHouseAMS.DataLayer.Migrations
                         .HasComment("Пол");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("Created");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LastEdit");
 
                     b.ToTable("Survivors");
 
@@ -479,6 +595,28 @@ namespace SafeHouseAMS.DataLayer.Migrations
                     b.HasDiscriminator().HasValue("SpecialitiesUpdate");
                 });
 
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.AssistanceRequests.AssistanceActDAL", b =>
+                {
+                    b.HasOne("SafeHouseAMS.DataLayer.Models.AssistanceRequests.AssistanceRequestDAL", "Request")
+                        .WithMany("AssistanceActs")
+                        .HasForeignKey("RequestID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Request");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.AssistanceRequests.AssistanceRequestDAL", b =>
+                {
+                    b.HasOne("SafeHouseAMS.DataLayer.Models.Survivors.SurvivorDAL", "Survivor")
+                        .WithMany()
+                        .HasForeignKey("SurvivorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Survivor");
+                });
+
             modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.ExploitationEpisodes.EpisodeDAL", b =>
                 {
                     b.HasOne("SafeHouseAMS.DataLayer.Models.Survivors.SurvivorDAL", "Survivor")
@@ -510,6 +648,11 @@ namespace SafeHouseAMS.DataLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Survivor");
+                });
+
+            modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.AssistanceRequests.AssistanceRequestDAL", b =>
+                {
+                    b.Navigation("AssistanceActs");
                 });
 
             modelBuilder.Entity("SafeHouseAMS.DataLayer.Models.LifeSituations.LifeSituationDocumentDAL", b =>

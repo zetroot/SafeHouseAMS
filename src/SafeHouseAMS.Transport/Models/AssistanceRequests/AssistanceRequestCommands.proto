@@ -1,0 +1,28 @@
+syntax = "proto3";
+package safehouse.ams.models;
+option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.AssistanceRequests.Commands";
+
+import "Models/Common/UUID.proto";
+import "Models/Common/Decimal.proto";
+
+message CreateAssistanceRequest{
+  UUID EntityID = 1;
+  UUID SurvivorID = 2;
+  int32 Kind = 3;
+  string Details = 4;
+}
+
+message AttachAssistanceAct{
+  UUID EntityID = 1;
+  UUID ActID = 2;
+  string Details = 3;
+  Decimal WorkHours = 4;
+  Decimal Money = 5;
+}
+
+message AssistanceRequestCommand {
+  oneof Command {
+    CreateAssistanceRequest CreateRequest = 1;
+    AttachAssistanceAct AttachAct = 2;
+  }
+}

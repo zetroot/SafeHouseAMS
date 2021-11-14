@@ -5,28 +5,21 @@ namespace SafeHouseAMS.BizLayer.Survivors
     /// <summary>
     /// Карточка пострадавшего
     /// </summary>
-    public class Survivor : BaseDomainModel
+    /// <param name="ID">Идентификатор записи</param>
+    /// <param name="IsDeleted">Признак удаленной записи</param>
+    /// <param name="Created">Дата-время создания</param>
+    /// <param name="LastEdit">Дата время последнего редактирования</param>
+    /// <param name="Name">Имя пострадавшего</param>
+    /// <param name="Num">Номер карточки</param>
+    /// <param name="Sex">Пол</param>
+    /// <param name="OtherSex">Уточнение другого пола</param>
+    /// <param name="BirthDateAccurate">Точная дата рождения, если известно</param>
+    /// <param name="BirthDateCalculated">Приблизительная дата рождения</param>
+    public record Survivor(Guid ID, bool IsDeleted, DateTime Created, DateTime LastEdit,
+        string Name, int Num, SexEnum Sex, string? OtherSex,
+        DateTime? BirthDateAccurate, DateTime? BirthDateCalculated) :
+        BaseDomainModel(ID, IsDeleted, Created, LastEdit)
     {
-        /// <summary>
-        /// Номер карточки п/п
-        /// </summary>
-        public int Num { get; }
-
-        /// <summary>
-        /// Имя пострадавшего
-        /// </summary>
-        public string Name { get; }
-
-        /// <summary>
-        /// Пол
-        /// </summary>
-        public SexEnum Sex { get; }
-
-        /// <summary>
-        /// Уточнение другого пола
-        /// </summary>
-        public string? OtherSex { get; }
-
         /// <summary>
         /// Пол для отображения
         /// </summary>
@@ -38,22 +31,11 @@ namespace SafeHouseAMS.BizLayer.Survivors
         };
 
         /// <summary>
-        /// Точная дата рождения - если известна
-        /// </summary>
-        public DateTime? BirthDateAccurate { get; }
-
-        /// <summary>
-        /// Вычисленная (приблизительная) дата рождения. Если неизвестна точная
-        /// </summary>
-        public DateTime? BirthDateCalculated { get; }
-
-        /// <summary>
         /// Возраст
         /// </summary>
         public int? Age =>
             BirthDateAccurate.HasValue ? CalcTodayAge(BirthDateAccurate.Value) :
             BirthDateCalculated.HasValue ? CalcTodayAge(BirthDateCalculated.Value) : null;
-
 
         private static int CalcTodayAge(DateTime dob)
         {
@@ -66,37 +48,5 @@ namespace SafeHouseAMS.BizLayer.Survivors
             return age;
         }
 
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        /// <param name="id">Идентификатор записи</param>
-        /// <param name="isDeleted">Признак удаленной записи</param>
-        /// <param name="created">Дата-время создания</param>
-        /// <param name="lastEdit">Дата время последнего редактирования</param>
-        /// <param name="name">Имя пострадавшего</param>
-        /// <param name="num">Номер карточки</param>
-        /// <param name="sex">Пол</param>
-        /// <param name="otherSex">Уточнение другого пола</param>
-        /// <param name="birthDateAccurate">Точная дата рождения, если известно</param>
-        /// <param name="birthDateCalculated">Приблизительная дата рождения</param>
-        public Survivor(Guid id,
-            bool isDeleted,
-            DateTime created,
-            DateTime lastEdit,
-            string name,
-            int num,
-            SexEnum sex,
-            string? otherSex,
-            DateTime? birthDateAccurate,
-            DateTime? birthDateCalculated) :
-            base(id, isDeleted, created, lastEdit)
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Num = num;
-            Sex = sex;
-            OtherSex = otherSex;
-            BirthDateAccurate = birthDateAccurate;
-            BirthDateCalculated = birthDateCalculated;
-        }
     }
 }
