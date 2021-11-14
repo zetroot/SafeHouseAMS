@@ -1,0 +1,115 @@
+@page "/CreateRequest/{SurvivorID}"
+@using SafeHouseAMS.BizLayer.Survivors
+@using SafeHouseAMS.BizLayer.AssistanceRequests
+@using System.Threading
+@using EnumDescriber
+@using SafeHouseAMS.BizLayer.AssistanceRequests.Commands
+@inject ISurvivorCatalogue _survivorCatalogue;
+@inject IAssistanceRequestAggregate _assistanceRequestAggregate;
+@inject ILogger<CreateRequest> _logger;
+@inject NavigationManager _navigation;
+@inject NotificationService _notification;
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h3>Добавить запросы помощи</h3>
+        </div>
+    </div>
+    @if (_survivor is null)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <RadzenLabel Text="Пострадавший не найден по ID"/>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        @foreach (var request in RequestPrototypes)
+        {
+            <div class="row">
+                <div class="col-4">
+                    <RadzenCheckBox TValue="bool" @bind-Value="@request.IsSelected"/>
+                    <RadzenLabel Text="@request.Title"/>
+                </div>
+                <div class="col-8">
+                    <RadzenTextArea @bind-Value="@request.Details" Rows="3" Visible="@request.IsSelected"/>
+                </div>
+            </div>
+        }
+        <div class="row justify-content-center">
+            <div class="col-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                <RadzenButton ButtonType="ButtonType.Submit" Text="Добавить" Click="CreateCommands"/>
+                <RadzenButton ButtonType="ButtonType.Reset" Text="Отмена" Click="CancelCreation"/>
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+    [Parameter] public string? SurvivorID { get; set; }
+    private Survivor? _survivor;
+
+    private class RequestVM
+    {
+        public string Title { get; }
+        public AssistanceKind Kind { get; }
+        public bool IsSelected { get; set; }
+        public string Details { get; set; } = string.Empty;
+
+        public RequestVM(AssistanceKind kind)
+        {
+            Kind = kind;
+            Title = kind.GetDescription();
+        }
+
+        public CreateAssistanceRequest ToCommand(Guid survivorId) => IsSelected switch
+            {
+                true => new(Guid.NewGuid(), survivorId, Kind, Details),
+                _ => throw new InvalidOperationException(),
+            };
+    }
+
+    private readonly IReadOnlyList<RequestVM> RequestPrototypes = Enum.GetValues<AssistanceKind>().Select(x => new RequestVM(x)).ToList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (!Guid.TryParse(SurvivorID, out var surId))
+        {
+            _notification.Notify(NotificationSeverity.Error, "Невалидный идентификатор", $"Строка '{SurvivorID}' не является валидным GUID");
+            _logger.LogError("Invalid guid passed = '{Parameter}', cant look for survivor", SurvivorID);
+            return;
+        }
+        _survivor = await _survivorCatalogue.GetSingleAsync(surId, CancellationToken.None);
+
+        if (_survivor is not null)
+        {
+            _logger.LogInformation("Survivor found!");
+            return;
+        }
+
+        _notification.Notify(NotificationSeverity.Error, "Не найден пострадавший", $"Пострадавший с идентификатором '{surId}' не найден в БД");
+        _logger.LogError("No survivor for ID = '{SurvivorId}' found", surId);
+    }
+    private async Task CreateCommands()
+    {
+        if (_survivor is null) return;
+        var commands = RequestPrototypes.Where(x => x.IsSelected).Select(x => x.ToCommand(_survivor.ID)).ToList();
+        foreach (var command in commands)
+        {
+            await _assistanceRequestAggregate.ApplyCommand(command, CancellationToken.None);
+            _logger.LogInformation("Applied command {@Command}", command);
+        }
+        _notification.Notify(NotificationSeverity.Success, "Успешно завершено", $"Успешно создано {commands.Count} записей");
+        _navigation.NavigateTo($"/SurvivorDetails/{SurvivorID}");
+    }
+    private void CancelCreation()
+    {
+        _navigation.NavigateTo($"/SurvivorDetails/{SurvivorID}");
+    }
+}
