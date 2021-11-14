@@ -42,8 +42,8 @@
         }
         <div class="row justify-content-center">
             <div class="col-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
-                <RadzenButton ButtonType="ButtonType.Submit" Text="Добавить" Click="CreateCommands"/>
-                <RadzenButton ButtonType="ButtonType.Reset" Text="Отмена" Click="CancelCreation"/>
+                <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Text="Добавить" Style="margin: 5px" Click="CreateCommands"/>
+                <RadzenButton ButtonType="ButtonType.Reset" Text="Отмена" Style="margin: 5px" Click="CancelCreation"/>
             </div>
         </div>
     }
@@ -74,7 +74,10 @@
             };
     }
 
-    private readonly IReadOnlyList<RequestVM> RequestPrototypes = Enum.GetValues<AssistanceKind>().Select(x => new RequestVM(x)).ToList();
+    private readonly IReadOnlyList<RequestVM> RequestPrototypes = Enum.GetValues<AssistanceKind>()
+        .Where(x => x != AssistanceKind.Undefined)
+        .Select(x => new RequestVM(x))
+        .ToList();
 
     protected override async Task OnInitializedAsync()
     {

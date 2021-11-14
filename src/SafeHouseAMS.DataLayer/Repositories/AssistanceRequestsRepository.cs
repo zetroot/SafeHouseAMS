@@ -56,7 +56,9 @@ internal class AssistanceRequestsRepository : IAssistanceRequestsRepository
         var items = _context.AssistanceRequests
             .Include(x => x.Survivor)
             .Include(x => x.AssistanceActs)
-            .Where(x => !x.IsDeleted && x.SurvivorID == survivorId).AsAsyncEnumerable();
+            .Where(x => !x.IsDeleted && x.SurvivorID == survivorId)
+            .OrderByDescending(x => x.Created)
+            .AsAsyncEnumerable();
 
         await foreach (var item in items.WithCancellation(cancellationToken))
             yield return _mapper.Map<AssistanceRequest>(item);
