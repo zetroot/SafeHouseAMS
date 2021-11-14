@@ -1,5 +1,6 @@
 using AutoMapper;
 using SafeHouseAMS.BizLayer.AssistanceRequests;
+using SafeHouseAMS.BizLayer.AssistanceRequests.Commands;
 
 namespace SafeHouseAMS.Transport.MapperProfiles;
 
@@ -9,7 +10,28 @@ internal class AssistanceRequestsMappingProfile : Profile
     {
         MapActs();
         MapRequests();
+        MapCreateCommand();
+        MapAttachActCommand();
+        MapCommands();
     }
+
+    private void MapCommands()
+    {
+
+    }
+
+    private void MapAttachActCommand()
+    {
+        CreateMap<AttachAssistanceAct, Protos.Models.AssistanceRequests.Commands.AttachAssistanceAct>()
+            .ReverseMap();
+    }
+
+    private void MapCreateCommand()
+    {
+        CreateMap<CreateAssistanceRequest, Protos.Models.AssistanceRequests.Commands.CreateAssistanceRequest>()
+            .ReverseMap();
+    }
+
     private void MapRequests()
     {
         CreateMap<AssistanceRequest, Protos.Models.AssistanceRequests.AssistanceRequest>();

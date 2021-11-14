@@ -5,6 +5,7 @@ using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
 using SafeHouseAMS.BizLayer.AssistanceRequests;
+using SafeHouseAMS.BizLayer.AssistanceRequests.Commands;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
 using SafeHouseAMS.Transport.MapperProfiles;
 
@@ -52,6 +53,38 @@ public class AssistanceRequestsMappingTests
 
             result.Should()
                 .BeEquivalentTo(src, opts => opts.IncludingProperties());
+        }).QuickCheckThrowOnFailure();
+    }
+
+    [Property]
+    public void CreateEpisode_OnRoundTripMapping_DoesNotChanges()
+    {
+        Arb.Register<NotNullStringsGenerators>();
+
+        var mapper = BuildMapper();
+        Prop.ForAll<CreateAssistanceRequest>(src =>
+        {
+            var dto =
+                mapper.Map<SafeHouseAMS.Transport.Protos.Models.AssistanceRequests.Commands.CreateAssistanceRequest>(src);
+            var result = mapper.Map<CreateAssistanceRequest>(dto);
+
+            result.Should().BeEquivalentTo(src);
+        }).QuickCheckThrowOnFailure();
+    }
+
+    [Property]
+    public void AttachAct_OnRoundTripMapping_DoesNotChanges()
+    {
+        Arb.Register<NotNullStringsGenerators>();
+
+        var mapper = BuildMapper();
+        Prop.ForAll<AttachAssistanceAct>(src =>
+        {
+            var dto =
+                mapper.Map<SafeHouseAMS.Transport.Protos.Models.AssistanceRequests.Commands.AttachAssistanceAct>(src);
+            var result = mapper.Map<AttachAssistanceAct>(dto);
+
+            result.Should().BeEquivalentTo(src);
         }).QuickCheckThrowOnFailure();
     }
 }
