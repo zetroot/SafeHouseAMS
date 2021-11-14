@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Radzen;
+using SafeHouseAMS.BizLayer.AssistanceRequests;
 using SafeHouseAMS.BizLayer.ExploitationEpisodes;
 using SafeHouseAMS.BizLayer.LifeSituations;
 using SafeHouseAMS.BizLayer.Survivors;
@@ -68,6 +69,7 @@ namespace SafeHouseAMS.WasmApp
             services.TryAddTransient<ISurvivorCatalogue, SurvivorCatalogueClient>();
             services.TryAddTransient<ILifeSituationDocumentsAggregate, LifeSituationDocumentsClient>();
             services.TryAddTransient<IEpisodesCatalogue, EpisodesCatalogueClient>();
+            services.TryAddTransient<IAssistanceRequestAggregate, AssistanceRequestsCatalogueClient>();
 
             services.AddScoped<DialogService>()
                 .AddScoped<NotificationService>()
@@ -81,7 +83,6 @@ namespace SafeHouseAMS.WasmApp
         /// </summary>
         /// <param name="builderLogging">Билдер логгера</param>
         /// <param name="builderConfiguration">Конфигурация</param>
-
         private static void ConfigureLogging(ILoggingBuilder builderLogging, [SuppressMessage("ReSharper", "UnusedParameter.Local")] IConfiguration builderConfiguration)
         {
             builderLogging.ClearProviders();
