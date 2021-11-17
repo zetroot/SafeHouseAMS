@@ -178,18 +178,20 @@
         {
             @foreach (var request in _requests)
             {
-                <div class="row" style="margin-top: 5px">
-                    <div class="col-md-2">
-                        <RadzenLabel Text="@request.Created.ToString("G")"/>
+                <a href="AssistanceRequest/@request.ID">
+                    <div class="row" style="margin-top: 5px">
+                        <div class="col-md-2">
+                            <RadzenLabel Text="@request.Created.ToString("G")"/>
+                        </div>
+                        <div class="col-md-4">
+                            <RadzenLabel Text="@request.AssistanceKind.GetDescription()"/>
+                        </div>
+                        <div class="col-md-4">
+                            <RadzenLabel Text="Работ выполнено: "/>
+                            <RadzenLabel Text="@request.AssistanceActs.Count.ToString()"/>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <RadzenLabel Text="@request.AssistanceKind.GetDescription()"/>
-                    </div>
-                    <div class="col-md-4">
-                        <RadzenLabel Text="Работ выполнено: "/>
-                        <RadzenLabel Text="@request.AssistanceActs.Count.ToString()"/>
-                    </div>
-                </div>
+                </a>
             }
         }
     </RadzenFieldset>
