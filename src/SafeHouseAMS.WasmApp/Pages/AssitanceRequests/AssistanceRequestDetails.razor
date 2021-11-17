@@ -1,0 +1,104 @@
+@page "/AssistanceRequest/{RequestID}"
+@using SafeHouseAMS.BizLayer.AssistanceRequests
+@using System.Threading
+@using EnumDescriber
+@inject IAssistanceRequestAggregate _requestClient;
+@inject ILogger<AssistanceRequestDetails> _logger;
+@inject NavigationManager _navigationManager;
+@inject NotificationService _notificationService;
+
+<div>
+    <div class="row">
+        <div class="col-12">
+            <h3>Запрос помощи</h3>
+        </div>
+    </div>
+    @if (_request is null)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    <RadzenLabel Text="Запрос не найден"/>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-3">
+                <RadzenFieldset Text="Пострадавший">
+                    <div class="row">
+                        <div class="col-12">
+                            <RadzenLabel Text="@SurvivorDisplay"/>
+                        </div>
+                    </div>
+                </RadzenFieldset>
+            </div>
+            <div class="col-9">
+                <RadzenFieldset Text="Запрос">
+                    <div class="row">
+                        <div class="col-12">
+                            <RadzenLabel Text="Тип: "/>
+                            <RadzenLabel Text="@_request.AssistanceKind.GetDescription()"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <RadzenLabel Text="Дополнительная информация: "/>
+                            <RadzenLabel Text="@_request.Details"/>
+                        </div>
+                    </div>
+                </RadzenFieldset>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <RadzenFieldset Text="Работы по этому запросу">
+                    @foreach (var act in _request.AssistanceActs.OrderByDescending(x => x.Created))
+                    {
+                        <div class="row">
+                            <div class="col-2">
+                                <RadzenLabel Text="@act.Created.ToString("g")"/>
+                            </div>
+                            <div class="col-6">
+                                <RadzenLabel Text="@act.Details"/>
+                            </div>
+                            <div class="col-2">
+                                <RadzenLabel Text="@act.WorkHours.ToString("F")"/>
+                                <RadzenLabel Text=" ч."/>
+                            </div>
+                            <div class="col-2">
+                                <RadzenLabel Text="@act.Money.ToString("C")"/>
+                            </div>
+                        </div>
+                    }
+                </RadzenFieldset>
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+    [Parameter] public string? RequestID { get; set; }
+    private AssistanceRequest? _request;
+
+    private string SurvivorDisplay => $"№{_request?.Survivor.Num} {_request?.Survivor.Name} ({_request?.Survivor.Age} л.)";
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        if (!Guid.TryParse(RequestID, out var requestId))
+        {
+            _logger.LogError("Parameter {ID} is not a valid GUID", requestId);
+            _notificationService.Notify(NotificationSeverity.Error, "Невалидный идентификатор", $"Переданный идентификатор '{RequestID}' не является валидным идентификатором");
+        }
+        _request = await _requestClient.GetSingleAsync(requestId, CancellationToken.None);
+        if (_request is null)
+        {
+            _logger.LogError("Request not found by id = {ID}", requestId);
+            _notificationService.Notify(NotificationSeverity.Warning, "Не найден запрос", $"Запрос с идентификатором '{requestId}' не найден");
+        }
+    }
+}
