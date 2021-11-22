@@ -1,0 +1,83 @@
+@page "/AssistanceRequest/{RequestID:guid}/CreateAct"
+@using SafeHouseAMS.BizLayer.AssistanceRequests
+@using System.Threading
+@using EnumDescriber
+@inject IAssistanceRequestAggregate _assistanceRequestAggregate;
+@inject ILogger<CreateAct> _logger;
+@inject NotificationService _notificationService;
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h3>Создание акта оказания помощи</h3>
+        </div>
+    </div>
+    @if (_request is null)
+    {
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    <RadzenLabel Text="Ошибка получения запроса по идентификатору"/>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12">
+                <RadzenFieldset Text="Детали запроса">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <RadzenLabel Text="@_request.AssistanceKind.GetDescription()"/>
+                        </div>
+                        <div class="col-md-3">
+                            <RadzenLabel Text="@_request.Details"/>
+                        </div>
+                        <div class="col-md-4">
+                            <RadzenLabel Text="@SurvivorDisplayText"/>
+                        </div>
+                    </div>
+                </RadzenFieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <RadzenLabel Text="Описание"/>
+                <RadzenTextArea @bind-Value="@actDetails" Style="width: 100%" Rows="5"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <RadzenLabel Text="Потрачено часов"/>
+                <RadzenTextBox />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <RadzenLabel Text="Затраты средств"/>
+                <RadzenTextBox />
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+@code {
+    [Parameter] public Guid RequestID { get; set; }
+    private AssistanceRequest? _request;
+    private string actDetails = string.Empty;
+    private string SurvivorDisplayText => $"{_request?.Survivor.Name} ({_request?.Survivor.Age}, {_request?.Survivor.SexDisplay})";
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        _request = await _assistanceRequestAggregate.GetSingleAsync(RequestID, CancellationToken.None);
+        if (_request is null)
+        {
+            _logger.LogError("Request with id={RequestId} not found", RequestID);
+            _notificationService.Notify(NotificationSeverity.Error, "Не найден запрос", $"Запрос по идентификатору {RequestID} не найден");
+        }
+    }
+}

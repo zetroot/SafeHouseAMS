@@ -56,6 +56,13 @@
         <div class="row">
             <div class="col-12">
                 <RadzenFieldset Text="Работы по этому запросу">
+                    <div class="row">
+                        <div class="col-12">
+                            <RadzenButton Click="@(() => _navigationManager.NavigateTo($"/AssistanceRequest/{_request.ID}/CreateAct"))">
+                                <RadzenIcon Icon="add_circle_outline"/>
+                            </RadzenButton>
+                        </div>
+                    </div>
                     @foreach (var act in _request.AssistanceActs.OrderByDescending(x => x.Created))
                     {
                         <div class="row">
