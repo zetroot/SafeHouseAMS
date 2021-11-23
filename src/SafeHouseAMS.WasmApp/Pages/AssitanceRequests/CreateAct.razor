@@ -2,9 +2,11 @@
 @using SafeHouseAMS.BizLayer.AssistanceRequests
 @using System.Threading
 @using EnumDescriber
+@using SafeHouseAMS.BizLayer.AssistanceRequests.Commands
 @inject IAssistanceRequestAggregate _assistanceRequestAggregate;
 @inject ILogger<CreateAct> _logger;
 @inject NotificationService _notificationService;
+@inject NavigationManager _navigationManager;
 
 <div class="container-fluid">
     <div class="row">
@@ -44,19 +46,25 @@
         <div class="row">
             <div class="col-8">
                 <RadzenLabel Text="Описание"/>
-                <RadzenTextArea @bind-Value="@actDetails" Style="width: 100%" Rows="5"/>
+                <RadzenTextArea @bind-Value="@_actDetails" Style="width: 100%" Rows="5"/>
             </div>
         </div>
         <div class="row">
             <div class="col-4">
                 <RadzenLabel Text="Потрачено часов"/>
-                <RadzenTextBox />
+                <RadzenNumeric TValue="decimal" Placeholder="Количество потраченных часов" @bind-Value="@_workHours" />
             </div>
         </div>
         <div class="row">
             <div class="col-4">
                 <RadzenLabel Text="Затраты средств"/>
-                <RadzenTextBox />
+                <RadzenNumeric TValue="decimal" Placeholder="В рублях" @bind-Value="@_money" />
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Text="Добавить" Style="margin: 5px" Click="CreateCommand"/>
+                <RadzenButton ButtonType="ButtonType.Reset" Text="Отмена" Style="margin: 5px" Click="CancelCreation"/>
             </div>
         </div>
     }
@@ -68,7 +76,10 @@
 @code {
     [Parameter] public Guid RequestID { get; set; }
     private AssistanceRequest? _request;
-    private string actDetails = string.Empty;
+    private string _actDetails = string.Empty;
+    private decimal _workHours = 0;
+    private decimal _money = 0;
+
     private string SurvivorDisplayText => $"{_request?.Survivor.Name} ({_request?.Survivor.Age}, {_request?.Survivor.SexDisplay})";
     protected override async Task OnParametersSetAsync()
     {
@@ -79,5 +90,27 @@
             _logger.LogError("Request with id={RequestId} not found", RequestID);
             _notificationService.Notify(NotificationSeverity.Error, "Не найден запрос", $"Запрос по идентификатору {RequestID} не найден");
         }
+    }
+
+    private async Task CreateCommand()
+    {
+        var cmd = new AttachAssistanceAct(RequestID, Guid.NewGuid(), _actDetails, _workHours, _money);
+        try
+        {
+            await _assistanceRequestAggregate.ApplyCommand(cmd, CancellationToken.None);
+            _notificationService.Notify(NotificationSeverity.Success, "Успешно сохранено");
+            _navigationManager.NavigateTo($"/AssistanceRequest/{RequestID}");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to create assistance act for request id = {AssistanceRequestID}", RequestID);
+            _notificationService.Notify(NotificationSeverity.Error, "Ошибка сохранения", e.Message);
+        }
+    }
+
+    private void CancelCreation()
+    {
+        _notificationService.Notify(NotificationSeverity.Info, "Добавление отменено");
+        _navigationManager.NavigateTo($"/AssistanceRequest/{RequestID}");
     }
 }
