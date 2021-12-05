@@ -15,7 +15,7 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.Property(x => x.AssistanceKind).HasComment("Тип запрашиваемой помощи");
             builder.Property(x => x.Details).HasComment("Дополнительная информация по запросу");
             builder.Property(x => x.IsAccomplished).HasComment("Признак выполненного запроса");
-            builder.Property(x => x.DocumentDate).HasComment("Дата запроса помощи");
+            builder.Property(x => x.DocumentDate).HasComment("Дата запроса помощи").HasDefaultValueSql("now()");
 
             builder.HasIndex(x => x.IsAccomplished);
             builder.HasIndex(x => x.DocumentDate);
@@ -37,11 +37,11 @@ namespace SafeHouseAMS.DataLayer.Configuration
             builder.Property(x => x.Details).HasComment("Дополнительная информация по этому акту помощи");
             builder.Property(x => x.WorkHours).HasComment("Потрачено часов");
             builder.Property(x => x.Money).HasComment("Потрачено денег");
-            builder.Property(x => x.DocumentDate).HasComment("Дата совершения акта помощи");
+            builder.Property(x => x.DocumentDate).HasComment("Дата совершения акта помощи").HasDefaultValueSql("now()");
 
             builder.HasIndex(x => x.DocumentDate);
 
-            builder.HasOne(x => x.Request).WithMany(x => x!.AssistanceActs).HasForeignKey(x => x.RequestID)
+            builder.HasOne(x => x.Request).WithMany(x => x.AssistanceActs).HasForeignKey(x => x.RequestID)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
         }
