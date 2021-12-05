@@ -45,6 +45,12 @@
         </div>
         <div class="row">
             <div class="col-8">
+                <RadzenLabel Text="Дата документа"/>
+                <RadzenDatePicker TValue="DateTime" ShowTime="true" HoursStep="1" MinutesStep="5" SecondsStep="10" @bind-Value="@_documentDate"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
                 <RadzenLabel Text="Описание"/>
                 <RadzenTextArea @bind-Value="@_actDetails" Style="width: 100%" Rows="5"/>
             </div>
@@ -79,6 +85,7 @@
     private string _actDetails = string.Empty;
     private decimal _workHours = 0;
     private decimal _money = 0;
+    private DateTime _documentDate = DateTime.Now;
 
     private string SurvivorDisplayText => $"{_request?.Survivor.Name} ({_request?.Survivor.Age}, {_request?.Survivor.SexDisplay})";
     protected override async Task OnParametersSetAsync()
@@ -94,7 +101,7 @@
 
     private async Task CreateCommand()
     {
-        var cmd = new AttachAssistanceAct(RequestID, Guid.NewGuid(), _actDetails, _workHours, _money);
+        var cmd = new AttachAssistanceAct(RequestID, Guid.NewGuid(), _actDetails, _workHours, _money, _documentDate);
         try
         {
             await _assistanceRequestAggregate.ApplyCommand(cmd, CancellationToken.None);

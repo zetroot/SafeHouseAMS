@@ -29,9 +29,10 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests
         /// <param name="assistanceKind">тип помощи</param>
         /// <param name="details">дополнительная информация о запросе</param>
         /// <param name="isAccomplished">выполнен ли запрос</param>
+        /// <param name="documentDate"></param>
         /// <returns></returns>
         Task CreateAssistanceRequest(Guid id, bool isDeleted, DateTime created, DateTime lastEdit,
-            Guid survivorId, AssistanceKind assistanceKind, string details, bool isAccomplished);
+            Guid survivorId, AssistanceKind assistanceKind, string details, bool isAccomplished, DateTime documentDate);
 
         /// <summary>
         /// получить все записи о заопросах о помощи по пострадавшему
@@ -52,8 +53,9 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests
         /// <param name="details">дополнительная информация по оказанной помощи</param>
         /// <param name="workHours">потрачено часов</param>
         /// <param name="money">потрачено денег</param>
+        /// <param name="documentDate"></param>
         /// <returns></returns>
         Task CreateAssistanceAct(Guid id, bool isDeleted, DateTime created, DateTime lastEdit,
-            Guid requestId, string details, decimal workHours, decimal money);
+            Guid requestId, string details, decimal workHours, decimal money, DateTime documentDate);
     }
 }

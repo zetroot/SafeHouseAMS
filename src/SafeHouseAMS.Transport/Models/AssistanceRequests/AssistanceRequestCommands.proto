@@ -4,12 +4,14 @@ option csharp_namespace = "SafeHouseAMS.Transport.Protos.Models.AssistanceReques
 
 import "Models/Common/UUID.proto";
 import "Models/Common/Decimal.proto";
+import "google/protobuf/timestamp.proto";
 
 message CreateAssistanceRequest{
   UUID EntityID = 1;
   UUID SurvivorID = 2;
   int32 Kind = 3;
   string Details = 4;
+  google.protobuf.Timestamp DocumentDate = 5;
 }
 
 message AttachAssistanceAct{
@@ -18,6 +20,7 @@ message AttachAssistanceAct{
   string Details = 3;
   Decimal WorkHours = 4;
   Decimal Money = 5;
+  google.protobuf.Timestamp DocumentDate = 6;
 }
 
 message AssistanceRequestCommand {

@@ -12,6 +12,7 @@ namespace SafeHouseAMS.DataLayer.Models.AssistanceRequests
         public string Details { get; set; } = string.Empty;
         public bool IsAccomplished { get; set; }
         public virtual ICollection<AssistanceActDAL>? AssistanceActs { get; set; }
+        public DateTime DocumentDate { get; set; }
     }
 
 }

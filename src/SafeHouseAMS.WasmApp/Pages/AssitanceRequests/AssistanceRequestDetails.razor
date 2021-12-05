@@ -41,14 +41,20 @@
                         <div class="col-12">
                             <RadzenLabel Text="Тип: "/>
                             <RadzenLabel Text="@_request.AssistanceKind.GetDescription()"/>
+                            <RadzenLabel Text="Дата: "/>
+                            <RadzenLabel Text="@_request.DocumentDate.ToString("f")"/>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <RadzenLabel Text="Дополнительная информация: "/>
-                            <RadzenLabel Text="@_request.Details"/>
+                    @if (!string.IsNullOrWhiteSpace(_request.Details))
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <RadzenLabel Text="Дополнительная информация: "/>
+                                <RadzenLabel Text="@_request.Details"/>
+                            </div>
                         </div>
-                    </div>
+                    }
+
                 </RadzenFieldset>
             </div>
         </div>
@@ -63,24 +69,14 @@
                             </RadzenButton>
                         </div>
                     </div>
-                    @foreach (var act in _request.AssistanceActs.OrderByDescending(x => x.Created))
-                    {
-                        <div class="row">
-                            <div class="col-2">
-                                <RadzenLabel Text="@act.Created.ToString("g")"/>
-                            </div>
-                            <div class="col-6">
-                                <RadzenLabel Text="@act.Details"/>
-                            </div>
-                            <div class="col-2">
-                                <RadzenLabel Text="@act.WorkHours.ToString("F")"/>
-                                <RadzenLabel Text=" ч."/>
-                            </div>
-                            <div class="col-2">
-                                <RadzenLabel Text="@act.Money.ToString("C")"/>
-                            </div>
-                        </div>
-                    }
+                    <RadzenDataGrid TItem="AssistanceAct" Data="@_request.AssistanceActs.OrderByDescending(x => x.DocumentDate)">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="AssistanceAct" Property="DocumentDate" Title="Дата запроса"/>
+                            <RadzenDataGridColumn TItem="AssistanceAct" Property="Details" Title="Дополнительная информация"/>
+                            <RadzenDataGridColumn TItem="AssistanceAct" Property="WorkHours" Title="Часы"/>
+                            <RadzenDataGridColumn TItem="AssistanceAct" Property="Money" Title="Затраты"/>
+                        </Columns>
+                    </RadzenDataGrid>
                 </RadzenFieldset>
             </div>
         </div>

@@ -28,18 +28,37 @@
     }
     else
     {
-        @foreach (var request in RequestPrototypes)
-        {
-            <div class="row">
-                <div class="col-4">
-                    <RadzenCheckBox TValue="bool" @bind-Value="@request.IsSelected"/>
-                    <RadzenLabel Text="@request.Title"/>
+        <div class="row">
+            <div class="col-6">
+                @foreach (var request in RequestPrototypes)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <RadzenCheckBox TValue="bool" @bind-Value="@request.IsSelected"/>
+                            <RadzenLabel Text="@request.Title"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <RadzenTextArea @bind-Value="@request.Details" Style="margin: 5px; width: 100%" Rows="3" Visible="@request.IsSelected"/>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12">
+                        <RadzenLabel Text="Дата документа"/>
+                    </div>
                 </div>
-                <div class="col-8">
-                    <RadzenTextArea @bind-Value="@request.Details" Rows="3" Visible="@request.IsSelected"/>
+                <div class="row">
+                    <div class="col-12">
+                        <RadzenDatePicker TValue="DateTime" Inline="true" ShowTime="true" HoursStep="1" MinutesStep="5" SecondsStep="10" @bind-Value="@_documentDate"/>
+                    </div>
                 </div>
             </div>
-        }
+        </div>
+
         <div class="row justify-content-center">
             <div class="col-12 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
                 <RadzenButton ButtonType="ButtonType.Submit" ButtonStyle="ButtonStyle.Success" Text="Добавить" Style="margin: 5px" Click="CreateCommands"/>
@@ -53,6 +72,7 @@
 @code {
     [Parameter] public string? SurvivorID { get; set; }
     private Survivor? _survivor;
+    private DateTime _documentDate = DateTime.Now;
 
     private class RequestVM
     {
@@ -67,9 +87,9 @@
             Title = kind.GetDescription();
         }
 
-        public CreateAssistanceRequest ToCommand(Guid survivorId) => IsSelected switch
+        public CreateAssistanceRequest ToCommand(Guid survivorId, DateTime documentDate) => IsSelected switch
             {
-                true => new(Guid.NewGuid(), survivorId, Kind, Details),
+                true => new(Guid.NewGuid(), survivorId, Kind, Details, documentDate),
                 _ => throw new InvalidOperationException(),
             };
     }
@@ -102,7 +122,7 @@
     private async Task CreateCommands()
     {
         if (_survivor is null) return;
-        var commands = RequestPrototypes.Where(x => x.IsSelected).Select(x => x.ToCommand(_survivor.ID)).ToList();
+        var commands = RequestPrototypes.Where(x => x.IsSelected).Select(x => x.ToCommand(_survivor.ID, _documentDate)).ToList();
         foreach (var command in commands)
         {
             await _assistanceRequestAggregate.ApplyCommand(command, CancellationToken.None);

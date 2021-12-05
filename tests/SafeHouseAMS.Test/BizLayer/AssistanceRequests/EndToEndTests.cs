@@ -18,11 +18,12 @@ public class EndToEndTests
     {
         //arrange
         var surId = Guid.NewGuid();
+        var documentDate = new DateTime(2020, 02, 02, 02, 02, 02);
         await using var context = TestHelper.CreateInMemoryDatabase();
         await context.Survivors.AddAsync(new() { ID = surId, Num = 42}).ConfigureAwait(false);
         await context.SaveChangesAsync().ConfigureAwait(false);
 
-        var sut = new CreateAssistanceRequest(Guid.NewGuid(), surId, AssistanceKind.Accomodation, "request details");
+        var sut = new CreateAssistanceRequest(Guid.NewGuid(), surId, AssistanceKind.Accomodation, "request details", documentDate);
 
         var repo = new AssistanceRequestsRepository(context, TestHelper.CreateMapper());
         var aggregate = new AssistanceRequestAggregate(repo);
@@ -41,6 +42,7 @@ public class EndToEndTests
         request.IsDeleted.Should().BeFalse();
         request.AssistanceActs.Should().BeEmpty();
         request.AssistanceKind.Should().Be(AssistanceKind.Accomodation);
+        request.DocumentDate.Should().Be(documentDate);
     }
 
     [Fact, IntegrationTest]
@@ -49,17 +51,24 @@ public class EndToEndTests
         //arrange
         var surId = Guid.NewGuid();
         var reqId = Guid.NewGuid();
+        var documentDate = new DateTime(2020, 02, 02, 02, 02, 02);
         await using var context = TestHelper.CreateInMemoryDatabase();
         await context.Survivors.AddAsync(new() { ID = surId, Num = 42}).ConfigureAwait(false);
         await context.AssistanceRequests
-            .AddAsync(new() { ID = reqId, SurvivorID = surId, AssistanceKind = (int)AssistanceKind.Accomodation })
+            .AddAsync(new()
+            {
+                ID = reqId,
+                SurvivorID = surId,
+                AssistanceKind = (int)AssistanceKind.Accomodation,
+                DocumentDate = DateTime.Now
+            })
             .ConfigureAwait(false);
         await context.SaveChangesAsync().ConfigureAwait(false);
 
         const decimal money = 2;
         const decimal workHours = 1;
         const string actDetails = "act details";
-        var sut = new AttachAssistanceAct(reqId, Guid.NewGuid(), actDetails, workHours, money);
+        var sut = new AttachAssistanceAct(reqId, Guid.NewGuid(), actDetails, workHours, money, documentDate);
 
         var repo = new AssistanceRequestsRepository(context, TestHelper.CreateMapper());
         var aggregate = new AssistanceRequestAggregate(repo);
@@ -76,6 +85,7 @@ public class EndToEndTests
             x.Details.Should().Be(actDetails);
             x.Money.Should().Be(money);
             x.WorkHours.Should().Be(workHours);
+            x.DocumentDate.Should().Be(documentDate);
         });
     }
 }

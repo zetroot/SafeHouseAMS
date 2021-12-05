@@ -15,9 +15,10 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests
     /// <param name="AssistanceKind">вид запроса помощи</param>
     /// <param name="Details">Дополнительное описание запроса помощи</param>
     /// <param name="IsAccomplished">Признак выполненного запроса</param>
+    /// <param name="DocumentDate">Дата документа - когда запрос начал действовать</param>
     /// <param name="AssistanceActs">Акты оказания помощи</param>
     public record AssistanceRequest(Guid ID, bool IsDeleted, DateTime Created, DateTime LastEdit,
-        Survivor Survivor, AssistanceKind AssistanceKind, string Details, bool IsAccomplished,
+        Survivor Survivor, AssistanceKind AssistanceKind, string Details, bool IsAccomplished, DateTime DocumentDate,
         IReadOnlyCollection<AssistanceAct> AssistanceActs) :
         BaseDomainModel(ID, IsDeleted, Created, LastEdit);
 }

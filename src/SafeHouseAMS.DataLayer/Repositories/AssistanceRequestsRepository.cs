@@ -28,24 +28,24 @@ internal class AssistanceRequestsRepository : IAssistanceRequestsRepository
     }
 
     public async Task CreateAssistanceRequest(Guid id, bool isDeleted, DateTime created, DateTime lastEdit,
-        Guid survivorId, AssistanceKind assistanceKind, string details, bool isAccomplished)
+        Guid survivorId, AssistanceKind assistanceKind, string details, bool isAccomplished, DateTime documentDate)
     {
         await _context.AssistanceRequests.AddAsync(new()
         {
             ID = id, Created = created, LastEdit = lastEdit, IsDeleted = isDeleted,
             SurvivorID = survivorId, Details = details, AssistanceKind = (int)assistanceKind,
-            IsAccomplished = isAccomplished
+            IsAccomplished = isAccomplished, DocumentDate = documentDate
         }).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
     public async Task CreateAssistanceAct(Guid id, bool isDeleted, DateTime created, DateTime lastEdit,
-        Guid requestId, string details, decimal workHours, decimal money)
+        Guid requestId, string details, decimal workHours, decimal money, DateTime documentDate)
     {
         await _context.AssistanceActs.AddAsync(new()
         {
             ID = id, IsDeleted = isDeleted, Created = created, LastEdit = lastEdit,
-            RequestID = requestId, Details = details, WorkHours = workHours, Money = money
+            RequestID = requestId, Details = details, WorkHours = workHours, Money = money, DocumentDate = documentDate
         }).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
@@ -57,7 +57,7 @@ internal class AssistanceRequestsRepository : IAssistanceRequestsRepository
             .Include(x => x.Survivor)
             .Include(x => x.AssistanceActs)
             .Where(x => !x.IsDeleted && x.SurvivorID == survivorId)
-            .OrderByDescending(x => x.Created)
+            .OrderByDescending(x => x.DocumentDate)
             .AsAsyncEnumerable();
 
         await foreach (var item in items.WithCancellation(cancellationToken))
