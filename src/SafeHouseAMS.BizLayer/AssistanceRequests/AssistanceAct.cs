@@ -12,7 +12,8 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests
     /// <param name="Details">Дополнительная информация по выполненным работам</param>
     /// <param name="WorkHours">Затрачено часов</param>
     /// <param name="Money">Затрачено денег</param>
+    /// <param name="DocumentDate">Дата документа - когда запрос начал действовать</param>
     public record AssistanceAct(Guid ID, bool IsDeleted, DateTime Created, DateTime LastEdit,
-        string Details, decimal WorkHours, decimal Money) :
+        string Details, decimal WorkHours, decimal Money, DateTime DocumentDate) :
         BaseDomainModel(ID, IsDeleted, Created, LastEdit);
 }

@@ -29,6 +29,11 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests.Commands
         public decimal Money { get; }
 
         /// <summary>
+        /// Дата совершения акта помощи
+        /// </summary>
+        public DateTime DocumentDate { get; }
+
+        /// <summary>
         /// ctor
         /// </summary>
         /// <param name="entityID">идентификатор запроса помощи к которому добавляется новый акт помощи</param>
@@ -36,15 +41,18 @@ namespace SafeHouseAMS.BizLayer.AssistanceRequests.Commands
         /// <param name="details">дополнительная информация об оказанной помощи</param>
         /// <param name="workHours">количество потраченных часов</param>
         /// <param name="money">потрачено денег</param>
-        public AttachAssistanceAct(Guid entityID, Guid actID, string details, decimal workHours, decimal money) : base(entityID)
+        /// <param name="documentDate">Дата совершения акта помощи</param>
+        public AttachAssistanceAct(Guid entityID, Guid actID, string details, decimal workHours, decimal money, DateTime documentDate)
+            : base(entityID)
         {
             ActID = actID;
             Details = details;
             WorkHours = workHours;
             Money = money;
+            DocumentDate = documentDate;
         }
 
         internal override Task ApplyOn(IAssistanceRequestsRepository repository) =>
-            repository.CreateAssistanceAct(ActID, false, DateTime.Now, DateTime.Now, EntityID, Details, WorkHours, Money);
+            repository.CreateAssistanceAct(ActID, false, DateTime.Now, DateTime.Now, EntityID, Details, WorkHours, Money, DocumentDate);
     }
 }

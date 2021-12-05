@@ -18,6 +18,7 @@ message AssistanceRequest {
   string Details = 7;
   bool IsAccomplished = 8;
   repeated AssistanceAct AssistanceActs = 9;
+  google.protobuf.Timestamp DocumentDate = 10;
 }
 
 message AssistanceAct {
@@ -28,4 +29,5 @@ message AssistanceAct {
   string Details = 5;
   safehouse.ams.Decimal WorkHours = 6;
   safehouse.ams.Decimal Money = 7;
+  google.protobuf.Timestamp DocumentDate = 8;
 }

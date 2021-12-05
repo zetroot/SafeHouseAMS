@@ -9,5 +9,6 @@ namespace SafeHouseAMS.DataLayer.Models.AssistanceRequests
         public decimal Money { get; set; }
         public virtual AssistanceRequestDAL? Request { get; set; }
         public Guid RequestID { get; set; }
+        public DateTime DocumentDate { get; set; }
     }
 }
