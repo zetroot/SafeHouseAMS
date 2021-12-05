@@ -43,7 +43,13 @@
     </div>
     @if (_survivor is null)
     {
-        <p>Загрузка информации..</p>
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <RadzenLabel Text="Загрузка информации.."></RadzenLabel>
+                </div>
+            </div>
+        </div>
     }
     else
     {
@@ -91,110 +97,137 @@
         </div>
     }
 
-    <SurvivorStateReportView StateReport="@_report"/>
-
-    @if (!_episodes.Any())
-    {
-        <p>Нет эпизодов для отображения</p>
-    }
-    else
-    {
-        <RadzenFieldset Text="Эпизоды" Style="margin-top: 5px">
-            @foreach (var episode in _episodes)
-            {
-                <div class="row">
-                    <EpisodeView Episode="@episode"/>
-                </div>
-            }
-        </RadzenFieldset>
-    }
-
-    @if (!_documents.Any())
-    {
-        <p>Нет документов для отображения</p>
-    }
-    else
-    {
-        <RadzenFieldset Text="Записи по пострадавшему">
-            @foreach (var doc in _documents)
-            {
-                <div class="row" style="margin-top: 5px">
-                    <div class="col-md-2">
-                        <a href="Document/@doc.ID">
-                            <RadzenLabel Text="@doc.DocumentDate.ToString("G")"/>
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="Document/@doc.ID">
-                            @switch (doc)
-                            {
-                                case Inquiry:
-                                    <RadzenLabel Text="Обращение за помощью"/>
-                                    break;
-                                case SingleRecordUpdate<CitizenshipRecord>:
-                                    <RadzenLabel Text="Смена гражданства"/>
-                                    break;
-                                case SingleRecordUpdate<ChildrenRecord>:
-                                    <RadzenLabel Text="Обновление информации о детях"/>
-                                    break;
-                                case SingleRecordUpdate<DomicileRecord>:
-                                    <RadzenLabel Text="Обновление информации о проживании"/>
-                                    break;
-                                case MultiRecordsUpdate<EducationLevelRecord>:
-                                    <RadzenLabel Text="Обновление образования"/>
-                                    break;
-                                case SingleRecordUpdate<MigrationStatusRecord>:
-                                    <RadzenLabel Text="Изменение миграционного статуса"/>
-                                    break;
-                                case SingleRecordUpdate<RegistrationStatusRecord>:
-                                    <RadzenLabel Text="Изменение статуса регистрации"/>
-                                    break;
-                                case MultiRecordsUpdate<SpecialityRecord>:
-                                    <RadzenLabel Text="Обновление информации о специальностях"/>
-                                    break;
-                                default:
-                                    <RadzenLabel Text="Иной тип документа"/>
-                                    break;
-                            }
-                        </a>
-                        <RadzenButton Icon="delete_outline" Click="@(async () => await DeleteDocumentAction(doc.ID))"></RadzenButton>
-                    </div>
-                </div>
-            }
-        </RadzenFieldset>
-    }
-
-    <RadzenFieldset Text="Запросы помощи">
-        <div class="row">
-            <div class="col">
-                <RadzenButton Icon="add_circle_outline" Click="@(() => _navigationManager.NavigateTo($"/CreateRequest/{SurvivorID}"))"/>
-            </div>
+    <div class="row">
+        <div class="col-12">
+            <SurvivorStateReportView StateReport="@_report"/>
         </div>
-        @if (!_requests.Any())
-        {
-            <RadzenLabel Text="У пострадавшего нет запросов помощи"/>
-        }
-        else
-        {
-            @foreach (var request in _requests)
-            {
-                <a href="AssistanceRequest/@request.ID">
-                    <div class="row" style="margin-top: 5px">
-                        <div class="col-md-2">
-                            <RadzenLabel Text="@request.Created.ToString("G")"/>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <RadzenTabs>
+                <Tabs>
+                    <RadzenTabsItem Text="Изменения состояния">
+                        <div class="row">
+                            <div class="col-12">
+                                @if (!_documents.Any())
+                                {
+                                    <div class="alert alert-info">
+                                        <RadzenLabel Text="Нет документов для отображения"/>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @foreach (var doc in _documents)
+                                    {
+                                        <div class="row" style="margin-top: 5px">
+                                            <div class="col-md-2">
+                                                <a href="Document/@doc.ID">
+                                                    <RadzenLabel Text="@doc.DocumentDate.ToString("G")"/>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a href="Document/@doc.ID">
+                                                    @switch (doc)
+                                                    {
+                                                        case Inquiry:
+                                                            <RadzenLabel Text="Обращение за помощью"/>
+                                                            break;
+                                                        case SingleRecordUpdate<CitizenshipRecord>:
+                                                            <RadzenLabel Text="Смена гражданства"/>
+                                                            break;
+                                                        case SingleRecordUpdate<ChildrenRecord>:
+                                                            <RadzenLabel Text="Обновление информации о детях"/>
+                                                            break;
+                                                        case SingleRecordUpdate<DomicileRecord>:
+                                                            <RadzenLabel Text="Обновление информации о проживании"/>
+                                                            break;
+                                                        case MultiRecordsUpdate<EducationLevelRecord>:
+                                                            <RadzenLabel Text="Обновление образования"/>
+                                                            break;
+                                                        case SingleRecordUpdate<MigrationStatusRecord>:
+                                                            <RadzenLabel Text="Изменение миграционного статуса"/>
+                                                            break;
+                                                        case SingleRecordUpdate<RegistrationStatusRecord>:
+                                                            <RadzenLabel Text="Изменение статуса регистрации"/>
+                                                            break;
+                                                        case MultiRecordsUpdate<SpecialityRecord>:
+                                                            <RadzenLabel Text="Обновление информации о специальностях"/>
+                                                            break;
+                                                        default:
+                                                            <RadzenLabel Text="Иной тип документа"/>
+                                                            break;
+                                                    }
+                                                </a>
+                                                <RadzenButton Icon="delete_outline" Click="@(async () => await DeleteDocumentAction(doc.ID))"></RadzenButton>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <RadzenLabel Text="@request.AssistanceKind.GetDescription()"/>
+                    </RadzenTabsItem>
+                    <RadzenTabsItem Text="Эпизоды эксплуатации">
+                        <div class="row">
+                            <div class="col-12">
+                                @if (!_episodes.Any())
+                                {
+                                    <div class="alert alert-info">
+                                        <RadzenLabel Text="Нет эпизодов для отображения"/>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @foreach (var episode in _episodes)
+                                    {
+                                        <div class="row">
+                                            <EpisodeView Episode="@episode"/>
+                                        </div>
+                                    }
+                                }
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <RadzenLabel Text="Работ выполнено: "/>
-                            <RadzenLabel Text="@request.AssistanceActs.Count.ToString()"/>
+                    </RadzenTabsItem>
+                    <RadzenTabsItem Text="Запросы помощи">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col">
+                                        <RadzenButton Icon="add_circle_outline" Click="@(() => _navigationManager.NavigateTo($"/CreateRequest/{SurvivorID}"))"/>
+                                    </div>
+                                </div>
+                                @if (!_requests.Any())
+                                {
+                                    <div class="alert alert-info">
+                                        <RadzenLabel Text="У пострадавшего нет запросов помощи"/>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @foreach (var request in _requests)
+                                    {
+                                        <a href="AssistanceRequest/@request.ID">
+                                            <div class="row" style="margin-top: 5px">
+                                                <div class="col-md-2">
+                                                    <RadzenLabel Text="@request.Created.ToString("G")"/>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <RadzenLabel Text="@request.AssistanceKind.GetDescription()"/>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <RadzenLabel Text="Работ выполнено: "/>
+                                                    <RadzenLabel Text="@request.AssistanceActs.Count.ToString()"/>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    }
+                                }
+                            </div>
                         </div>
-                    </div>
-                </a>
-            }
-        }
-    </RadzenFieldset>
+                    </RadzenTabsItem>
+                </Tabs>
+            </RadzenTabs>
+        </div>
+    </div>
 </div>
 
 @code {
