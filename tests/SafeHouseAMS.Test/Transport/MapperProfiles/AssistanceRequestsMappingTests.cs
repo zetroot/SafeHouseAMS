@@ -60,6 +60,7 @@ public class AssistanceRequestsMappingTests
     public void CreateEpisode_OnRoundTripMapping_DoesNotChanges()
     {
         Arb.Register<NotNullStringsGenerators>();
+        Arb.Register<DateTimeGenerators>();
 
         var mapper = BuildMapper();
         Prop.ForAll<CreateAssistanceRequest>(src =>
@@ -76,6 +77,7 @@ public class AssistanceRequestsMappingTests
     public void AttachAct_OnRoundTripMapping_DoesNotChanges()
     {
         Arb.Register<NotNullStringsGenerators>();
+        Arb.Register<DateTimeGenerators>();
 
         var mapper = BuildMapper();
         Prop.ForAll<AttachAssistanceAct>(src =>
@@ -92,6 +94,7 @@ public class AssistanceRequestsMappingTests
     public void AssistanceRequestCommand_OnRoundTripMapping_DoesNotChanges()
     {
         Arb.Register<NotNullStringsGenerators>();
+        Arb.Register<DateTimeGenerators>();
 
         var commandsArb = Gen
             .OneOf(Arb.From<CreateAssistanceRequest>().Generator.Select(x => x as AssistanceRequestCommand),
