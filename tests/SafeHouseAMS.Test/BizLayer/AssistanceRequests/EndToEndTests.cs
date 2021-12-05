@@ -55,7 +55,13 @@ public class EndToEndTests
         await using var context = TestHelper.CreateInMemoryDatabase();
         await context.Survivors.AddAsync(new() { ID = surId, Num = 42}).ConfigureAwait(false);
         await context.AssistanceRequests
-            .AddAsync(new() { ID = reqId, SurvivorID = surId, AssistanceKind = (int)AssistanceKind.Accomodation })
+            .AddAsync(new()
+            {
+                ID = reqId,
+                SurvivorID = surId,
+                AssistanceKind = (int)AssistanceKind.Accomodation,
+                DocumentDate = DateTime.Now
+            })
             .ConfigureAwait(false);
         await context.SaveChangesAsync().ConfigureAwait(false);
 
