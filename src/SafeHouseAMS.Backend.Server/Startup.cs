@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Okta.AspNetCore;
 using SafeHouseAMS.Backend.Server.Services;
 using SafeHouseAMS.BizLayer;
 using SafeHouseAMS.DataLayer;
