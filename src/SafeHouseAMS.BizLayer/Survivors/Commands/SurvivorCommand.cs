@@ -1,18 +1,17 @@
 ﻿using System;
 
-namespace SafeHouseAMS.BizLayer.Survivors.Commands
+namespace SafeHouseAMS.BizLayer.Survivors.Commands;
+
+/// <summary>
+/// Базовый класс команды агрегата реестра постардавших
+/// </summary>
+public abstract class SurvivorCommand : BaseCommand<ISurvivorRepository>
 {
     /// <summary>
-    /// Базовый класс команды агрегата реестра постардавших
+    /// Ctor
     /// </summary>
-    public abstract class SurvivorCommand : BaseCommand<ISurvivorRepository>
+    /// <param name="entityID">идентификатор пострадавшего для которого выполняется команда</param>
+    protected SurvivorCommand(Guid entityID) : base(entityID)
     {
-        /// <summary>
-        /// Ctor
-        /// </summary>
-        /// <param name="entityID">идентификатор пострадавшего для которого выполняется команда</param>
-        protected SurvivorCommand(Guid entityID) : base(entityID)
-        {
-        }
     }
 }

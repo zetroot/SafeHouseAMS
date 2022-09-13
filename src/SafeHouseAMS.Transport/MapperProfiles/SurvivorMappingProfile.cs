@@ -10,6 +10,9 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         {
             MapSurvivors();
             MapCreateSurvivorCommand();
+
+            CreateMap<DeleteSurvivor, Protos.Models.Survivors.DeleteSurvivor>();
+            CreateMap<Protos.Models.Survivors.DeleteSurvivor, DeleteSurvivor>();
         }
         private void MapCreateSurvivorCommand()
         {

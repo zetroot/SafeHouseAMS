@@ -8,6 +8,7 @@
 @using SafeHouseAMS.BizLayer.LifeSituations.Documents
 @using SafeHouseAMS.BizLayer.LifeSituations.Records
 @using SafeHouseAMS.BizLayer.Survivors
+@using SafeHouseAMS.BizLayer.Survivors.Commands
 @using SafeHouseAMS.WasmApp.RecordViews
 @using SafeHouseAMS.WasmApp.Episodes
 
@@ -23,7 +24,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12-md">
-            <button type="button" class="btn btn-primary" @onclick="() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue))">В каталог</button>
+            <RadzenButton Icon="list" ButtonStyle="ButtonStyle.Info" Text="В каталог" Click="@(() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue)))"/>
+        </div>
+        <div class="col-12-md">
+            <RadzenButton Icon="delete_outline" ButtonStyle="ButtonStyle.Danger" Text="Удалить всё" Click="@(async () => await DeleteSurvivorAction(_survivor!.ID))"/>
         </div>
     </div>
 
@@ -256,6 +260,22 @@
         }
     }
 
+    private async Task DeleteSurvivorAction(Guid survivorId)
+    {
+        try
+        {
+            var cmd = new DeleteSurvivor(survivorId);
+            await _survivorCatalogue.ApplyCommand(cmd, CancellationToken.None);
+            _notificationService.Notify(NotificationSeverity.Success, "Запись удалена", "Обновите страницу для обновления информации");
+            _navigationManager.NavigateTo(nameof(SurvivorCatalogue));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to survivor with id = {SurvivorIs}", survivorId);
+            _notificationService.Notify(NotificationSeverity.Error, "Ошибка удаления");
+        }
+    }
+    
     protected override async Task OnParametersSetAsync()
     {
         if (Guid.TryParse(SurvivorID, out var surId))

@@ -77,5 +77,14 @@ namespace SafeHouseAMS.DataLayer.Repositories
         {
             return _dataContext.Survivors.CountAsync(x => !x.IsDeleted);
         }
+
+        public async Task DeleteAsync(Guid survivorId)
+        {
+            var entity = await _dataContext.Survivors.FirstOrDefaultAsync(x => x.ID == survivorId);
+            if (entity is null)
+                return;
+            _dataContext.Survivors.Remove(entity);
+            await _dataContext.SaveChangesAsync();
+        }
     }
 }
