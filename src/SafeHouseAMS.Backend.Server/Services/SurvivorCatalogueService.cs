@@ -45,7 +45,7 @@ namespace SafeHouseAMS.Backend.Server.Services
                     await _catalogue.ApplyCommand(_mapper.Map<CreateSurvivor>(request.CreateCommand), context.CancellationToken);
                     break;
                 case CommandWrapper.CommandOneofCase.DeleteCommand:
-                    await _catalogue.ApplyCommand(_mapper.Map<DeleteSurvivor>(request.CreateCommand), context.CancellationToken);
+                    await _catalogue.ApplyCommand(_mapper.Map<DeleteSurvivor>(request.DeleteCommand), context.CancellationToken);
                     break;
                 default:
                     _logger.LogError("Получен запрос с неизвестным типом команды");
