@@ -47,5 +47,12 @@ namespace SafeHouseAMS.BizLayer.Survivors
         /// </summary>
         /// <returns>общее количество пострадавших</returns>
         Task<int> GetTotalCount();
+
+        /// <summary>
+        /// Удалить запись о пострадавшем
+        /// </summary>
+        /// <param name="survivorId">Идентификатор пострадавшего</param>
+        /// <returns></returns>
+        Task DeleteAsync(Guid survivorId);
     }
 }
