@@ -5,6 +5,7 @@ option csharp_namespace = "SafeHouseAMS.Transport.Protos.Services";
 import "Models/Common/UUID.proto";
 import "Models/Survivors/Survivor.proto";
 import "Models/Survivors/CreateSurvivorCommand.proto";
+import "Models/Survivors/DeleteSurvivorCommand.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 
@@ -18,7 +19,8 @@ service SurvivorCatalogue{
 
 message CommandWrapper{
   oneof command {
-    commands.CreateSurvivor CreateCommand = 1; 
+    commands.CreateSurvivor CreateCommand = 1;
+    commands.DeleteSurvivor DeleteCommand = 2;
   }
 }
 
