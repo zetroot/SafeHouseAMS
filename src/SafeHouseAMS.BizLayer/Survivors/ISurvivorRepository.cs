@@ -54,5 +54,19 @@ namespace SafeHouseAMS.BizLayer.Survivors
         /// <param name="survivorId">Идентификатор пострадавшего</param>
         /// <returns></returns>
         Task DeleteAsync(Guid survivorId);
+
+        /// <summary>
+        /// Обновить запись о пострадавшем
+        /// </summary>
+        /// <param name="id">идентификатор обновляемой записи</param>
+        /// <param name="lastEdit">дата редактирования</param>
+        /// <param name="name">новое имя</param>
+        /// <param name="num">новый номер</param>
+        /// <param name="sex">новый пол</param>
+        /// <param name="otherSex">новый пол уточненный</param>
+        /// <param name="accurateDob">точная дата рождения</param>
+        /// <param name="calculatedDob">вычисленная дата рождения</param>
+        Task Update(Guid id, DateTime lastEdit,
+            string name, int num, SexEnum sex, string? otherSex, DateTime? accurateDob, DateTime? calculatedDob);
     }
 }

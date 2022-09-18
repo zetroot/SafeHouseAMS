@@ -1,0 +1,155 @@
+@page "/survivor/{SurvivorId:guid}/update"
+@using SafeHouseAMS.BizLayer.Survivors
+@using System.Threading
+@using SafeHouseAMS.BizLayer.Survivors.Commands
+@inject ISurvivorCatalogue _catalogue
+@inject NotificationService _notificationService;
+@inject NavigationManager _navigationManager;
+@inject ILogger<UpdateSurvivorPage> _logger;
+
+<h3>Редактирование записи</h3>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <RadzenTemplateForm TItem="SurvivorUpdateRequest" Submit="SubmitSurvivor" Data="@_request">
+                <div class="row">
+                    <div class="col-12">
+                        <RadzenFieldset Text="Общая информация">
+                            <div class="row" style="margin: 5px">
+                                <div class="col-md-2 align-items-center d-flex">
+                                    Имя
+                                </div>
+                                <div class="col-md">
+                                    <RadzenRequiredValidator Component="NameTextBox" Text="Имя обязательно для заполнения"/>
+                                    <RadzenTextBox Style="width: 100%" Name="NameTextBox" Placeholder="Введите имя..." @bind-Value=@_request.Name />
+                                </div>
+                                <div class="col-md-2 align-items-center d-flex">
+                                    № карточки
+                                </div>
+                                <div class="col-md">
+                                    <RadzenRequiredValidator Component="NumTextBox" Text="Номер не должен быть пустым"/>
+                                    <RadzenNumeric Style="width: 100%" Name="NumTextBox" Placeholder="Введите номер..." TValue="int" @bind-Value=@_request.Num />
+                                </div>
+                            </div>
+                            <div class="row" style="margin: 5px">
+                                <div class="col-md-2 align-items-center d-flex">
+                                    Пол
+                                </div>
+                                <div class="col-md-4">
+                                    <RadzenDropDown @bind-Value="@_request.Sex" Data="_sexes" Style="width: 100%"
+                                                    TextProperty="@nameof(SexEnumVM.Description)" ValueProperty="@nameof(SexEnumVM.SexValue)"/>
+                                </div>
+                                @if (_request.Sex == SexEnum.Other)
+                                {
+                                    <div class="col-md">
+                                        <RadzenTextBox Style="width: 100%; margin-left: 5px" Placeholder="Уточните, если возможно" @bind-Value=@_request.OtherSex />
+                                    </div>
+                                }
+                            </div>
+                            <div class="row" style="margin: 5px">
+                                <div class="col-md-2 align-items-center d-flex">
+                                    Дата рождения
+                                </div>
+                                <div class="col-md">
+                                    <div class="row" style="margin: 0">
+                                        <RadzenRadioButtonList @bind-Value=@_dobIsAccurate TValue="bool">
+                                            <Items>
+                                                <RadzenRadioButtonListItem Text="Известна" Value="true"/>
+                                                <RadzenRadioButtonListItem Text="Возраст" Value="false"/>
+                                            </Items>
+                                        </RadzenRadioButtonList>
+                                    </div>
+                                    <div class="row" style="margin-left: 0; margin-top: 5px">
+                                        @if (_dobIsAccurate)
+                                        {
+                                            <RadzenDatePicker @bind-Value=@_request.AccurateDob DateFormat="d"/>
+                                        }
+                                        else
+                                        {
+                                            <RadzenNumeric Placeholder="Полных лет сегодня" TValue="int?" @bind-Value=@_request.Age/>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </RadzenFieldset>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
+                        <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
+                        <button type="reset" style="margin-left: 8px" class="btn btn-warning" @onclick="@CancelClick">Отмена</button>
+                    </div>
+                </div>
+            </RadzenTemplateForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Guid SurvivorId { get; set; }
+    private bool _dobIsAccurate = true;
+    private record SexEnumVM(SexEnum SexValue, string Description);
+
+    private readonly SexEnumVM[] _sexes = {
+        new(SexEnum.Female, "женский"), new(SexEnum.Male, "мужской"),
+        new(SexEnum.Other, "другой"),
+    };
+
+    private class SurvivorUpdateRequest
+    {
+        public int Num { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public SexEnum Sex { get; set; }
+        public string? OtherSex { get; set; }
+        public DateTime? AccurateDob { get; set; }
+        public int? Age { get; set; }
+    }
+
+    private readonly SurvivorUpdateRequest _request = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var survivor = await _catalogue.GetSingleAsync(SurvivorId, CancellationToken.None);
+        if (survivor is null)
+        {
+            _notificationService.Notify(new(){Severity = NotificationSeverity.Error, Summary = "Пострадавший не найден"});
+            _navigationManager.NavigateTo("/");
+            return;
+        }
+        _request.Num = survivor.Num;
+        _request.Name = survivor.Name;
+        _request.Sex = survivor.Sex;
+        _request.OtherSex = survivor.OtherSex;
+        _request.AccurateDob = survivor.BirthDateAccurate;
+        if (survivor.BirthDateCalculated.HasValue)
+        {
+            _request.Age = survivor.Age;
+            _dobIsAccurate = false;
+        }
+        await base.OnParametersSetAsync();
+    }
+
+    private void CancelClick()
+    {
+        _notificationService.Notify(new(){Severity = NotificationSeverity.Info, Summary = "Операция отменена"});
+        _navigationManager.NavigateTo($"/SurvivorDetails/{SurvivorId}");
+    }
+
+    private async Task SubmitSurvivor()
+    {
+        var cmd = new UpdateSurvivor(SurvivorId, _request.Name, _request.Num, _request.Sex, _request.OtherSex,
+            _dobIsAccurate ? _request.AccurateDob : null,
+            _dobIsAccurate ? null : _request.Age);
+        try
+        {
+            await _catalogue.ApplyCommand(cmd, CancellationToken.None);
+            _notificationService.Notify(new() { Severity = NotificationSeverity.Success, Summary = "Успешно сохранено" });
+            _navigationManager.NavigateTo($"/SurvivorDetails/{SurvivorId}");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Ошибка выполнения команды обновления пострадавшего");
+            _notificationService.Notify(new() { Severity = NotificationSeverity.Error, Summary = "Ошибка сохранения", Detail = "Попробуйте снова или позже"});
+        }
+    }
+}
