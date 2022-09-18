@@ -33,6 +33,21 @@ namespace SafeHouseAMS.DataLayer.Repositories
                 Name = name, Sex = (int) sex, OtherSex = otherSex, BirthDateAccurate = accurateDob, BirthDateCalculated = calculatedDob});
             await _dataContext.SaveChangesAsync();
         }
+        
+        public async Task Update(Guid id, DateTime lastEdit,
+            string name, int num, SexEnum sex, string? otherSex, DateTime? accurateDob, DateTime? calculatedDob)
+        {
+            var survivor = await _dataContext.Survivors.SingleAsync(x => x.ID == id).ConfigureAwait(false);
+            survivor.LastEdit = lastEdit;
+            survivor.Name = name;
+            survivor.Num = num;
+            survivor.Sex = (int)sex;
+            survivor.OtherSex = otherSex;
+            survivor.BirthDateAccurate = accurateDob;
+            survivor.BirthDateCalculated = calculatedDob;
+            await _dataContext.SaveChangesAsync().ConfigureAwait(false);
+        }
+        
         public async Task<Survivor?> GetSingleAsync(Guid id, CancellationToken cancellationToken)
         {
             var survivor = await _dataContext.Survivors.SingleOrDefaultAsync(x => !x.IsDeleted && x.ID == id, cancellationToken);
