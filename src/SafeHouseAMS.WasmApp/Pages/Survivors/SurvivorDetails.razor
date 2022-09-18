@@ -22,14 +22,12 @@
 
 <h3>Карточка пострадавшего</h3>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-12-md">
+    <div class="row row justify-content-between">
+        <div class="col">
             <RadzenButton Icon="list" ButtonStyle="ButtonStyle.Info" Text="В каталог" Click="@(() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue)))"/>
-        </div>
-        <div class="col-12-md">
             <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Primary" Text="Редактировать" Click="@(() => _navigationManager.NavigateTo($"/survivor/{_survivor!.ID}/update"))"/>
         </div>
-        <div class="col-12-md">
+        <div class="col-2">
             <RadzenButton Icon="delete_outline" ButtonStyle="ButtonStyle.Danger" Text="Удалить всё" Click="@(async () => await DeleteSurvivorAction(_survivor!.ID))"/>
         </div>
     </div>
