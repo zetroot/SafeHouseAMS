@@ -76,8 +76,8 @@
                 </div>
                 <div class="row justify-content-center">
                     <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
-                        <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
-                        <button type="reset" style="margin-left: 8px" class="btn btn-warning" @onclick="@CancelClick">Отмена</button>
+                        <RadzenButton Icon="save" ButtonStyle="ButtonStyle.Success" style="margin-right: 8px" Text="Сохранить" type="submit"/>
+                        <RadzenButton Icon="block" ButtonStyle="ButtonStyle.Warning" style="margin-left: 8px" Text="Отмена" type="reset" Click="@CancelClick"/>
                     </div>
                 </div>
             </RadzenTemplateForm>
@@ -112,7 +112,7 @@
         var survivor = await _catalogue.GetSingleAsync(SurvivorId, CancellationToken.None);
         if (survivor is null)
         {
-            _notificationService.Notify(new(){Severity = NotificationSeverity.Error, Summary = "Пострадавший не найден"});
+            _notificationService.Notify(new(){Severity = NotificationSeverity.Error, Summary = "Запись не найдена"});
             _navigationManager.NavigateTo("/");
             return;
         }
