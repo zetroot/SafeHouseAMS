@@ -42,20 +42,20 @@ public class UpdateSurvivor : SurvivorCommand
     /// <summary>
     /// ctor
     /// </summary>
-    public UpdateSurvivor(Guid entityID, string name, int num, SexEnum sex, string? otherSex, DateTime? birthDate, int? age) : base(entityID)
+    public UpdateSurvivor(Guid entityID, string name, int num, SexEnum sex, string? otherSex, DateTime? birthDateAccurate, int? age) : base(entityID)
     {
         Name = name;
         Num = num;
         Sex = sex;
         OtherSex = otherSex;
-        BirthDate = birthDate;
+        BirthDate = birthDateAccurate;
         Age = age;
     }
 
     internal override Task ApplyOn(ISurvivorRepository repository)
     {
         DateTime? calcDob = null;
-        if (Age is not null) calcDob = DateTime.Today.AddYears(Age.Value * -1).AddDays(-180);
+        if (Age.HasValue) calcDob = DateTime.Today.AddYears(Age.Value * -1).AddDays(-180);
 
         return repository.Update(EntityID, DateTime.Now, Name, Num, Sex, OtherSex, BirthDate, calcDob);
     }

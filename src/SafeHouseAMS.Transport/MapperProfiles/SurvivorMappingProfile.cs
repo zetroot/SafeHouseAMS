@@ -14,7 +14,8 @@ namespace SafeHouseAMS.Transport.MapperProfiles
             CreateMap<DeleteSurvivor, Protos.Models.Survivors.DeleteSurvivor>();
             CreateMap<Protos.Models.Survivors.DeleteSurvivor, DeleteSurvivor>();
             
-            CreateMap<UpdateSurvivor, Protos.Models.Survivors.UpdateSurvivor>();
+            CreateMap<UpdateSurvivor, Protos.Models.Survivors.UpdateSurvivor>()
+                .ForMember(d => d.BirthDateAccurate, opt => opt.MapFrom(s => s.BirthDate));
             CreateMap<Protos.Models.Survivors.UpdateSurvivor, UpdateSurvivor>();
         }
         private void MapCreateSurvivorCommand()
