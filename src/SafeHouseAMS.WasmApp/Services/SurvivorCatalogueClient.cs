@@ -42,6 +42,7 @@ namespace SafeHouseAMS.WasmApp.Services
                 {
                     CreateSurvivor create => new CommandWrapper { CreateCommand = _mapper.Map<Transport.Protos.Models.Survivors.CreateSurvivor>(create) },
                     DeleteSurvivor delete => new CommandWrapper { DeleteCommand = _mapper.Map<Transport.Protos.Models.Survivors.DeleteSurvivor>(delete) },
+                    UpdateSurvivor update => new CommandWrapper { UpdateCommand = _mapper.Map<Transport.Protos.Models.Survivors.UpdateSurvivor>(update) },
                     _ => throw new InvalidOperationException()
                 };
                 await _client.ApplyCommandAsync(request, new CallOptions(cancellationToken: cancellationToken));
