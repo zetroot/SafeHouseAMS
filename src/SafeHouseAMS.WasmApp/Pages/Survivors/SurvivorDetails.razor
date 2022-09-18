@@ -27,6 +27,9 @@
             <RadzenButton Icon="list" ButtonStyle="ButtonStyle.Info" Text="В каталог" Click="@(() => _navigationManager.NavigateTo(nameof(SurvivorCatalogue)))"/>
         </div>
         <div class="col-12-md">
+            <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Primary" Text="Редактировать" Click="@(() => _navigationManager.NavigateTo($"/survivor/{_survivor!.ID}/update"))"/>
+        </div>
+        <div class="col-12-md">
             <RadzenButton Icon="delete_outline" ButtonStyle="ButtonStyle.Danger" Text="Удалить всё" Click="@(async () => await DeleteSurvivorAction(_survivor!.ID))"/>
         </div>
     </div>
