@@ -129,8 +129,8 @@
                 </RadzenTabs>
                 <div class="row justify-content-center">
                     <div class="col-8 d-flex align-items-end justify-content-center" style="margin-top: 16px;">
-                        <button type="submit" style="margin-right: 8px" class="btn btn-success">Добавить</button>
-                        <button type="reset" style="margin-left: 8px" class="btn btn-warning" @onclick="@CancelClick">Отмена</button>
+                        <RadzenButton Icon="save" ButtonStyle="ButtonStyle.Success" style="margin-right: 8px" Text="Добавить" type="submit"/>
+                        <RadzenButton Icon="block" ButtonStyle="ButtonStyle.Warning" style="margin-left: 8px" Text="Отмена" type="reset" Click="@CancelClick"/>
                     </div>
                 </div>
             </RadzenTemplateForm>
