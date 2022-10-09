@@ -17,7 +17,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
 
         private void MapCommandWrapper()
         {
-            CreateMap<EpisodeCommand, Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand>()
+            CreateMap<EpisodeCommand, Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand>(MemberList.None)
                 .ConstructUsing((src, ctx) =>
                 {
                     var result = new Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand();
@@ -41,7 +41,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     return result;
                 });
 
-            CreateMap<Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand, EpisodeCommand>()
+            CreateMap<Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand, EpisodeCommand>(MemberList.None)
                 .ConstructUsing((src, ctx) => src.CommandCase switch
                 {
                     Protos.Models.ExploitationEpisodes.Commands.EpisodeCommand.CommandOneofCase.Create =>
