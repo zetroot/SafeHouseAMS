@@ -10,10 +10,10 @@ namespace SafeHouseAMS.Transport.MapperProfiles
     {
         public GuidMappingProfile()
         {
-            CreateMap<Guid, UUID>()
+            CreateMap<Guid, UUID>(MemberList.None)
                 .ConstructUsing(g => new UUID {Value = ByteString.CopyFrom(g.ToByteArray())});
             
-            CreateMap<UUID, Guid>()
+            CreateMap<UUID, Guid>(MemberList.None)
                 .ConstructUsing(g => new Guid(g.Value.ToByteArray()));
         }
     }

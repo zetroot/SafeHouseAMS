@@ -71,6 +71,8 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
         {
             CreateMap<InquiryDAL, Inquiry>()
                 .IncludeBase<LifeSituationDocumentDAL, LifeSituationDocument>()
+                .ForMember(d => d.InquirySources, opt => opt.Ignore())
+                .ForMember(d => d.VulnerabilityFactors, opt => opt.Ignore())
                 .ConstructUsing((src, ctx) =>
                 {
                     var survivor = ctx.Mapper.Map<Survivor>(src.Survivor);

@@ -8,10 +8,10 @@ internal class DecimalMappingProfile : Profile
 {
     public DecimalMappingProfile()
     {
-        CreateMap<decimal, Decimal>()
+        CreateMap<decimal, Decimal>(MemberList.None)
             .ConstructUsing(src => new Decimal{Bits = { decimal.GetBits(src) }});
 
-        CreateMap<Decimal, decimal>()
+        CreateMap<Decimal, decimal>(MemberList.None)
             .ConstructUsing(src => new decimal(src.Bits.ToArray()));
     }
 }

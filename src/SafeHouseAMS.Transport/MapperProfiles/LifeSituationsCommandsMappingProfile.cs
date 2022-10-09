@@ -26,36 +26,36 @@ namespace SafeHouseAMS.Transport.MapperProfiles
 
         private void MapCreateCreateRecordUpdateCommand()
         {
-            CreateMap<CreateRecordUpdateDocument<ChildrenRecord>,
-                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+            CreateMap<CreateRecordUpdateDocument<ChildrenRecord>, Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .ForMember(d => d.Type, opt => opt.Ignore())
                 .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Children);
 
-            CreateMap<CreateRecordUpdateDocument<CitizenshipRecord>,
-                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+            CreateMap<CreateRecordUpdateDocument<CitizenshipRecord>, Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .ForMember(d => d.Type, opt => opt.Ignore())
                 .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Citizenship);
 
-            CreateMap<CreateRecordUpdateDocument<DomicileRecord>,
-                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+            CreateMap<CreateRecordUpdateDocument<DomicileRecord>, Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .ForMember(d => d.Type, opt => opt.Ignore())
                 .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Domicile);
 
-            CreateMap<CreateRecordUpdateDocument<EducationLevelRecord>,
-                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+            CreateMap<CreateRecordUpdateDocument<EducationLevelRecord>, Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .ForMember(d => d.Type, opt => opt.Ignore())
                 .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Education);
 
-            CreateMap<CreateRecordUpdateDocument<MigrationStatusRecord>,
-                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+            CreateMap<CreateRecordUpdateDocument<MigrationStatusRecord>, Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .ForMember(d => d.Type, opt => opt.Ignore())
                 .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Migration);
 
-            CreateMap<CreateRecordUpdateDocument<RegistrationStatusRecord>,
-                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+            CreateMap<CreateRecordUpdateDocument<RegistrationStatusRecord>, Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .ForMember(d => d.Type, opt => opt.Ignore())
                 .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Registration);
 
-            CreateMap<CreateRecordUpdateDocument<SpecialityRecord>,
-                    Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+            CreateMap<CreateRecordUpdateDocument<SpecialityRecord>, Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument>()
+                .ForMember(d => d.Type, opt => opt.Ignore())
                 .AfterMap((_, dst) => dst.Type = Protos.Models.LifeSituations.Commands.RecordType.Speciality);
 
 
-            CreateMap<Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument, CreateDocument>()
+            CreateMap<Protos.Models.LifeSituations.Commands.CreateRecordUpdateDocument, CreateDocument>(MemberList.None)
                 .ConstructUsing((src, ctx) =>
                 {
                     var entityId = ctx.Mapper.Map<Guid>(src.EntityID);
@@ -95,7 +95,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
 
         private void MapCommandsWrapper()
         {
-            CreateMap<LifeSituationDocumentCommand, Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand>()
+            CreateMap<LifeSituationDocumentCommand, Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand>(MemberList.None)
                 .ConstructUsing((src, ctx) =>
                 {
                     var result = new Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand();
@@ -147,7 +147,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     return result;
                 });
 
-            CreateMap<Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand, LifeSituationDocumentCommand>()
+            CreateMap<Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand, LifeSituationDocumentCommand>(MemberList.None)
                 .ConstructUsing((src, ctx) => src.CommandCase switch
                 {
                     Protos.Models.LifeSituations.Commands.LifeSituationDocumentCommand.CommandOneofCase.AddEducationLevel => ctx.Mapper.Map<AddEducationLevel>(src.AddEducationLevel),

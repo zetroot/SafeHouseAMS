@@ -10,7 +10,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
     {
         public LifeSituationDocumentsMappingProfile()
         {
-            CreateMap<LifeSituationDocument, SafeHouseAMS.Transport.Protos.Models.LifeSituations.LifeSituationDocument>()
+            CreateMap<LifeSituationDocument, SafeHouseAMS.Transport.Protos.Models.LifeSituations.LifeSituationDocument>(MemberList.None)
                 .ConstructUsing((src, ctx) =>
                 {
                     var result = new Protos.Models.LifeSituations.LifeSituationDocument();
@@ -48,7 +48,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     return result;
                 });
 
-            CreateMap<SafeHouseAMS.Transport.Protos.Models.LifeSituations.LifeSituationDocument, LifeSituationDocument>()
+            CreateMap<SafeHouseAMS.Transport.Protos.Models.LifeSituations.LifeSituationDocument, LifeSituationDocument>(MemberList.None)
                 .ConstructUsing((src, ctx) => src.DocumentCase switch
                 {
                     Protos.Models.LifeSituations.LifeSituationDocument.DocumentOneofCase.Inquiry =>

@@ -8,11 +8,11 @@ namespace SafeHouseAMS.Transport.MapperProfiles
     {
         public TimestampMappingProfile()
         {
-            CreateMap<DateTime, Timestamp>()
+            CreateMap<DateTime, Timestamp>(MemberList.None)
                 .ConstructUsing((d, _) =>
                     Timestamp.FromDateTime(d.Kind != DateTimeKind.Utc? d.ToUniversalTime() : d));
 
-            CreateMap<Timestamp, DateTime>()
+            CreateMap<Timestamp, DateTime>(MemberList.None)
                 .ConstructUsing(d => d.ToDateTime().ToLocalTime());
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using SafeHouseAMS.BizLayer.LifeSituations.Documents;
 using SafeHouseAMS.BizLayer.LifeSituations.InquirySources;
@@ -24,7 +25,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
         
         private void MapVulnerabilityFactors()
         {
-            CreateMap<IEnumerable<Vulnerability>, Protos.Models.LifeSituations.VulnerabilityFactors>()
+            CreateMap<IEnumerable<Vulnerability>, Protos.Models.LifeSituations.VulnerabilityFactors>(MemberList.None)
                 .ConstructUsing((src, _) =>
                 {
                     var result = new Protos.Models.LifeSituations.VulnerabilityFactors();
@@ -62,7 +63,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     return result;
                 });
             
-            CreateMap<Protos.Models.LifeSituations.VulnerabilityFactors, IEnumerable<Vulnerability>>()
+            CreateMap<Protos.Models.LifeSituations.VulnerabilityFactors, IEnumerable<Vulnerability>>(MemberList.None)
                 .ConstructUsing((src, _) =>
                 {
                     var result = new List<Vulnerability>();
@@ -77,6 +78,8 @@ namespace SafeHouseAMS.Transport.MapperProfiles
                     
                     return result;
                 });
+            CreateMap<Protos.Models.LifeSituations.VulnerabilityFactors, IReadOnlyCollection<Vulnerability>>(MemberList.None)
+                .ConstructUsing((src, ctx) => ctx.Mapper.Map<IEnumerable<Vulnerability>>(src).ToList());
         }
         private void MapInquirySources()
         {
@@ -92,7 +95,7 @@ namespace SafeHouseAMS.Transport.MapperProfiles
             CreateMap<ForwardedByOrganization, Protos.Models.LifeSituations.ForwardedByOrganization>();
             CreateMap<Protos.Models.LifeSituations.ForwardedByOrganization, ForwardedByOrganization>();
 
-            CreateMap<IInquirySource, Protos.Models.LifeSituations.InquirySource>()
+            CreateMap<IInquirySource, Protos.Models.LifeSituations.InquirySource>(MemberList.None)
                 .ConstructUsing((src, ctx) =>
                 {
                     var result = new Protos.Models.LifeSituations.InquirySource();
