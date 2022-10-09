@@ -13,6 +13,7 @@ namespace SafeHouseAMS.DataLayer.MapperProfiles
         private void MapEpisodes()
         {
             CreateMap<EpisodeDAL, Episode>()
+                .ForMember(d => d.ControlMethods, opt => opt.Ignore())
                 .ForCtorParam(nameof(Episode.ContactReason), opt => opt.MapFrom(src => src.BuildContactReason()))
                 .ForCtorParam(nameof(Episode.ControlMethods), opt => opt.MapFrom(src => src.BuildControlMethods()));
         }
