@@ -19,7 +19,7 @@ internal class AssistanceRequestsMappingProfile : Profile
 
     private void MapCommands()
     {
-        CreateMap<AssistanceRequestCommand, DTO.AssistanceRequestCommand>()
+        CreateMap<AssistanceRequestCommand, DTO.AssistanceRequestCommand>(MemberList.None)
             .ConstructUsing((src, ctx) =>
             {
                 var result = new DTO.AssistanceRequestCommand();
